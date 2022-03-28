@@ -50,7 +50,7 @@ class GameTile:
     def not_included(self):
         pass
 
-
+print("hello world.")
 # game loop
 running = True
 while running:
