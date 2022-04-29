@@ -44,10 +44,9 @@ class Tile:
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
         letters = {x: pygame.key.key_code(x) for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}  # StackOverFlow w lol
         touch = pygame.key.get_pressed()
-        for (letter, value) in letters.items():
-            if touch[value]:
-                print(f"(The letter {letter} has been pressed)")
-                letter = font.render(letter, True, WHITE)
+        for (character, value) in letters.items():
+            if touch[value] and self.tile_empty:
+                letter = font.render(character, True, WHITE)
                 letter_x_pos = self.x_pos+(self.tile_size[0]//2)
                 letter_y_pos = (self.y_pos+(self.tile_size[1]//2))
                 letter_rect = letter.get_rect(center=(letter_x_pos, letter_y_pos))  # get the center of letter
@@ -56,10 +55,13 @@ class Tile:
                 screen.blit(letter_surface, letter_rect)
                 screen.blit(letter, letter_rect)
                 pygame.display.update()
+                self.tile_empty = False
+                print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.tile_empty))
             elif touch[pygame.K_BACKSPACE]:
-                print("backspace pressed")
-                screen.fill("black")
+                screen.fill("black", rect=self.tile)
                 pygame.display.update()
+                self.tile_empty = True
+                print("backspace pressed " + "Tile Empty: " + str(self.tile_empty))
 
     def render(self):
         pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
@@ -83,21 +85,17 @@ class Wordle:
             x_pos += 80
             y_pos += 80
             print(board)
-            test_tile = Tile(x_pos, y_pos)
-            test_tile.input()
-            test_tile.render()
-            time.sleep(1)
-"""
-w = Wordle()
-w.create_board()
-"""
+
+
 running = True
+test_tile = Tile(400, 400)  # define objects outside the class so that the object state parameter doesn't reset.
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
         else:
-            test_tile = Tile(400, 400)
             test_tile.input()
             test_tile.render()
+            print(test_tile.tile_empty)
