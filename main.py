@@ -111,15 +111,16 @@ class Wordle:
             for y in range(self.cols):
                 tile = Tile((x*(tile_size[0]+box_space) + x_pos), (y*(tile_size[1]+box_space)) + y_pos)
 
-    def render_grid(self):  # need to get the tile object from the function above
-        tile.render()
-        tile.input()
+    def render_grid(self, tile):  # need to get the tile object from the function above
+        Tile.render(tile)
+        Tile.input(tile)
 
 
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 wordle = Wordle()
 wordle.create_grid()
+t = Tile(50, 50)
 
 while running:
     for event in pygame.event.get():
@@ -127,5 +128,5 @@ while running:
             running = False
             pygame.quit()
         else:
-            wordle.render_grid()
+            wordle.render_grid(t)
             pygame.display.update()
