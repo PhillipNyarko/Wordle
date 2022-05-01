@@ -95,38 +95,35 @@ class Tile:
         pygame.display.update()
 
 
-class Wordle:
-    def __init__(self):
-        self.character = " "
-        self.correctness = 0
-        self.rows = 5
-        self.cols = 6
-        self.board = []
+rows = 5
+cols = 6
+box_space = 5
+x_pos = (WIN_LENGTH//2)-((tile_size[0]+box_space)*5)//2
+y_pos = (WIN_HEIGHT//2-((tile_size[0]+box_space)*6)//2)-50
+board = []
+for x in range(rows):
+    for y in range(cols):
+        tile = Tile((x*(tile_size[0]+box_space) + x_pos), (y*(tile_size[1]+box_space)) + y_pos)
+        board.append(tile)
 
-    def create_grid(self):
-        box_space = 5
-        x_pos = (WIN_LENGTH//2)-((tile_size[0]+box_space)*5)//2
-        y_pos = (WIN_HEIGHT//2-((tile_size[0]+box_space)*6)//2)-50
-        for x in range(self.rows):
-            for y in range(self.cols):
-                tile = Tile((x*(tile_size[0]+box_space) + x_pos), (y*(tile_size[1]+box_space)) + y_pos)
 
-    def render_grid(self, tile):  # need to get the tile object from the function above
-        Tile.render(tile)
-        Tile.input(tile)
+def render_board():
+    for index, tiles in enumerate(board):
+        tiles.render()
+
+
+def accept_board_input():
+    for index, tiles in enumerate(board):
+        tiles.input()
 
 
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
-wordle = Wordle()
-wordle.create_grid()
-t = Tile(50, 50)
-
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
         else:
-            wordle.render_grid(t)
-            pygame.display.update()
+            render_board()
+            accept_board_input()
