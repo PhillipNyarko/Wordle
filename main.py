@@ -53,7 +53,7 @@ class Tile:
         letters = {x: pygame.key.key_code(x) for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}  # StackOverFlow w lol
         touch = pygame.key.get_pressed()  # going to have to change the way that I ge t the key input a little because its looping iof you hold backspace down ill figure it out.
         for (character, value) in letters.items():
-            if touch[value] and self.tile_empty:
+            if touch[value] and self.tile_empty and not touch[pygame.K_BACKSPACE]:
                 letter = font.render(character, True, WHITE)
                 letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
                 letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
@@ -94,8 +94,8 @@ class Tile:
 rows = 6
 cols = 5
 box_space = 5
-x_position = (WIN_LENGTH//2)-((tile_size[0]+box_space)*5)//2
-y_position = (WIN_HEIGHT//2-((tile_size[0]+box_space)*6)//2)-50
+x_position = (WIN_LENGTH//2)-((tile_size[0]+box_space)*cols)//2
+y_position = (WIN_HEIGHT//2-((tile_size[0]+box_space)*rows)//2)-50
 board = []
 for i in range(rows):
     for j in range(cols):
