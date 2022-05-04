@@ -62,7 +62,7 @@ class Tile:
                 screen.blit(letter, letter_rect)
                 pygame.display.update()
                 self.tile_empty = False
-                print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.tile_empty))
+                # print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.tile_empty))
             elif touch[pygame.K_BACKSPACE] and not self.tile_empty:
                 letter = font.render("    ", True, BACKGROUND_BLACK)
                 letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
@@ -72,7 +72,7 @@ class Tile:
                 screen.blit(letter, letter_rect)
                 pygame.display.update()
                 self.tile_empty = True
-                print("backspace pressed " + "Tile Empty: " + str(self.tile_empty))
+                # print("backspace pressed " + "Tile Empty: " + str(self.tile_empty))
         return self.tile_empty
 
     def green(self):
@@ -113,6 +113,16 @@ def accept_board_input():
         tiles.input()
 
 
+def main():
+    inc = 0
+    tile = board[0]
+    tile.input()
+    if not tile.tile_empty:
+        inc += 1
+        tile = board[inc]
+    render_board()
+
+
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 clock = pygame.time.Clock()
@@ -122,6 +132,5 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-        else:
-            render_board()
-            accept_board_input()
+        elif __name__ == "__main__":
+            main()
