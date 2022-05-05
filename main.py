@@ -33,10 +33,11 @@ animation
 
 # create game tile
 tile_size = (62, 62)
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 class Tile:
-    def __init__(self, x_pos, y_pos):
+    def __init__(self, x_pos, y_pos, key):
         self.color = GRAY1
         self.tile_size = tile_size
         self.boarder_thickness = 2
@@ -46,33 +47,32 @@ class Tile:
         self.tile_empty = True
         self.letter_x_pos = self.x_pos + (self.tile_size[0] // 2)
         self.letter_y_pos = (self.y_pos + (self.tile_size[1] // 2))
+        self.key = key.upper()
 
     def input(self):
         font_size = 43
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
-        letters = {x: pygame.key.key_code(x) for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"}  # StackOverFlow w lol
-        touch = pygame.key.get_pressed()  # going to have to change the way that I ge t the key input a little because its looping iof you hold backspace down ill figure it out.
-        for (character, value) in letters.items():
-            if touch[value] and self.tile_empty and not touch[pygame.K_BACKSPACE]:
-                letter = font.render(character, True, WHITE)
-                letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
-                letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-                letter_surface.fill((0, 225, 0))
-                # screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
-                screen.blit(letter, letter_rect)
-                pygame.display.update()
-                self.tile_empty = False
-                # print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.tile_empty))
-            elif touch[pygame.K_BACKSPACE] and not self.tile_empty:
-                letter = font.render("    ", True, BACKGROUND_BLACK)
-                letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
-                letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-                letter_surface.fill(BACKGROUND_BLACK)
-                screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
-                screen.blit(letter, letter_rect)
-                pygame.display.update()
-                self.tile_empty = True
-                # print("backspace pressed " + "Tile Empty: " + str(self.tile_empty))
+
+        letter = font.render(self.key.upper(), True, WHITE)
+        print(self.key)
+        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
+        letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
+        letter_surface.fill((0, 225, 0))
+        # screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
+        screen.blit(letter, letter_rect)
+        pygame.display.update()
+        self.tile_empty = False
+        # print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.tile_empty))
+
+        letter = font.render("    ", True, BACKGROUND_BLACK)
+        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
+        letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
+        letter_surface.fill(BACKGROUND_BLACK)
+        screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
+        screen.blit(letter, letter_rect)
+        pygame.display.update()
+        self.tile_empty = True
+        # print("backspace pressed " + "Tile Empty: " + str(self.tile_empty))
         return self.tile_empty
 
     def green(self):
@@ -99,7 +99,7 @@ y_position = (WIN_HEIGHT//2-((tile_size[0]+box_space)*rows)//2)-50
 board = []
 for i in range(rows):
     for j in range(cols):
-        tile = Tile((j * (tile_size[0] + box_space) + x_position), (i * (tile_size[1] + box_space)) + y_position)
+        tile = Tile((j * (tile_size[0] + box_space) + x_position), (i * (tile_size[1] + box_space)) + y_position, " ")
         board.append(tile)
 
 
@@ -114,13 +114,8 @@ def accept_board_input():
 
 
 def main():
-    inc = 0
-    tile = board[0]
-    tile.input()
-    if not tile.tile_empty:
-        inc += 1
-        tile = board[inc]
     render_board()
+    accept_board_input()
 
 
 # define objects outside the class so that the object state parameter doesn't reset
@@ -132,5 +127,9 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+        if event.type == pygame.KEYDOWN:
+            if pygame.key.name(event.key) in alphabet.lower():
+                key_pressed = pygame.key.name(event.key)
+                print(key_pressed)
         elif __name__ == "__main__":
             main()
