@@ -54,7 +54,7 @@ class Tile:
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
         letter_surface.fill((0, 225, 0))
-        screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
+        #screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         pygame.display.update()
         self.empty = False
@@ -64,7 +64,7 @@ class Tile:
         letter = self.font.render("    ", True, WHITE)
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-        letter_surface.fill("red")
+        letter_surface.fill(BACKGROUND_BLACK)
         screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         pygame.display.update()
@@ -73,13 +73,16 @@ class Tile:
     def green(self):
         self.color = GREEN
         screen.fill(GREEN, rect=self.tile)
+        pygame.display.update()
 
     def yellow(self):
         self.color = YELLOW
         screen.fill(YELLOW, rect=self.tile)
+        pygame.display.update()
 
     def gray(self):
         screen.fill(GRAY1, rect=self.tile)
+        pygame.display.update()
 
     def render(self):
         pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
@@ -108,6 +111,7 @@ render_board()
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 inc = 0
+
 while running:
     current_tile = board[inc]
     previous_tile = board[inc-1]
@@ -116,10 +120,13 @@ while running:
             running = False
             pygame.quit()
         if event.type == pygame.KEYDOWN:
-            if pygame.key.name(event.key) in alphabet:
+            if pygame.key.name(event.key) in alphabet and inc <= 4:
                 key_pressed = pygame.key.name(event.key).upper()
                 current_tile.display_letter(key_pressed)
                 inc += 1
-            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and not inc == -1:
+            if pygame.key.get_pressed()[pygame.K_RETURN]:
+                current_tile.green()
+
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and inc != 0:
                 inc -= 1
                 previous_tile.backspace()
