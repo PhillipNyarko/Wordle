@@ -1,8 +1,9 @@
 import pygame
+from win32api import GetSystemMetrics
 
 # global variables
-WIN_LENGTH = 1000
-WIN_HEIGHT = 800
+WIN_LENGTH = GetSystemMetrics(0)-GetSystemMetrics(0)//3
+WIN_HEIGHT = GetSystemMetrics(0)-((GetSystemMetrics(0)//2)+50)
 CLOCK = pygame.time.Clock()
 screen = pygame.display.set_mode((WIN_LENGTH, WIN_HEIGHT))
 
@@ -24,15 +25,8 @@ pygame.display.set_icon(wordle_icon)
 screen.fill(BACKGROUND_BLACK)
 pygame.display.update()
 
-'''
-needs:
-return position in array and value(identify letter or empty space)
-return correctness value(green, yellow or gray/ right_spot, wrong_spot, not_included)
-animation
-'''
-
 # create game tile
-tile_size = (62, 62)
+tile_size = (WIN_HEIGHT//12, WIN_HEIGHT//12)
 
 
 class Tile:
@@ -44,7 +38,7 @@ class Tile:
         self.y_pos = y_pos
         self.tile = pygame.Rect((x_pos, y_pos), self.tile_size)
         self.empty = True
-        self.font_size = 43
+        self.font_size = WIN_HEIGHT//20
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
         self.letter_x_pos = self.x_pos + (self.tile_size[0] // 2)
         self.letter_y_pos = (self.y_pos + (self.tile_size[1] // 2))
@@ -54,7 +48,7 @@ class Tile:
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
         letter_surface.fill((0, 225, 0))
-        #screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
+        # screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         pygame.display.update()
         self.empty = False
@@ -106,11 +100,17 @@ def render_board():
         tiles.render()
 
 
+def evaluate_row(last_five):
+    pass
+
+
 render_board()
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 inc = 0
+curr_row = []
+row_end = 4
 
 while running:
     current_tile = board[inc]
@@ -120,13 +120,18 @@ while running:
             running = False
             pygame.quit()
         if event.type == pygame.KEYDOWN:
-            if pygame.key.name(event.key) in alphabet and inc <= 4:
+            if pygame.key.name(event.key) in alphabet and inc <= row_end:
                 key_pressed = pygame.key.name(event.key).upper()
                 current_tile.display_letter(key_pressed)
                 inc += 1
-            if pygame.key.get_pressed()[pygame.K_RETURN]:
-                current_tile.green()
-
-            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and inc != 0:
+                curr_row.append(current_tile)
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and inc != row_end - 4:
                 inc -= 1
                 previous_tile.backspace()
+                del curr_row[-1]
+        if len(curr_row) == row_end + 1 and pygame.key.get_pressed()[pygame.K_RETURN]:
+            last_five = curr_row[-5:]
+            evaluate_row(last_five)
+            print(last_five)
+            row_end += 5
+
