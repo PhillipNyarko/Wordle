@@ -110,7 +110,8 @@ running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 inc = 0
 curr_row = []
-row_end = 4
+index_of_last_in_row = 4
+row_length = 0
 
 while running:
     current_tile = board[inc]
@@ -120,18 +121,17 @@ while running:
             running = False
             pygame.quit()
         if event.type == pygame.KEYDOWN:
-            if pygame.key.name(event.key) in alphabet and inc <= row_end:
+            if pygame.key.name(event.key) in alphabet and inc <= index_of_last_in_row:
                 key_pressed = pygame.key.name(event.key).upper()
                 current_tile.display_letter(key_pressed)
                 inc += 1
                 curr_row.append(current_tile)
-            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and inc != row_end - 4:
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and inc != index_of_last_in_row - 4:
                 inc -= 1
                 previous_tile.backspace()
                 del curr_row[-1]
-        if len(curr_row) == row_end + 1 and pygame.key.get_pressed()[pygame.K_RETURN]:
-            last_five = curr_row[-5:]
-            evaluate_row(last_five)
-            print(last_five)
-            row_end += 5
-
+            elif len(curr_row) == index_of_last_in_row + 1 and pygame.key.get_pressed()[pygame.K_RETURN]:
+                last_five = curr_row[-5:]
+                evaluate_row(last_five)
+                print(last_five)
+                index_of_last_in_row += 5
