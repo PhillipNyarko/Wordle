@@ -57,6 +57,7 @@ class Tile:
         screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         pygame.display.update()
+        self.empty = False
         # print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.empty))
 
     def backspace(self):
@@ -67,6 +68,7 @@ class Tile:
         screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         pygame.display.update()
+        self.empty = True
 
     def green(self):
         self.color = GREEN
@@ -87,12 +89,12 @@ class Tile:
 rows = 6
 cols = 5
 box_space = 5
-x_pos = (WIN_LENGTH//2)-((tile_size[0]+box_space)*5)//2
-y_pos = (WIN_HEIGHT//2-((tile_size[0]+box_space)*6)//2)-50
+x_position = (WIN_LENGTH//2)-((tile_size[0]+box_space)*5)//2
+y_position = (WIN_HEIGHT//2-((tile_size[0]+box_space)*6)//2)-50
 board = []
 for i in range(rows):
     for j in range(cols):
-        tile = Tile((j*(tile_size[0]+box_space) + x_pos), (i*(tile_size[1]+box_space)) + y_pos)
+        tile = Tile((j*(tile_size[0]+box_space) + x_position), (i*(tile_size[1]+box_space)) + y_position)
         board.append(tile)
 
 
@@ -121,4 +123,3 @@ while running:
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and not inc == -1:
                 inc -= 1
                 previous_tile.backspace()
-
