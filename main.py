@@ -133,7 +133,7 @@ def title_bar():
     title = font.render(title_name, True, WHITE)
     title_rect = title.get_rect(center=title_bar_rect_center)  # get the center of letter
     """title bar is the container for the entire bar but the line is the bar that actually is displayed"""
-    #pygame.draw.rect(screen, GREEN, title_bar_rect, bar_line_thickness)
+    # pygame.draw.rect(screen, GREEN, title_bar_rect, bar_line_thickness)
     pygame.draw.line(screen, GRAY1, line_start_position, line_end_position, bar_line_thickness)
     screen.blit(title, title_rect)
     pygame.display.update()
