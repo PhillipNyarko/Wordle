@@ -1,3 +1,6 @@
+import json
+import random
+
 import pygame
 import time
 from win32api import GetSystemMetrics
@@ -46,6 +49,7 @@ class Tile:
         self.letter_y_pos = (self.y_pos + (self.tile_size[1] // 2))
         self.tile_size_x = tile_size_x
         self.tile_size_y = tile_size_y
+        self.content = ""
 
         pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
         pygame.display.update()
@@ -55,7 +59,7 @@ class Tile:
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
         letter_surface.fill((0, 225, 0))
-        #screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
+        # screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         """ animate the letter by making the tile size slightly bigger and then return to normal"""
         pygame.draw.rect(screen, BACKGROUND_BLACK, self.tile, self.boarder_thickness)
@@ -72,6 +76,7 @@ class Tile:
         pygame.display.update()
         self.empty = False
         return key
+
         # print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.empty))
 
     def backspace(self):
@@ -115,41 +120,53 @@ for i in range(rows):
         board.append(tile)
 
 
-def evaluate_row(tile_list):
-    word = "weary"
-    """
-    for _ in tile_list:
-        if tile.display_letter() in word.lower() and rightspot():
-            tile.green()
-    """
+def word_of_the_day():
+    with open("word_list.json", "r") as file:
+        data = json.load(file)
+        word_list = data["word_list"]
+        word = word_list[random.randint(0,len(word_list))]
+        return word
+
+
+def evaluate_row(letters):
+    print(letter_list)
+    if letters[0] == word_of_the_day()[0]:
+        pass
 
 
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-current_tile_index = 0
+curr_tile_index = 0
 curr_row = []
 index_of_last_in_row = 4
 row_len = 4
-
+letter_list = []
+print(word_of_the_day())
 while running:
-    current_tile = board[current_tile_index]
-    previous_tile = board[current_tile_index-1]
+    curr_tile = board[curr_tile_index]
+    previous_tile = board[curr_tile_index-1]
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
         if event.type == pygame.KEYDOWN:
-            if pygame.key.name(event.key) in alphabet and current_tile_index <= index_of_last_in_row:
+            if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
                 key_pressed = pygame.key.name(event.key).upper()
-                current_tile.display_letter(key_pressed)
-                current_tile_index += 1
-                curr_row.append(current_tile)
-            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and current_tile_index != index_of_last_in_row - row_len:
-                current_tile_index -= 1
-                previous_tile.backspace()
-                del curr_row[-1]
+                curr_tile.display_letter(key_pressed)
+                letter_list.append(key_pressed)
+                if curr_tile_index != 29:
+                    curr_tile_index += 1
+                    curr_row.append(curr_tile)
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and curr_tile_index != index_of_last_in_row - row_len:
+                if curr_tile_index != 29:
+                    curr_tile_index -= 1
+                    previous_tile.backspace()
+                    del curr_row[-1]
+                    del letter_list[-1]
+                else:
+                    pass
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
-                last_five = curr_row[-5:]
-                evaluate_row(last_five)
+                evaluate_row(letter_list)
                 index_of_last_in_row += row_len + 1
+                letter_list.clear()
