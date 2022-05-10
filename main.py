@@ -30,8 +30,9 @@ screen.fill(BACKGROUND_BLACK)
 pygame.display.update()
 
 # create game tile
-tile_size_x = WIN_HEIGHT//12
-tile_size_y = WIN_HEIGHT//12
+tile_size_x = (WIN_HEIGHT//12) + 2.39
+tile_size_y = (WIN_HEIGHT//12) + 2.39
+print(tile_size_x)
 
 
 class Tile:
@@ -49,7 +50,6 @@ class Tile:
         self.letter_y_pos = (self.y_pos + (self.tile_size[1] // 2))
         self.tile_size_x = tile_size_x
         self.tile_size_y = tile_size_y
-        self.content = ""
 
         pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
         pygame.display.update()
@@ -75,8 +75,6 @@ class Tile:
         pygame.draw.rect(screen, GRAY2, self.tile, self.boarder_thickness)
         pygame.display.update()
         self.empty = False
-        return key
-
         # print(f"(The letter {character} has been pressed) " + "Tile Empty: " + str(self.empty))
 
     def backspace(self):
@@ -108,23 +106,11 @@ class Tile:
         pass
 
 
-rows = 6
-cols = 5
-box_space = 5
-x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
-y_position = (WIN_HEIGHT//2-((tile_size_y+box_space)*6)//2)-50
-board = []
-for i in range(rows):
-    for j in range(cols):
-        tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position)
-        board.append(tile)
-
-
 def word_of_the_day():
     with open("word_list.json", "r") as file:
         data = json.load(file)
         word_list = data["word_list"]
-        word = word_list[random.randint(0,len(word_list))]
+        word = word_list[random.randint(0, len(word_list))]
         return word
 
 
@@ -132,6 +118,40 @@ def evaluate_row(letters):
     print(letter_list)
     if letters[0] == word_of_the_day()[0]:
         pass
+
+
+def title_bar():
+    title_name = "Wordle"
+    font_size = 40
+    font = pygame.font.Font("karnak-small-normal-400.ttf", font_size)
+    bar_line_thickness = 1
+    bar_line_height = 50
+    line_start_position = (0, bar_line_height)
+    line_end_position = (WIN_LENGTH, bar_line_height)
+    title_bar_rect = pygame.Rect((0, 0), (WIN_LENGTH, bar_line_height))
+    title_bar_rect_center = (title_bar_rect.width//2, title_bar_rect.height//2)
+    title = font.render(title_name, True, WHITE)
+    title_rect = title.get_rect(center=title_bar_rect_center)  # get the center of letter
+    """title bar is the container for the entire bar but the line is the bar that actually is displayed"""
+    #pygame.draw.rect(screen, GREEN, title_bar_rect, bar_line_thickness)
+    pygame.draw.line(screen, GRAY1, line_start_position, line_end_position, bar_line_thickness)
+    screen.blit(title, title_rect)
+    pygame.display.update()
+    return bar_line_height
+
+
+rows = 6
+cols = 5
+box_space = 6
+title_bar_and_board_space = 23
+board_height = title_bar() + title_bar_and_board_space
+x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
+y_position = (WIN_HEIGHT//2-((tile_size_y+box_space)*6)//2)-board_height
+board = []
+for i in range(rows):
+    for j in range(cols):
+        tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position)
+        board.append(tile)
 
 
 # define objects outside the class so that the object state parameter doesn't reset
@@ -142,10 +162,12 @@ curr_row = []
 index_of_last_in_row = 4
 row_len = 4
 letter_list = []
-print(word_of_the_day())
+
 while running:
     curr_tile = board[curr_tile_index]
-    previous_tile = board[curr_tile_index-1]
+    previous_tile = board[curr_tile_index - 1]
+    next_tile = board[curr_tile_index + 1]
+    title_bar()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
