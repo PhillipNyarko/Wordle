@@ -1,6 +1,5 @@
-import time
-
 import pygame
+import time
 from win32api import GetSystemMetrics
 
 # global variables
@@ -56,23 +55,20 @@ class Tile:
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
         letter_surface.fill((0, 225, 0))
-        screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
+        #screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
-
+        """ animate the letter by making the tile size slightly bigger and then return to normal"""
         pygame.draw.rect(screen, BACKGROUND_BLACK, self.tile, self.boarder_thickness)
         pygame.display.update()
-
         self.tile = pygame.Rect((self.x_pos, self.y_pos), (tile_size_x + box_space, tile_size_y + box_space))
         self.tile.center = self.x_pos+(tile_size_x//2), self.y_pos+(tile_size_y//2)
         pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
         pygame.display.update()
-        time.sleep(0.1)
-
+        time.sleep(0.05)
         pygame.draw.rect(screen, BACKGROUND_BLACK, self.tile, self.boarder_thickness)
         pygame.display.update()
-
         self.tile = pygame.Rect((self.x_pos, self.y_pos), self.tile_size)
-        pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
+        pygame.draw.rect(screen, GRAY2, self.tile, self.boarder_thickness)
         pygame.display.update()
         self.empty = False
         return key
@@ -82,9 +78,10 @@ class Tile:
         letter = self.font.render("    ", True, WHITE)
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-        letter_surface.fill("red")
+        letter_surface.fill(BACKGROUND_BLACK)
         screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
+        pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
         pygame.display.update()
         self.empty = True
 
