@@ -57,9 +57,6 @@ class Tile:
     def display_letter(self, key):
         letter = self.font.render(key, True, WHITE)
         letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
-        letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-        letter_surface.fill((0, 225, 0))
-        # screen.blit(letter_surface, letter_rect)  # color letter area green for center testing
         screen.blit(letter, letter_rect)
         """ animate the letter by making the tile size slightly bigger and then return to normal"""
         pygame.draw.rect(screen, BACKGROUND_BLACK, self.tile, self.boarder_thickness)
@@ -122,21 +119,40 @@ def evaluate_row(letters):
 
 def title_bar():
     title_name = "Wordle"
+
     font_size = 40
-    font = pygame.font.Font("karnak-small-normal-400.ttf", font_size)
+    font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
+
     bar_line_thickness = 1
     bar_line_height = 50
     line_start_position = (0, bar_line_height)
     line_end_position = (WIN_LENGTH, bar_line_height)
+
     title_bar_rect = pygame.Rect((0, 0), (WIN_LENGTH, bar_line_height))
     title_bar_rect_center = (title_bar_rect.width//2, title_bar_rect.height//2)
+
+    """render title"""
     title = font.render(title_name, True, WHITE)
     title_rect = title.get_rect(center=title_bar_rect_center)  # get the center of letter
+
+    """render menu button"""
+    menu_btn = pygame.image.load("menu.svg")
+    menu_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH, bar_line_height))
+    menu_btn_rect = menu_btn.get_rect(center=title_bar_rect_center)
     """title bar is the container for the entire bar but the line is the bar that actually is displayed"""
     # pygame.draw.rect(screen, GREEN, title_bar_rect, bar_line_thickness)
     pygame.draw.line(screen, GRAY1, line_start_position, line_end_position, bar_line_thickness)
     screen.blit(title, title_rect)
     pygame.display.update()
+
+    def tile_bar_menu_pressed():
+        pass
+    def tile_bar_help_pressed():
+        pass
+    def tile_bar_data_pressed():
+        pass
+    def tile_bar_settings_pressed():
+        pass
     return bar_line_height
 
 
@@ -163,11 +179,12 @@ index_of_last_in_row = 4
 row_len = 4
 letter_list = []
 
+title_bar() # init title bar
+
 while running:
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
     next_tile = board[curr_tile_index + 1]
-    title_bar()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
