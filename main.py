@@ -170,7 +170,7 @@ box_space = 6
 title_bar_and_board_space = 23
 board_height = title_bar() + title_bar_and_board_space
 x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
-y_position = (WIN_HEIGHT//2-((tile_size_y+box_space)*6)//2)-board_height
+y_position = board_height
 board = []
 for i in range(rows):
     for j in range(cols):
