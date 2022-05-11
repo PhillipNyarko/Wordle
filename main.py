@@ -30,9 +30,8 @@ screen.fill(BACKGROUND_BLACK)
 pygame.display.update()
 
 # create game tile
-tile_size_x = (WIN_HEIGHT//12) + 2.39
-tile_size_y = (WIN_HEIGHT//12) + 2.39
-print(tile_size_x)
+tile_size_x = 54.39
+tile_size_y = 54.39
 
 
 class Tile:
@@ -119,7 +118,6 @@ def evaluate_row(letters):
 
 def title_bar():
     title_name = "Wordle"
-
     font_size = 40
     font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
 
@@ -137,16 +135,33 @@ def title_bar():
     screen.blit(title, title_rect)
 
     """render menu button"""
-    menu_btn = pygame.image.load("menu_icon.svg")
-    menu_btn_rect = pygame.Rect((0, 0), (0, 0))
+    menu_btn = pygame.image.load("menu_icon.png")
+    menu_btn_pos = 60
+    menu_btn_rect = pygame.Rect((0, 0), (menu_btn_pos, title_bar_rect.height))
     menu_btn_rect_center_pos = (menu_btn_rect.width//2, menu_btn_rect.height//2)
     menu_btn_center = menu_btn.get_rect(center=menu_btn_rect_center_pos)
-    screen.blit(menu_btn, menu_btn_rect)
+    screen.blit(menu_btn, menu_btn_center)
 
     """render help button"""
-    menu_btn = pygame.image.load("help_icon.svg")
-    menu_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH, bar_line_height))
-    menu_btn_rect = menu_btn.get_rect(center=title_bar_rect_center)
+    help_btn = pygame.image.load("help_icon.png")
+    help_btn_rect = pygame.Rect((0, 0), (menu_btn_pos + 65, title_bar_rect.height))
+    help_btn_rect_center_pos = (help_btn_rect.width // 2, help_btn_rect.height // 2)
+    help_btn_center = menu_btn.get_rect(center=help_btn_rect_center_pos)
+    screen.blit(help_btn, help_btn_center)
+
+    """render settings button"""
+    settings_btn = pygame.image.load("settings_icon.png")
+    settings_btn_rect = pygame.Rect((0, 0), (menu_btn_pos + 1700, title_bar_rect.height))
+    settings_btn_rect_center_pos = (settings_btn_rect.width // 2, settings_btn_rect.height // 2)
+    settings_btn_center = menu_btn.get_rect(center=settings_btn_rect_center_pos)
+    screen.blit(settings_btn, settings_btn_center)
+
+    """render leaderboard button"""
+    leaderboard_btn = pygame.image.load("leaderboard_icon.png")
+    leaderboard_btn_rect = pygame.Rect((0, 0), (menu_btn_pos + 1630, title_bar_rect.height))
+    leaderboard_btn_rect_center_pos = (leaderboard_btn_rect.width // 2, leaderboard_btn_rect.height // 2)
+    leaderboard_btn_center = menu_btn.get_rect(center=leaderboard_btn_rect_center_pos)
+    screen.blit(leaderboard_btn, leaderboard_btn_center)
 
     """title bar is the container for the entire bar but the line is the bar that actually is displayed"""
     # pygame.draw.rect(screen, GREEN, title_bar_rect, bar_line_thickness)
@@ -169,7 +184,7 @@ cols = 5
 box_space = 6
 title_bar_and_board_space = 14
 board_height = title_bar() + title_bar_and_board_space
-x_position = 0
+x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
 y_position = board_height
 board = []
 for i in range(rows):
