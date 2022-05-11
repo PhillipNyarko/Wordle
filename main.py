@@ -134,15 +134,23 @@ def title_bar():
     """render title"""
     title = font.render(title_name, True, WHITE)
     title_rect = title.get_rect(center=title_bar_rect_center)  # get the center of letter
+    screen.blit(title, title_rect)
 
     """render menu button"""
-    menu_btn = pygame.image.load("menu.svg")
+    menu_btn = pygame.image.load("menu_icon.svg")
+    menu_btn_rect = pygame.Rect((0, 0), (0, 0))
+    menu_btn_rect_center_pos = (menu_btn_rect.width//2, menu_btn_rect.height//2)
+    menu_btn_center = menu_btn.get_rect(center=menu_btn_rect_center_pos)
+    screen.blit(menu_btn, menu_btn_rect)
+
+    """render help button"""
+    menu_btn = pygame.image.load("help_icon.svg")
     menu_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH, bar_line_height))
     menu_btn_rect = menu_btn.get_rect(center=title_bar_rect_center)
+
     """title bar is the container for the entire bar but the line is the bar that actually is displayed"""
     # pygame.draw.rect(screen, GREEN, title_bar_rect, bar_line_thickness)
     pygame.draw.line(screen, GRAY1, line_start_position, line_end_position, bar_line_thickness)
-    screen.blit(title, title_rect)
     pygame.display.update()
 
     def tile_bar_menu_pressed():
