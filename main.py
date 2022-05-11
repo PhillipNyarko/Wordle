@@ -6,8 +6,8 @@ import time
 from win32api import GetSystemMetrics
 
 # global variables
-WIN_LENGTH = GetSystemMetrics(0)-GetSystemMetrics(0)//3
-WIN_HEIGHT = GetSystemMetrics(0)-((GetSystemMetrics(0)//2)+50)
+WIN_LENGTH = GetSystemMetrics(0)-GetSystemMetrics(0)//2
+WIN_HEIGHT = GetSystemMetrics(0)-((GetSystemMetrics(0)//2)+150)
 CLOCK = pygame.time.Clock()
 screen = pygame.display.set_mode((WIN_LENGTH, WIN_HEIGHT))
 
