@@ -167,9 +167,9 @@ def title_bar():
 rows = 6
 cols = 5
 box_space = 6
-title_bar_and_board_space = 23
+title_bar_and_board_space = 14
 board_height = title_bar() + title_bar_and_board_space
-x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
+x_position = 0
 y_position = board_height
 board = []
 for i in range(rows):
