@@ -30,8 +30,8 @@ screen.fill(BACKGROUND_BLACK)
 pygame.display.update()
 
 # create game tile
-tile_size_x = 54.39
-tile_size_y = 54.39
+tile_size_x = 61
+tile_size_y = 61
 
 
 class Tile:
@@ -130,7 +130,7 @@ def title_bar():
     title_bar_rect_center = (title_bar_rect.width//2, title_bar_rect.height//2)
 
     """render title"""
-    title = font.render(title_name, True, WHITE)
+    title = pygame.image.load("wordle_title.png")
     title_rect = title.get_rect(center=title_bar_rect_center)  # get the center of letter
     screen.blit(title, title_rect)
 
