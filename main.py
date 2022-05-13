@@ -176,9 +176,9 @@ def word_of_the_day():
 
 """right now the evaluation script is not looking to see if
 a letter is in the right spot but rather only if it is in the word at all
+its also only diplaying the letters that are in the word
 """
-def evaluate_row(letters, tiles):
-    word = "HELLO"
+def evaluate_row(letters, tiles, word):
     guess = letters
     for letter in letters:
         print(letter)
@@ -197,6 +197,7 @@ board_height = title_bar() + title_bar_and_board_space
 x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
 y_position = board_height
 board = []
+word = word_of_the_day()
 for i in range(rows):
     for j in range(cols):
         tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position,)
@@ -240,7 +241,7 @@ while running:
                 del letter_list[-1]
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
                 last_five_tiles = curr_row[-5:]
-                evaluate_row(letter_list, last_five_tiles)
+                evaluate_row(letter_list, last_five_tiles, word)
                 if curr_tile_index != len(board)-1:
                     index_of_last_in_row += row_len + 1
                     letter_list.clear()
