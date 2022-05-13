@@ -35,7 +35,7 @@ tile_size_y = 61
 
 
 class Tile:
-    def __init__(self, x_pos, y_pos):
+    def __init__(self, x_pos, y_pos, render=True):
         self.color = GRAY1
         self.tile_size = (tile_size_x, tile_size_y)
         self.boarder_thickness = 2
@@ -49,9 +49,11 @@ class Tile:
         self.letter_y_pos = (self.y_pos + (self.tile_size[1] // 2))
         self.tile_size_x = tile_size_x
         self.tile_size_y = tile_size_y
+        self.render = render
 
-        pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
-        pygame.display.update()
+        if self.render:
+            pygame.draw.rect(screen, self.color, self.tile, self.boarder_thickness)
+            pygame.display.update()
 
     def display_letter(self, key):
         letter = self.font.render(key, True, WHITE)
@@ -102,24 +104,7 @@ class Tile:
         pass
 
 
-def word_of_the_day():
-    with open("word_list.json", "r") as file:
-        data = json.load(file)
-        word_list = data["word_list"]
-        word = word_list[random.randint(0, len(word_list))]
-        return word
-
-
-def evaluate_row(letters):
-    print(letter_list)
-    if letters[0] == word_of_the_day()[0]:
-        pass
-
-
 def title_bar():
-    title_name = "Wordle"
-    font_size = 40
-    font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
 
     bar_line_thickness = 1
     bar_line_height = 50
@@ -170,13 +155,35 @@ def title_bar():
 
     def tile_bar_menu_pressed():
         pass
+
     def tile_bar_help_pressed():
         pass
+
     def tile_bar_data_pressed():
         pass
+
     def tile_bar_settings_pressed():
         pass
     return bar_line_height
+
+
+def word_of_the_day():
+    with open("word_list.json", "r") as file:
+        data = json.load(file)
+        word_list = data["word_list"]
+        word = word_list[random.randint(0, len(word_list))].upper()
+        return word
+
+
+def evaluate_row(letters, tiles):
+    word = "HELLO"
+    guess = letters
+    for letter in letters:
+        print(letter)
+        print(word)
+        if letter in word:
+            tiles[0].green()
+            tiles[0].display_letter(letters[0])
 
 
 rows = 6
@@ -189,9 +196,12 @@ y_position = board_height
 board = []
 for i in range(rows):
     for j in range(cols):
-        tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position)
+        tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position,)
         board.append(tile)
 
+"render hidden tile and add to the last of the list to avoid index out of bounds error with curr_tile_index += 1"
+hidden_last_tile = Tile(588, 399, False)
+board.append(hidden_last_tile)
 
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
@@ -201,13 +211,14 @@ curr_row = []
 index_of_last_in_row = 4
 row_len = 4
 letter_list = []
+last_tile = len(board)-1
 
-title_bar() # init title bar
+title_bar()  # init title bar
 
 while running:
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
-    next_tile = board[curr_tile_index + 1]
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -217,18 +228,16 @@ while running:
                 key_pressed = pygame.key.name(event.key).upper()
                 curr_tile.display_letter(key_pressed)
                 letter_list.append(key_pressed)
-                if curr_tile_index != 29:
-                    curr_tile_index += 1
-                    curr_row.append(curr_tile)
+                curr_tile_index += 1
+                curr_row.append(curr_tile)
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and curr_tile_index != index_of_last_in_row - row_len:
-                if curr_tile_index != 29:
-                    curr_tile_index -= 1
-                    previous_tile.backspace()
-                    del curr_row[-1]
-                    del letter_list[-1]
-                else:
-                    pass
+                previous_tile.backspace()
+                curr_tile_index -= 1
+                del curr_row[-1]
+                del letter_list[-1]
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
-                evaluate_row(letter_list)
-                index_of_last_in_row += row_len + 1
-                letter_list.clear()
+                last_five_tiles = curr_row[-5:]
+                evaluate_row(letter_list, last_five_tiles)
+                if curr_tile_index != len(board)-1:
+                    index_of_last_in_row += row_len + 1
+                    letter_list.clear()
