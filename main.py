@@ -174,7 +174,9 @@ def word_of_the_day():
         word = word_list[random.randint(0, len(word_list))].upper()
         return word
 
-
+"""right now the evaluation script is not looking to see if
+a letter is in the right spot but rather only if it is in the word at all
+"""
 def evaluate_row(letters, tiles):
     word = "HELLO"
     guess = letters
@@ -182,8 +184,9 @@ def evaluate_row(letters, tiles):
         print(letter)
         print(word)
         if letter in word:
-            tiles[0].green()
-            tiles[0].display_letter(letters[0])
+            for tile in tiles:
+                tile.green()
+                tile.display_letter(letter)
 
 
 rows = 6
