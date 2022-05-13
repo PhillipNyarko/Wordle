@@ -151,14 +151,14 @@ def title_bar():
 
     """render settings button"""
     settings_btn = pygame.image.load("settings_icon.png")
-    settings_btn_rect = pygame.Rect((0, 0), (100 + 1300, title_bar_rect.height))
+    settings_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH*2-50, title_bar_rect.height))
     settings_btn_rect_center_pos = (settings_btn_rect.width // 2, settings_btn_rect.height // 2)
     settings_btn_center = menu_btn.get_rect(center=settings_btn_rect_center_pos)
     screen.blit(settings_btn, settings_btn_center)
 
     """render leaderboard button"""
     leaderboard_btn = pygame.image.load("leaderboard_icon.png")
-    leaderboard_btn_rect = pygame.Rect((0, 0), (menu_btn_pos + 1630, title_bar_rect.height))
+    leaderboard_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH*2-120, title_bar_rect.height))
     leaderboard_btn_rect_center_pos = (leaderboard_btn_rect.width // 2, leaderboard_btn_rect.height // 2)
     leaderboard_btn_center = menu_btn.get_rect(center=leaderboard_btn_rect_center_pos)
     screen.blit(leaderboard_btn, leaderboard_btn_center)
