@@ -193,6 +193,7 @@ its also only diplaying the letters that are in the word
 
 def evaluate_row(letters, tiles, word):
     inc = 0
+    print(word)
     for x in range(5):
         if letters[inc] == word[inc]:
             tiles[inc].green(letters[inc])
@@ -232,7 +233,6 @@ letter_list = []
 last_tile = len(board)-1
 
 title_bar()  # init title bar
-
 while running:
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
