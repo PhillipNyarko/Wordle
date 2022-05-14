@@ -86,18 +86,28 @@ class Tile:
         pygame.display.update()
         self.empty = True
 
-    def green(self):
+    def green(self, key):
+        letter = self.font.render(key, True, WHITE)
+        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))
         self.color = GREEN
-        screen.fill(GREEN, rect=self.tile)
+        screen.fill(self.color, rect=self.tile)
+        screen.blit(letter, letter_rect)
         pygame.display.update()
 
-    def yellow(self):
+    def yellow(self, key):
+        letter = self.font.render(key, True, WHITE)
+        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))
         self.color = YELLOW
-        screen.fill(YELLOW, rect=self.tile)
+        screen.fill(self.color, rect=self.tile)
+        screen.blit(letter, letter_rect)
         pygame.display.update()
 
-    def gray(self):
-        screen.fill(GRAY1, rect=self.tile)
+    def gray(self, key):
+        letter = self.font.render(key, True, WHITE)
+        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))
+        self.color = GRAY1
+        screen.fill(self.color, rect=self.tile)
+        screen.blit(letter, letter_rect)
         pygame.display.update()
 
     def animate(self):
@@ -174,19 +184,23 @@ def word_of_the_day():
         word = word_list[random.randint(0, len(word_list))].upper()
         return word
 
+
 """right now the evaluation script is not looking to see if
 a letter is in the right spot but rather only if it is in the word at all
 its also only diplaying the letters that are in the word
 """
+
+
 def evaluate_row(letters, tiles, word):
-    guess = letters
-    for letter in letters:
-        print(letter)
-        print(word)
-        if letter in word:
-            for tile in tiles:
-                tile.green()
-                tile.display_letter(letter)
+    inc = 0
+    for x in range(5):
+        if letters[inc] == word[inc]:
+            tiles[inc].green(letters[inc])
+        elif letters[inc] != word[0] and letters[inc] in word:
+            tiles[inc].yellow(letters[inc])
+        else:
+            tiles[inc].gray(letters[inc])
+        inc += 1
 
 
 rows = 6
@@ -197,7 +211,7 @@ board_height = title_bar() + title_bar_and_board_space
 x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
 y_position = board_height
 board = []
-word = word_of_the_day()
+word_of_the_day = word_of_the_day()
 for i in range(rows):
     for j in range(cols):
         tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position,)
@@ -241,7 +255,7 @@ while running:
                 del letter_list[-1]
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
                 last_five_tiles = curr_row[-5:]
-                evaluate_row(letter_list, last_five_tiles, word)
+                evaluate_row(letter_list, last_five_tiles, word_of_the_day)
                 if curr_tile_index != len(board)-1:
                     index_of_last_in_row += row_len + 1
                     letter_list.clear()
