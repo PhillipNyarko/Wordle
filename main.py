@@ -174,6 +174,11 @@ def title_bar():
 
     def tile_bar_settings_pressed():
         pass
+
+    tile_bar_menu_pressed()
+    tile_bar_help_pressed()
+    tile_bar_data_pressed()
+    tile_bar_settings_pressed()
     return bar_line_height
 
 
@@ -184,23 +189,17 @@ def word_of_the_day():
         word = word_list[random.randint(0, len(word_list))].upper()
         return word
 
-
-"""right now the evaluation script is not looking to see if
-a letter is in the right spot but rather only if it is in the word at all
-its also only diplaying the letters that are in the word
-"""
-
-
 def evaluate_row(letters, tiles, word):
     inc = 0
-    print(word)
+    guess = ''.join(letters)
+
     for x in range(5):
-        if letters[inc] == word[inc]:
-            tiles[inc].green(letters[inc])
-        elif letters[inc] != word[0] and letters[inc] in word:
-            tiles[inc].yellow(letters[inc])
+        if guess[inc] == word[inc]:
+            tiles[inc].green(guess[inc])
+        elif guess[inc] != word[inc] and guess[inc] in word:
+            tiles[inc].yellow(guess[inc])
         else:
-            tiles[inc].gray(letters[inc])
+            tiles[inc].gray(guess[inc])
         inc += 1
 
 
@@ -212,7 +211,6 @@ board_height = title_bar() + title_bar_and_board_space
 x_position = (WIN_LENGTH//2)-((tile_size_x+box_space)*5)//2
 y_position = board_height
 board = []
-word_of_the_day = word_of_the_day()
 for i in range(rows):
     for j in range(cols):
         tile = Tile((j*(tile_size_x+box_space) + x_position), (i*(tile_size_y+box_space)) + y_position,)
@@ -231,6 +229,7 @@ index_of_last_in_row = 4
 row_len = 4
 letter_list = []
 last_tile = len(board)-1
+word_of_the_day = word_of_the_day()
 
 title_bar()  # init title bar
 while running:
