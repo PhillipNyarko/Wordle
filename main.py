@@ -197,7 +197,7 @@ def evaluate_row(letters, tiles, word):
         if guess[inc] == word[inc]:
             tiles[inc].green(guess[inc])
         elif guess[inc] != word[inc] and guess[inc] in word:
-            tiles[inc].yellow(guess[inc])
+                tiles[inc].yellow(guess[inc])
         else:
             tiles[inc].gray(guess[inc])
         inc += 1
