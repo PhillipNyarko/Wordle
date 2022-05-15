@@ -189,6 +189,7 @@ def word_of_the_day():
         word = word_list[random.randint(0, len(word_list))].upper()
         return word
 
+
 def evaluate_row(letters, tiles, word):
     inc = 0
     guess = ''.join(letters)
@@ -197,7 +198,7 @@ def evaluate_row(letters, tiles, word):
         if guess[inc] == word[inc]:
             tiles[inc].green(guess[inc])
         elif guess[inc] != word[inc] and guess[inc] in word:
-                tiles[inc].yellow(guess[inc])
+            tiles[inc].yellow(guess[inc])
         else:
             tiles[inc].gray(guess[inc])
         inc += 1
