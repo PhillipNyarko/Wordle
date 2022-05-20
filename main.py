@@ -197,13 +197,12 @@ def evaluate_row(letters, tiles, word):
     for x in range(5):
         if guess[inc] == word[inc]:
             tiles[inc].green(guess[inc])
-        elif guess[inc] != word[inc] and guess[inc] in word:
-            tiles[inc].yellow(guess[inc])
-        else:
+        if guess[inc] not in word:
             tiles[inc].gray(guess[inc])
         inc += 1
 
-
+    for x in guess:
+        if x
 rows = 6
 cols = 5
 box_space = 6
