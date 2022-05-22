@@ -204,7 +204,7 @@ def evaluate_row(letters, tiles, word):
                 tiles[inc].gray(guess[inc])
             inc += 1
     else:
-        print("not in word lisr")
+        print("not in word list")
         in_word_list = False
         return in_word_list
 
