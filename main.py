@@ -182,24 +182,31 @@ def title_bar():
     return bar_line_height
 
 
+with open("word_list.json", "r") as file:
+    data = json.load(file)
+    word_list = data["word_list"]
+
+
 def word_of_the_day():
-    with open("word_list.json", "r") as file:
-        data = json.load(file)
-        word_list = data["word_list"]
-        word = word_list[random.randint(0, len(word_list))].upper()
-        return word
+    word = word_list[random.randint(0, len(word_list))].upper()
+    return word
 
 
 def evaluate_row(letters, tiles, word):
     inc = 0
     guess = ''.join(letters)
 
-    for x in range(5):
-        if guess[inc] == word[inc]:
-            tiles[inc].green(guess[inc])
-        if guess[inc] not in word:
-            tiles[inc].gray(guess[inc])
-        inc += 1
+    if guess.lower() in word_list:
+        for x in range(5):
+            if guess[inc] == word[inc]:
+                tiles[inc].green(guess[inc])
+            if guess[inc] not in word:
+                tiles[inc].gray(guess[inc])
+            inc += 1
+    else:
+        print("not in word lisr")
+        in_word_list = False
+        return in_word_list
 
 
 rows = 6
