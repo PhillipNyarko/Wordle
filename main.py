@@ -201,8 +201,7 @@ def evaluate_row(letters, tiles, word):
             tiles[inc].gray(guess[inc])
         inc += 1
 
-    for x in guess:
-        if x
+
 rows = 6
 cols = 5
 box_space = 6
