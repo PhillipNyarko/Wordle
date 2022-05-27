@@ -179,10 +179,10 @@ def title_bar():
     tile_bar_settings_pressed()
     return bar_line_height
 
-"""separate word list and possible inputs"""
 with open("word_list.json", "r") as file:
     data = json.load(file)
     word_list = data["word_list"]
+    acceptable_words = data["acceptable_input_list"]
 
 
 def word_of_the_day():
@@ -194,7 +194,8 @@ def evaluate_row(letters, tiles, word):
     inc = 0
     guess = ''.join(letters)
 
-    if guess.lower() in word_list:
+    if guess.lower() in acceptable_words or guess.lower() in word_list:
+
         for x in range(5):
             if guess[inc] == word[inc]:
                 tiles[inc].green(guess[inc])
