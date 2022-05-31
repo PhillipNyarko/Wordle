@@ -21,6 +21,7 @@ YELLOW = (181, 159, 59)
 GRAY1 = (58, 58, 60)
 GRAY2 = (86, 87, 88)
 GRAY3 = (129, 131, 132)
+
 # images
 wordle_icon = pygame.image.load("wordle_icon.png")
 
@@ -35,7 +36,7 @@ pygame.display.update()
 tile_size_x = 61
 tile_size_y = 61
 
-"""look @"""
+
 class Tile:
     def __init__(self, x_pos, y_pos, render=True):
         self.color = GRAY1
@@ -112,6 +113,7 @@ class Tile:
         screen.blit(letter, letter_rect)
         pygame.display.update()
 
+
 def title_bar():
 
     bar_line_thickness = 1
@@ -179,6 +181,7 @@ def title_bar():
     tile_bar_settings_pressed()
     return bar_line_height
 
+
 with open("word_list.json", "r") as file:
     data = json.load(file)
     word_list = data["word_list"]
@@ -210,6 +213,15 @@ def evaluate_row(letters, tiles, word):
         print("not in word list")
         in_word_list = False
         return in_word_list
+
+
+def display_word(word):
+    font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
+    final_word = font.render(word, True, "black")
+    final_word_rect = final_word.get_rect(center=(WIN_LENGTH//2-(70/2)+(final_word.get_size()[0]//2), WIN_HEIGHT-635))
+    pygame.draw.rect(screen, "white", final_word_rect)
+    screen.blit(final_word, final_word_rect)
+    pygame.display.update()
 
 
 rows = 6
@@ -261,20 +273,21 @@ while running:
                 curr_tile_index -= 1
                 del curr_row[-1]
                 del letter_list[-1]
-            elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]: # if on last letter of row
+            elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
                 last_five_tiles = curr_row[-5:]
-                if curr_tile_index != len(board)-1: # if we are not on the last tile of the entire board
-                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day) == True:
-                        index_of_last_in_row += row_len + 1 # go to the fisrt tile ond the next line
-                        letter_list.clear()  # cleer the letter list to keep the list with one word
-                    elif evaluate_row(letter_list, last_five_tiles, word_of_the_day) == False:
+                if curr_tile_index != len(board)-1:  # if we are not on the last tile of the entire board
+                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day):
+                        index_of_last_in_row += row_len + 1  # go to the first tile ond the next line
+                        letter_list.clear()  # clear the letter list to keep the list with one word
+                    elif not evaluate_row(letter_list, last_five_tiles, word_of_the_day):
                         pass
                     """ create rects that hold each row and shake the rects"""
 
-                elif curr_tile_index == len(board)-1: # if we are on the last tile of the board
+                elif curr_tile_index == len(board)-1:  # if we are on the last tile of the board
                     evaluate_row(letter_list, last_five_tiles, word_of_the_day)
                     if evaluate_row(letter_list, last_five_tiles, word_of_the_day):
                         print(word_of_the_day)
+                        display_word(word_of_the_day)
                     """ create rects that hold each row and shake the rects"""
 
             print(letter_list)
