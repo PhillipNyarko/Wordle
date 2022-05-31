@@ -210,6 +210,7 @@ def evaluate_row(letters, tiles, word):
         in_word_list = True
         return in_word_list
     else:
+        display_word("not in word list")
         print("not in word list")
         in_word_list = False
         return in_word_list
@@ -222,6 +223,7 @@ def display_word(word):
     pygame.draw.rect(screen, "white", final_word_rect)
     screen.blit(final_word, final_word_rect)
     pygame.display.update()
+
 
 
 rows = 6
