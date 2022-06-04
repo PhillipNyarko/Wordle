@@ -232,7 +232,7 @@ def end_card(win_num, loss_num):
     card_length = WIN_LENGTH/2
     card_height = WIN_HEIGHT/2
 
-    end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2-50, card_length, card_height+100)
+    end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2.7, card_length, card_height*1.3)
     pygame.draw.rect(screen, BACKGROUND_BLACK, end_card_rect, 0, border_radius=3)
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
@@ -242,7 +242,7 @@ def end_card(win_num, loss_num):
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     wins = font.render("Wins", True, WHITE)
-    screen.blit(wins, (WIN_LENGTH / 2 - (stats.get_width() / 2)-65, 160))
+    screen.blit(wins, (WIN_LENGTH / 2 - (stats.get_width() / .91), card_height//2.13))
     wins_num = font.render(str(win_num), True, WHITE)
     screen.blit(wins_num, (WIN_LENGTH / 2 - (stats.get_width() / 2) - 48, 190))
 
