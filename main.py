@@ -237,43 +237,43 @@ def end_card(win_num, loss_num):
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
     stats = font.render("Statistics", True, WHITE)
-    screen.blit(stats, (WIN_LENGTH/2-(stats.get_width()/2), WIN_HEIGHT//5))
+    screen.blit(stats, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     wins = font.render("Wins", True, WHITE)
-    screen.blit(wins, (WIN_LENGTH / 2 - (stats.get_width()/0.99), card_height/1.75))
+    screen.blit(wins, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     wins_num = font.render(str(win_num), True, WHITE)
-    screen.blit(wins_num, (WIN_LENGTH / 2 - (stats.get_width() / 1.07), card_height/2))
+    screen.blit(wins_num, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     losses = font.render("Losses", True, WHITE)
-    screen.blit(losses, (WIN_LENGTH / 2 - (stats.get_width() / 5.5), card_height/1.75))
+    screen.blit(losses, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     losses_num = font.render(str(loss_num), True, WHITE)
-    screen.blit(losses_num, (WIN_LENGTH / 2 - (stats.get_width() / 16), card_height/2))
+    screen.blit(losses_num, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     percent = font.render("Win %", True, WHITE)
-    screen.blit(percent, (WIN_LENGTH/1.41 - (stats.get_width()), card_height/1.75))
+    screen.blit(percent, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     percent_num = font.render(str(win_num/(win_num + loss_num)*10) + "%", True, WHITE)
-    screen.blit(percent_num, (WIN_LENGTH - (percent_num.get_width()/0.13), card_height/2))
+    screen.blit(percent_num, (0,0))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 23)
     nxt_wordle = font.render("NEXT WORDLE", True, WHITE)
-    screen.blit(nxt_wordle, (WIN_LENGTH / 2 - (stats.get_width() / 2)-150, 450))
+    screen.blit(nxt_wordle, (0,0))
     pygame.display.update()
 
 
