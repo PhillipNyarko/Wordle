@@ -234,40 +234,43 @@ def end_card(win_num, loss_num):
 
     end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2.7, card_length, card_height*1.3)
     pygame.draw.rect(screen, BACKGROUND_BLACK, end_card_rect, 0, border_radius=3)
+    local_legnth = end_card_rect.width
+    local_height = end_card_rect.height
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
+
     stats = font.render("Statistics", True, WHITE)
-    screen.blit(stats, (0,0))
+    screen.blit(stats, (local_legnth-stats.get_width()/2, local_height//3.3))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     wins = font.render("Wins", True, WHITE)
-    screen.blit(wins, (0,0))
+    screen.blit(wins, (local_legnth - wins.get_width() / .32, local_height // 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     wins_num = font.render(str(win_num), True, WHITE)
-    screen.blit(wins_num, (0,0))
+    screen.blit(wins_num, (local_legnth-wins.get_width()/0.35, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     losses = font.render("Losses", True, WHITE)
-    screen.blit(losses, (0,0))
+    screen.blit(losses, (local_legnth - losses.get_width() / 2, local_height // 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     losses_num = font.render(str(loss_num), True, WHITE)
-    screen.blit(losses_num, (0,0))
+    screen.blit(losses_num, (local_legnth-losses_num.get_width()/2, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     percent = font.render("Win %", True, WHITE)
-    screen.blit(percent, (0,0))
+    screen.blit(percent, (WIN_LENGTH/1.76, local_height//2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
-    percent_num = font.render(str(win_num/(win_num + loss_num)*10) + "%", True, WHITE)
-    screen.blit(percent_num, (0,0))
+    percent_num = font.render(str(round((win_num/(win_num + loss_num)*10), 1)), True, WHITE)
+    screen.blit(percent_num, (WIN_LENGTH/1.75, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
@@ -277,8 +280,8 @@ def end_card(win_num, loss_num):
     pygame.display.update()
 
 
-num_wins = 6
-num_losses = 9
+num_wins = 8
+num_losses = 5
 rows = 6
 cols = 5
 box_space = 6
