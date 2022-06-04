@@ -226,6 +226,13 @@ def display_word(word):
     if pygame.key.get_pressed():
         pygame.draw.rect(screen, BACKGROUND_BLACK, backdrop)
 
+def end_card():
+    screen.fill((8, 8, 8))
+    card_length = WIN_LENGTH/2
+    card_height = WIN_HEIGHT/2
+    end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2-50, card_length, card_height+100)
+    pygame.draw.rect(screen, BACKGROUND_BLACK, end_card_rect, 0, border_radius=3)
+    pygame.display.update()
 
 rows = 6
 cols = 5
@@ -245,7 +252,6 @@ hidden_last_tile = Tile(588, 399, False)
 board.append(hidden_last_tile)
 
 # define objects outside the class so that the object state parameter doesn't reset
-game_playing = True
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 curr_tile_index = 0
@@ -255,55 +261,58 @@ row_len = 4
 letter_list = []
 last_tile = len(board)-1
 word_of_the_day = word_of_the_day()
-while running:
-    while game_playing:
-        curr_tile = board[curr_tile_index]
-        previous_tile = board[curr_tile_index - 1]
+game_playing = True
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
+while running:
+    curr_tile = board[curr_tile_index]
+    previous_tile = board[curr_tile_index - 1]
+
+    if not game_playing:
+        end_card()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.quit()
+        if event.type == pygame.KEYDOWN:
+            if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
+                if game_playing:
                     key_pressed = pygame.key.name(event.key).upper()
                     curr_tile.display_letter(key_pressed)
                     letter_list.append(key_pressed)
                     curr_tile_index += 1
                     curr_row.append(curr_tile)
 
-                elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and curr_tile_index != index_of_last_in_row - row_len:
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and curr_tile_index != index_of_last_in_row - row_len:
+                if game_playing:
                     previous_tile.backspace()
                     curr_tile_index -= 1
                     del curr_row[-1]
                     del letter_list[-1]
 
-                elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
+            elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
+                last_five_tiles = curr_row[-5:]
+                if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) == word_of_the_day:
                     """animate right word selected"""''
-                    last_five_tiles = curr_row[-5:]
-                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) == word_of_the_day:
-                        game_playing = True
+                    game_playing = False
 
-                    if curr_tile_index != len(board)-1:  # if we are not on the last tile of the entire board
-                        if evaluate_row(letter_list, last_five_tiles, word_of_the_day):
-                            index_of_last_in_row += row_len + 1  # go to the first tile ond the next line
-                            letter_list.clear()  # clear the letter list to keep the list with one word
-                            """ animate word inputed"""
-                        elif not evaluate_row(letter_list, last_five_tiles, word_of_the_day):
-                            pass
-                            """ create rects that hold each row and shake the rects"""
+                if curr_tile_index != len(board)-1:  # if we are not on the last tile of the entire board
+                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day):
+                        index_of_last_in_row += row_len + 1  # go to the first tile ond the next line
+                        letter_list.clear()  # clear the letter list to keep the list with one word
+                        """ animate word inputed"""
+                    elif not evaluate_row(letter_list, last_five_tiles, word_of_the_day):
+                        pass
+                        """ create rects that hold each row and shake the rects"""
 
-                    elif curr_tile_index == len(board)-1:  # if we are on the last tile of the board
-                        evaluate_row(letter_list, last_five_tiles, word_of_the_day)
-                        if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) != word_of_the_day:
-                            print(word_of_the_day)
-                            display_word(word_of_the_day)
-                            game_playing = False
-                            """ create rects that hold each row and shake the rects"""
-                print(word_of_the_day)
-                print(letter_list)
+                elif curr_tile_index == len(board)-1:  # if we are on the last tile of the board
+                    evaluate_row(letter_list, last_five_tiles, word_of_the_day)
+                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) != word_of_the_day:
+                        print(word_of_the_day)
+                        display_word(word_of_the_day)
+                        game_playing = False
+            print(word_of_the_day)
+            print(letter_list)
 
-    screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, BACKGROUND_BLACK, pygame.Rect(WIN_LENGTH-300, WIN_HEIGHT-300, WIN_HEIGHT-500, WIN_LENGTH-500), 0, border_radius=3)
-    pygame.display.update()
+
+
 
