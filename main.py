@@ -226,14 +226,44 @@ def display_word(word):
     if pygame.key.get_pressed():
         pygame.draw.rect(screen, BACKGROUND_BLACK, backdrop)
 
-def end_card():
+
+def end_card(win_num, loss_num):
     screen.fill((8, 8, 8))
     card_length = WIN_LENGTH/2
     card_height = WIN_HEIGHT/2
+
     end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2-50, card_length, card_height+100)
     pygame.draw.rect(screen, BACKGROUND_BLACK, end_card_rect, 0, border_radius=3)
+
+    font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
+    stats = font.render("Statistics", True, WHITE)
+    screen.blit(stats, (WIN_LENGTH/2-(stats.get_width()/2), 120))
+
+    font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
+
+    wins = font.render("Wins", True, WHITE)
+    screen.blit(wins, (WIN_LENGTH / 2 - (stats.get_width() / 2)-65, 160))
+    wins_num = font.render(str(win_num), True, WHITE)
+    screen.blit(wins_num, (WIN_LENGTH / 2 - (stats.get_width() / 2) - 48, 190))
+
+    losses = font.render("Losses", True, WHITE)
+    screen.blit(losses, (WIN_LENGTH / 2 - (stats.get_width() / 2)+25, 160))
+    losses_num = font.render(str(loss_num), True, WHITE)
+    screen.blit(losses_num, (WIN_LENGTH / 2 - (stats.get_width() / 2) +50, 190))
+
+    percent = font.render("Win %", True, WHITE)
+    screen.blit(percent, (WIN_LENGTH / 2 - (stats.get_width() / 2)+120, 160))
+    percent_num = font.render(str(win_num/(win_num + loss_num)*10) + "%", True, WHITE)
+    screen.blit(percent_num, (WIN_LENGTH / 2 - (stats.get_width() / 2) + 125, 190))
+
+    font = pygame.font.Font("NeueHelvetica-Bold.otf", 23)
+    nxt_wordle = font.render("NEXT WORDLE", True, WHITE)
+    screen.blit(nxt_wordle, (WIN_LENGTH / 2 - (stats.get_width() / 2)-150, 450))
     pygame.display.update()
 
+
+num_wins = 6
+num_losses = 9
 rows = 6
 cols = 5
 box_space = 6
@@ -268,7 +298,7 @@ while running:
     previous_tile = board[curr_tile_index - 1]
 
     if not game_playing:
-        end_card()
+        end_card(num_wins, num_losses)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -292,7 +322,8 @@ while running:
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
                 last_five_tiles = curr_row[-5:]
                 if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) == word_of_the_day:
-                    """animate right word selected"""''
+                    """animate right word selected"""
+                    time.sleep(1)
                     game_playing = False
 
                 if curr_tile_index != len(board)-1:  # if we are not on the last tile of the entire board
@@ -309,6 +340,7 @@ while running:
                     if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) != word_of_the_day:
                         print(word_of_the_day)
                         display_word(word_of_the_day)
+                        time.sleep(1)
                         game_playing = False
             print(word_of_the_day)
             print(letter_list)
