@@ -237,7 +237,7 @@ def end_card(win_num, loss_num):
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
     stats = font.render("Statistics", True, WHITE)
-    screen.blit(stats, (WIN_LENGTH/2-(stats.get_width()/2), 120))
+    screen.blit(stats, (WIN_LENGTH/2-(stats.get_width()/2), WIN_HEIGHT//5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
@@ -249,7 +249,7 @@ def end_card(win_num, loss_num):
     losses = font.render("Losses", True, WHITE)
     screen.blit(losses, (WIN_LENGTH / 2 - (stats.get_width() / 2)+25, 160))
     losses_num = font.render(str(loss_num), True, WHITE)
-    screen.blit(losses_num, (WIN_LENGTH / 2 - (stats.get_width() / 2) +50, 190))
+    screen.blit(losses_num, (WIN_LENGTH / 2 - (stats.get_width() / 2) + 50, 190))
 
     percent = font.render("Win %", True, WHITE)
     screen.blit(percent, (WIN_LENGTH / 2 - (stats.get_width() / 2)+120, 160))
@@ -294,6 +294,7 @@ word_of_the_day = word_of_the_day()
 game_playing = True
 
 while running:
+    end_card(num_wins, num_losses)
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
 
