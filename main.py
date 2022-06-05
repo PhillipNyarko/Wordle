@@ -5,6 +5,8 @@ import time
 import animations
 from win32api import GetSystemMetrics
 
+import render
+
 pygame.init()
 
 """look @"""
@@ -86,82 +88,7 @@ class Tile:
 
 
 def title_bar():
-
-    bar_line_thickness = 1
-    bar_line_height = 50
-    line_start_position = (0, bar_line_height)
-    line_end_position = (WIN_LENGTH, bar_line_height)
-
-    title_bar_rect = pygame.Rect((0, 0), (WIN_LENGTH, bar_line_height))
-    title_bar_rect_center = (title_bar_rect.width//2, title_bar_rect.height//2)
-
-    """render title"""
-    title = pygame.image.load("wordle_title.png")
-    title_rect = title.get_rect(center=title_bar_rect_center)  # get the center of letter
-    SCREEN.blit(title, title_rect)
-
-    """render menu button"""
-    menu_btn = pygame.image.load("menu_icon.png")
-    menu_btn_pos = 60
-    menu_btn_rect = pygame.Rect((0, 0), (menu_btn_pos, title_bar_rect.height))
-    menu_btn_rect_center_pos = (menu_btn_rect.width//2, menu_btn_rect.height//2)
-    menu_btn_center = menu_btn.get_rect(center=menu_btn_rect_center_pos)
-    SCREEN.blit(menu_btn, menu_btn_center)
-
-    """render help button"""
-    help_btn = pygame.image.load("help_icon.png")
-    help_btn_rect = pygame.Rect((0, 0), (menu_btn_pos + 65, title_bar_rect.height))
-    help_btn_rect_center_pos = (help_btn_rect.width // 2, help_btn_rect.height // 2)
-    help_btn_center = menu_btn.get_rect(center=help_btn_rect_center_pos)
-    SCREEN.blit(help_btn, help_btn_center)
-
-    """render settings button"""
-    settings_btn = pygame.image.load("settings_icon.png")
-    settings_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH*2-50, title_bar_rect.height))
-    settings_btn_rect_center_pos = (settings_btn_rect.width // 2, settings_btn_rect.height // 2)
-    settings_btn_center = menu_btn.get_rect(center=settings_btn_rect_center_pos)
-    SCREEN.blit(settings_btn, settings_btn_center)
-
-    """render leaderboard button"""
-    leaderboard_btn = pygame.image.load("leaderboard_icon.png")
-    leaderboard_btn_rect = pygame.Rect((0, 0), (WIN_LENGTH*2-120, title_bar_rect.height))
-    leaderboard_btn_rect_center_pos = (leaderboard_btn_rect.width // 2, leaderboard_btn_rect.height // 2)
-    leaderboard_btn_center = menu_btn.get_rect(center=leaderboard_btn_rect_center_pos)
-    SCREEN.blit(leaderboard_btn, leaderboard_btn_center)
-
-    """title bar is the container for the entire bar but the line is the bar that actually is displayed"""
-    # pygame.draw.rect(SCREEN, GREEN, title_bar_rect, bar_line_thickness)
-    pygame.draw.line(SCREEN, TILE_GRAY, line_start_position, line_end_position, bar_line_thickness)
-    update_display()
-
-    def tile_bar_menu_pressed():
-        pass
-
-    def tile_bar_help_pressed():
-        pass
-
-    def tile_bar_data_pressed():
-        pass
-
-    def tile_bar_settings_pressed():
-        pass
-
-    tile_bar_menu_pressed()
-    tile_bar_help_pressed()
-    tile_bar_data_pressed()
-    tile_bar_settings_pressed()
-    return bar_line_height
-
-
-with open("word_list.json", "r") as file:
-    data = json.load(file)
-    word_list = data["word_list"]
-    acceptable_words = data["acceptable_input_list"]
-
-
-def word_of_the_day():
-    word = word_list[random.randint(0, len(word_list))].upper()
-    return word
+    return render.render_title_bar()
 
 
 def evaluate_row(letters, tiles, word):
@@ -188,12 +115,7 @@ def evaluate_row(letters, tiles, word):
     
 
 def display_word(word):
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
-    final_word = font.render(word, True, "black")
-    final_word_rect = final_word.get_rect(center=(WIN_LENGTH // 2, 78))
-    bg_rect = pygame.Rect(WIN_LENGTH // 2 - 75, 57, 150, 45)
-    animations.fade_in(final_word, final_word_rect, bg_rect)
-    animations.fade_out(final_word,final_word_rect, bg_rect)
+    render.show_word(word)
 
 
 def end_card(win_num, loss_num):
@@ -209,33 +131,33 @@ def end_card(win_num, loss_num):
 
     end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2.7, card_length, card_height*1.3)
     pygame.draw.rect(SCREEN, BG_BLACK, end_card_rect, 0, border_radius=3)
-    local_legnth = end_card_rect.width
+    local_length = end_card_rect.width
     local_height = end_card_rect.height
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
 
     stats = font.render("Statistics", True, WHITE)
-    SCREEN.blit(stats, (local_legnth-stats.get_width()/2, local_height//3.3))
+    SCREEN.blit(stats, (local_length-stats.get_width()/2, local_height//3.3))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     wins = font.render("Wins", True, WHITE)
-    SCREEN.blit(wins, (local_legnth - wins.get_width() / .32, local_height // 2.1))
+    SCREEN.blit(wins, (local_length - wins.get_width() / .32, local_height // 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     wins_num = font.render(str(win_num), True, WHITE)
-    SCREEN.blit(wins_num, (local_legnth-wins.get_width()/0.35, local_height//2.5))
+    SCREEN.blit(wins_num, (local_length-wins.get_width()/0.35, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     losses = font.render("Losses", True, WHITE)
-    SCREEN.blit(losses, (local_legnth - losses.get_width() / 2, local_height // 2.1))
+    SCREEN.blit(losses, (local_length - losses.get_width() / 2, local_height // 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     losses_num = font.render(str(loss_num), True, WHITE)
-    SCREEN.blit(losses_num, (local_legnth-losses_num.get_width()/2, local_height//2.5))
+    SCREEN.blit(losses_num, (local_length-losses_num.get_width()/2, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
@@ -253,6 +175,17 @@ def end_card(win_num, loss_num):
     nxt_wordle = font.render("NEXT WORDLE", True, WHITE)
     SCREEN.blit(nxt_wordle, (0,0))
     update_display()
+
+
+with open("word_list.json", "r") as file:
+    data = json.load(file)
+    word_list = data["word_list"]
+    acceptable_words = data["acceptable_input_list"]
+
+
+def word_of_the_day():
+    word = word_list[random.randint(0, len(word_list))].upper()
+    return word
 
 
 num_wins = 8
