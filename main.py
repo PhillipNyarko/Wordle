@@ -30,11 +30,14 @@ pygame.display.set_caption("Wordle")
 pygame.display.set_icon(wordle_icon)
 SCREEN.fill(BG_BLACK)
 
+
 def update_display():
     pygame.display.update()
 
+
 # define tile size (x,y / length, height) and create game tile
-tile_size = (61,61)
+tile_size = (61, 61)
+
 
 class Tile:
     def __init__(self, x_pos, y_pos, render=True):
@@ -42,8 +45,7 @@ class Tile:
         self.tile_thickness = 2
         self.position = x_pos, y_pos
         self.tile_size = (tile_size[0], tile_size[1])
-        self.letter_x_pos = self.position[0] + (self.tile_size[0] / 2)
-        self.letter_y_pos = self.position[1] + (self.tile_size[1] / 2)
+        self.letter_pos = (self.position[0] + (self.tile_size[0] / 2), self.position[1] + (self.tile_size[1] / 2))
         self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_size)
         self.font_size = WIN_HEIGHT//20
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
@@ -58,39 +60,29 @@ class Tile:
 
     def display_letter(self, key):
         letter = self.font.render(key, True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # move by center
+        letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
         SCREEN.blit(letter, letter_rect)
         animations.display_letter(self.tile, self.tile_thickness, self.position, self.tile_size, tile_spacing)
         self.empty = False
 
     def backspace(self):
-        letter = self.font.render("   ", True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))  # get the center of letter
+        letter = self.font.render("    ", True, WHITE)
+        letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # get the center of letter
         letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-        letter_surface.fill(BG_BLACK) # fill tile with background color
+        letter_surface.fill(BG_BLACK)  # fill tile with background color
         SCREEN.blit(letter_surface, letter_rect)
-        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness) #change tile color back
+        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)  # change tile color back
         update_display()
         self.empty = True
 
     def green(self, key):
-       animations.green(key, self.letter_x_pos, self.letter_y_pos, self.position, self.tile_size, self.tile_thickness)
+        animations.animate_tile(key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, GREEN)
 
     def yellow(self, key):
-        letter = self.font.render(key, True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))
-        self.color = YELLOW
-        SCREEN.fill(self.color, rect=self.tile)
-        SCREEN.blit(letter, letter_rect)
-        update_display()
+        animations.animate_tile(key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, YELLOW)
 
     def gray(self, key):
-        letter = self.font.render(key, True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))
-        self.color = TILE_GRAY
-        SCREEN.fill(self.color, rect=self.tile)
-        SCREEN.blit(letter, letter_rect)
-        update_display()
+        animations.animate_tile(key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, TILE_GRAY)
 
 
 def title_bar():
@@ -193,11 +185,9 @@ def evaluate_row(letters, tiles, word):
         print("not in word list")
         in_word_list = False
         return in_word_list
-
-
+    
 
 def display_word(word):
-    inc = 0
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
     final_word = font.render(word, True, "black")
     final_word_rect = final_word.get_rect(center=(WIN_LENGTH // 2, 78))
@@ -297,7 +287,7 @@ word_of_the_day = word_of_the_day()
 game_playing = True
 
 while running:
-    #end_card(num_wins, num_losses)
+    # end_card(num_wins, num_losses)
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
 
@@ -325,24 +315,23 @@ while running:
 
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
                 last_five_tiles = curr_row[-5:]
-                if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) == word_of_the_day:
+                row_value = evaluate_row(letter_list, last_five_tiles, word_of_the_day)
+                if row_value and ''.join(letter_list) == word_of_the_day:
                     """animate right word selected"""
                     time.sleep(1)
                     game_playing = False
 
                 if curr_tile_index != len(board)-1:  # if we are not on the last tile of the entire board
-                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day):
+                    if row_value:
                         index_of_last_in_row += row_len + 1  # go to the first tile ond the next line
                         letter_list.clear()  # clear the letter list to keep the list with one word
                         """ animate word inputed"""
-                    elif not evaluate_row(letter_list, last_five_tiles, word_of_the_day):
+                    elif not row_value:
                         pass
                         """ create rects that hold each row and shake the rects"""
 
                 elif curr_tile_index == len(board)-1:  # if we are on the last tile of the board
-                    evaluate_row(letter_list, last_five_tiles, word_of_the_day)
-                    if evaluate_row(letter_list, last_five_tiles, word_of_the_day) and ''.join(letter_list) != word_of_the_day:
-                        print(word_of_the_day)
+                    if row_value and ''.join(letter_list) != word_of_the_day:
                         display_word(word_of_the_day)
                         time.sleep(1)
                         game_playing = False

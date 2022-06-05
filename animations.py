@@ -74,40 +74,32 @@ def display_letter(tile, tile_thickness, position, tile_size, box_space):
     update_display()
 
 
-def green(key, letter_x_pos, letter_y_pos, position, tile_size, tile_thickness):
+def animate_tile(key, letter_pos, position, tile_size, tile_thickness, color):
     letter = font.render(key, True, WHITE)
-    letter_rect = letter.get_rect(center=(letter_x_pos, letter_y_pos))
+    letter_rect = letter.get_rect(center=(letter_pos[0], letter_pos[1]))
     x_pos = position[0]
     y_pos = position[1]
 
     change_rate = 0
     speed = 0.002
     for x in range(tile_size[0]):
+        """loook att"""
         tile = pygame.Rect((x_pos, y_pos), tile_size)
         tile.inflate_ip(0, change_rate)
         pygame.draw.rect(SCREEN, TILE_GRAY, tile, tile_thickness)
         update_display()
         time.sleep(speed)
-
         pygame.draw.rect(SCREEN, BG_BLACK, tile, tile_thickness)
         update_display()
-        change_rate -= 1
-        
+        change_rate -= 2
     for x in range(tile_size[0]):
         tile = pygame.Rect((x_pos, y_pos), tile_size)
         tile.inflate_ip(0, change_rate)
-        pygame.draw.rect(SCREEN, GREEN, tile, tile_thickness)
+        pygame.draw.rect(SCREEN, color, tile, tile_thickness)
         update_display()
         time.sleep(speed)
-        change_rate += 1
+        change_rate += 2
 
     SCREEN.blit(letter, letter_rect)
 
-
-while True:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            pygame.quit()
 
