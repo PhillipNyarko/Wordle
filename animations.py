@@ -83,7 +83,6 @@ def animate_tile(key, letter_pos, position, tile_size, tile_thickness, color):
     change_rate = 0
     speed = 0.001
     for x in range(tile_size[0]):
-        """loook att"""
         tile = pygame.Rect((x_pos, y_pos), tile_size)
         tile.inflate_ip(0, change_rate)
         pygame.draw.rect(SCREEN, TILE_GRAY, tile, tile_thickness)
