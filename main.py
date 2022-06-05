@@ -40,9 +40,7 @@ class Tile:
     def __init__(self, x_pos, y_pos, render=True):
         self.color = TILE_GRAY
         self.tile_thickness = 2
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.position = self.x_pos, self.y_pos
+        self.position = x_pos, y_pos
         self.tile_size = (tile_size[0], tile_size[1])
         self.letter_x_pos = self.x_pos + (self.tile_size[0] / 2)
         self.letter_y_pos = self.y_pos + (self.tile_size[1] / 2)
