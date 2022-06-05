@@ -42,9 +42,9 @@ class Tile:
         self.tile_thickness = 2
         self.position = x_pos, y_pos
         self.tile_size = (tile_size[0], tile_size[1])
-        self.letter_x_pos = self.x_pos + (self.tile_size[0] / 2)
-        self.letter_y_pos = self.y_pos + (self.tile_size[1] / 2)
-        self.tile = pygame.Rect((self.x_pos, self.y_pos), self.tile_size)
+        self.letter_x_pos = self.position[0] + (self.tile_size[0] / 2)
+        self.letter_y_pos = self.position[1] + (self.tile_size[1] / 2)
+        self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_size)
         self.font_size = WIN_HEIGHT//20
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
@@ -74,12 +74,7 @@ class Tile:
         self.empty = True
 
     def green(self, key):
-        letter = self.font.render(key, True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_x_pos, self.letter_y_pos))
-        self.color = GREEN
-        SCREEN.fill(self.color, rect=self.tile)
-        SCREEN.blit(letter, letter_rect)
-        update_display()
+       animations.green(key, self.letter_x_pos, self.letter_y_pos, self.position, self.tile_size, self.tile_thickness)
 
     def yellow(self, key):
         letter = self.font.render(key, True, WHITE)

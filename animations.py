@@ -74,52 +74,40 @@ def display_letter(tile, tile_thickness, position, tile_size, box_space):
     update_display()
 
 
-position = (300, 200)
-tile_size = (61, 61)
-test_color = GREEN
-letter_x_pos = position[0] + (tile_size[0] / 2)
-letter_y_pos = position[1] + (tile_size[1] / 2)
-
-
-def green(key, color):
+def green(key, letter_x_pos, letter_y_pos, position, tile_size, tile_thickness):
     letter = font.render(key, True, WHITE)
     letter_rect = letter.get_rect(center=(letter_x_pos, letter_y_pos))
     x_pos = position[0]
     y_pos = position[1]
-    tile = pygame.Rect((x_pos, y_pos), (tile_size[0], tile_size[1]))
-    pygame.draw.rect(SCREEN, TILE_GRAY, tile, 2)
-    update_display()
-    inc = 0
-    shrink_rate = 0
 
+    change_rate = 0
+    speed = 0.002
     for x in range(tile_size[0]):
-        tile.inflate_ip(0, shrink_rate)
-        pygame.draw.rect(SCREEN, TILE_GRAY, tile, 2)
+        tile = pygame.Rect((x_pos, y_pos), tile_size)
+        tile.inflate_ip(0, change_rate)
+        pygame.draw.rect(SCREEN, TILE_GRAY, tile, tile_thickness)
         update_display()
-        time.sleep(0.05)
-        pygame.draw.rect(SCREEN, BG_BLACK, tile, 2)
-        update_display()
-        shrink_rate -= 1
+        time.sleep(speed)
 
+        pygame.draw.rect(SCREEN, BG_BLACK, tile, tile_thickness)
+        update_display()
+        change_rate -= 1
+        
     for x in range(tile_size[0]):
-        tile = pygame.Rect((x_pos, y_pos), (tile_size[0], tile_size[1]))
-        tile.height = inc
-        SCREEN.fill(color, rect=tile)
-        SCREEN.blit(letter, letter_rect)
+        tile = pygame.Rect((x_pos, y_pos), tile_size)
+        tile.inflate_ip(0, change_rate)
+        pygame.draw.rect(SCREEN, GREEN, tile, tile_thickness)
         update_display()
-        time.sleep(0.05)
-        inc += 1
+        time.sleep(speed)
+        change_rate += 1
 
-    SCREEN.fill(BG_BLACK, rect=tile)
+    SCREEN.blit(letter, letter_rect)
 
 
 while True:
-    
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-
-    green("W", test_color)
-
 
