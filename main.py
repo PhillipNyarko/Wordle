@@ -52,9 +52,9 @@ class Board:
         pass
     board_x = WIN_WIDTH/2
     board_y = WIN_HEIGHT/4
-    board_rect = pygame.Rect((board_x, board_y), (338,340))
+    board_rect = pygame.Rect((board_x, board_y), ((5*5)+(tile_size*5), (6*5)+tile_size*6))
     board_rect.center = WIN_WIDTH/2, WIN_HEIGHT/2.5
-    pygame.draw.rect(SCREEN, "yellow", board_rect, 1)
+    pygame.draw.rect(SCREEN, "yellow", board_rect)
     pygame.display.update()
     class Row:
         def __init__(self, x_pos, y_pos):
