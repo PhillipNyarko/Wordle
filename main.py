@@ -9,9 +9,9 @@ from win32api import GetSystemMetrics
 pygame.init()
 
 # global variables
-WIN_WIDTH = GetSystemMetrics(0)//1.1
-WIN_HEIGHT = GetSystemMetrics(1)//1.1
-
+WIN_WIDTH = GetSystemMetrics(0)/1.1
+WIN_HEIGHT = GetSystemMetrics(1)/1.1
+print("screen size",str(WIN_WIDTH), str(WIN_HEIGHT))
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 
@@ -31,18 +31,16 @@ pygame.display.set_caption("Wordle")
 pygame.display.set_icon(wordle_icon)
 SCREEN.fill(BG_BLACK)
 
-
 def update_display():
     pygame.display.update()
 
-
-# define tile size (x,y / width, height) and create game tile
-tile_sze = 62
-
-tile_x = WIN_WIDTH/tile_sze
-tile_y = WIN_HEIGHT/tile_sze
-tile_size = (int(WIN_WIDTH//tile_x), int(WIN_HEIGHT//tile_y))
-print(tile_size)
+# define tile size (x,y / width, height) and create game tile MY PRIDE AND JOY
+tile_size = 62
+tile_x = WIN_WIDTH/tile_size
+tile_y = WIN_HEIGHT/tile_size
+print("tile_x " + str(tile_x), "tile_y " + str(tile_y))
+tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
+print("tile dimensions" + str(tile_dimension))
 
 class Tile:
     def __init__(self, x_pos, y_pos):
@@ -50,9 +48,9 @@ class Tile:
         self.empty = True
         self.tile_thickness = 2
         self.position = x_pos, y_pos
-        self.tile_size = (tile_size[0], tile_size[1])
-        self.letter_pos = (self.position[0] + (self.tile_size[0] / 2), self.position[1] + (self.tile_size[1] / 2))
-        self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_size)
+        self.tile_dimension = (tile_dimension[0], tile_dimension[1])
+        self.letter_pos = (self.position[0] + (self.tile_dimension[0] / 2), self.position[1] + (self.tile_dimension[1] / 2))
+        self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_dimension)
         self.font_size = int(WIN_HEIGHT//30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
@@ -63,7 +61,7 @@ class Tile:
         letter = self.font.render(key, True, WHITE)
         letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
         SCREEN.blit(letter, letter_rect)
-        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_size, tile_spacing)
+        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_dimension, tile_spacing)
         self.empty = False
 
     def backspace(self):
@@ -77,13 +75,13 @@ class Tile:
         self.empty = True
 
     def green(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, GREEN)
+        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, GREEN)
 
     def yellow(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, YELLOW)
+        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, YELLOW)
 
     def gray(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, TILE_GRAY)
+        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, TILE_GRAY)
 
 
 def title_bar():
@@ -194,12 +192,12 @@ cols = 5
 tile_spacing = 6
 title_bar_and_board_space = 60
 board_height = title_bar() + title_bar_and_board_space # THIS IS INITIALIZING THE TITLE BAR
-x_position = (WIN_WIDTH//2)-((tile_size[0]+tile_spacing)*5)//2
+x_position = (WIN_WIDTH//2)-((tile_dimension[0]+tile_spacing)*5)//2
 y_position = board_height
 board = []
 for i in range(rows):
     for j in range(cols):
-        tile = Tile((j*(tile_size[0]+tile_spacing) + x_position), (i*(tile_size[1]+tile_spacing)) + y_position,)
+        tile = Tile((j*(tile_dimension[0]+tile_spacing) + x_position), (i*(tile_dimension[1]+tile_spacing)) + y_position,)
         board.append(tile)
 
 # define objects outside the class so that the object state parameter doesn't reset
