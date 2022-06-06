@@ -44,7 +44,7 @@ def update_display():
 tile_size = 62
 tile_x = WIN_WIDTH/tile_size
 tile_y = WIN_HEIGHT/tile_size
-tile_spacing = 30
+tile_spacing = 40
 tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
 print(tile_dimension)
 
@@ -61,12 +61,11 @@ class Board:
     pygame.display.update()
 
     class Row:
-
         row_x = WIN_WIDTH / 2
         row_y = WIN_HEIGHT / 4
-        row_rect = pygame.Rect((0, 0), (200, 200))
-        row_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
-        #pygame.draw.rect(SCREEN, "pink", row_rect, 3)
+        row_rect = pygame.Rect((100,100), ((cols*tile_spacing+tile_size*cols)-tile_spacing, tile_size))
+        row_rect.center = WIN_WIDTH / 2, 125
+        pygame.draw.rect(SCREEN, "pink", row_rect, 3)
         pygame.display.update()
 
         class Tile:
@@ -111,6 +110,12 @@ class Board:
             def gray(self, key):
                 animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, TILE_GRAY)
 
+
+board = []
+for i in range(rows):
+    for j in range(cols):
+        tile = Board.Row.Tile((j*(tile_size+tile_spacing) + Board.board_rect.topleft[0]), (i*(tile_size+tile_spacing)) + Board.board_rect.topleft[1])
+        board.append(tile)
 
 def title_bar():
     return render.render_title_bar(SCREEN, WIN_WIDTH)
@@ -215,12 +220,6 @@ def word_of_the_day():
 
 num_wins = 8
 num_losses = 5
-
-board = []
-for i in range(rows):
-    for j in range(cols):
-        tile = Board.Row.Tile((j*(tile_size+tile_spacing) + Board.board_rect.topleft[0]), (i*(tile_size+tile_spacing)) + Board.board_rect.topleft[1])
-        board.append(tile)
 
 # define objects outside the class so that the object state parameter doesn't reset
 running = True

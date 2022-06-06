@@ -91,3 +91,5 @@ def render_title_bar(screen, win_width):
     tile_bar_data_pressed()
     tile_bar_settings_pressed()
     return bar_line_height
+
+
