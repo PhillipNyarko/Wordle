@@ -44,7 +44,7 @@ def display_letter(screen, tile, tile_thickness, position, tile_size, box_space)
     update_display()
 
     tile = pygame.Rect((x_pos, y_pos), (tile_size[0] + box_space, tile_size[1] + box_space))
-    tile.center = x_pos + (tile_size[0] // 2), y_pos + (tile_size[1] // 2)
+    tile.center = x_pos + (tile_size[0] / 2), y_pos + (tile_size[1] / 2)
     pygame.draw.rect(screen, TILE_GRAY, tile, tile_thickness)
     update_display()
     time.sleep(0.05)

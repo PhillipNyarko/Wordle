@@ -51,12 +51,13 @@ class Tile:
         self.tile_thickness = 2
         self.position = x_pos, y_pos
         self.tile_dimension = (tile_dimension[0], tile_dimension[1])
-        self.letter_pos = (self.position[0] + (self.tile_dimension[0] / 2), self.position[1] + (self.tile_dimension[1]/2))
+        self.letter_pos = (self.position[0] + (self.tile_dimension[0]/2), self.position[1] + (self.tile_dimension[1]/2))
         self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_dimension)
-        self.font_size = int(WIN_HEIGHT//30)
+        self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
         pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
+        pygame.draw.line(SCREEN, "red", (self.position[0]+31, self.position[1]+62), (self.position[0]+31, 0))
         update_display()
 
     def display_letter(self, key):
@@ -128,7 +129,7 @@ def end_card(win_num, loss_num):
     card_width = WIN_WIDTH/2
     card_height = WIN_HEIGHT/2
 
-    end_card_rect = pygame.Rect(card_width-card_width//2, card_height//2.7, card_width, card_height*1.3)
+    end_card_rect = pygame.Rect(card_width-card_width/2, card_height/2.7, card_width, card_height*1.3)
     pygame.draw.rect(SCREEN, BG_BLACK, end_card_rect, 0, border_radius=3)
     local_width = end_card_rect.width
     local_height = end_card_rect.height
@@ -136,37 +137,37 @@ def end_card(win_num, loss_num):
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
 
     stats = font.render("Statistics", True, WHITE)
-    SCREEN.blit(stats, (local_width-stats.get_width()/2, local_height//3.3))
+    SCREEN.blit(stats, (local_width-stats.get_width()/2, local_height/3.3))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     wins = font.render("Wins", True, WHITE)
-    SCREEN.blit(wins, (local_width - wins.get_width() / .32, local_height // 2.1))
+    SCREEN.blit(wins, (local_width - wins.get_width() / .32, local_height / 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     wins_num = font.render(str(win_num), True, WHITE)
-    SCREEN.blit(wins_num, (local_width-wins.get_width()/0.35, local_height//2.5))
+    SCREEN.blit(wins_num, (local_width-wins.get_width()/0.35, local_height/2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     losses = font.render("Losses", True, WHITE)
-    SCREEN.blit(losses, (local_width - losses.get_width() / 2, local_height // 2.1))
+    SCREEN.blit(losses, (local_width - losses.get_width() / 2, local_height / 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     losses_num = font.render(str(loss_num), True, WHITE)
-    SCREEN.blit(losses_num, (local_width-losses_num.get_width()/2, local_height//2.5))
+    SCREEN.blit(losses_num, (local_width-losses_num.get_width()/2, local_height/2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     percent = font.render("Win %", True, WHITE)
-    SCREEN.blit(percent, (WIN_WIDTH/1.76, local_height//2.1))
+    SCREEN.blit(percent, (WIN_WIDTH/1.76, local_height/2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     percent_num = font.render(str(round((win_num/(win_num + loss_num)*10), 1)), True, WHITE)
-    SCREEN.blit(percent_num, (WIN_WIDTH/1.75, local_height//2.5))
+    SCREEN.blit(percent_num, (WIN_WIDTH/1.75, local_height/2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
@@ -192,14 +193,13 @@ num_losses = 5
 rows = 6
 cols = 5
 tile_spacing = 6
-title_bar_and_board_space = 60
-board_height = title_bar() + title_bar_and_board_space # THIS IS INITIALIZING THE TITLE BAR
-x_position = (WIN_WIDTH//2)-((tile_dimension[0]+tile_spacing)*5)//2
-y_position = board_height
+
+x_position = WIN_WIDTH/2-167
+y_position = WIN_HEIGHT/2
 board = []
 for i in range(rows):
     for j in range(cols):
-        tile = Tile((j*(tile_dimension[0]+tile_spacing) + x_position), (i*(tile_dimension[1]+tile_spacing)) + y_position,)
+        tile = Tile((j*(tile_dimension[0]+tile_spacing) + x_position), (i*(tile_dimension[1]+tile_spacing)) + y_position)
         board.append(tile)
 
 # define objects outside the class so that the object state parameter doesn't reset
@@ -275,3 +275,7 @@ while running:
                         game_playing = False
             print(word_of_the_day)
             print(letter_list)
+        pygame.draw.line(SCREEN, "red", (WIN_WIDTH / 2, 0), (WIN_WIDTH / 2, WIN_HEIGHT))
+        pygame.draw.line(SCREEN, "red", (0, WIN_HEIGHT / 2), (WIN_WIDTH, WIN_HEIGHT / 2))
+        pygame.display.update()
+

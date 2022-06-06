@@ -33,7 +33,7 @@ def render_title_bar(screen, win_width):
     line_end_position = (win_width, bar_line_height)
 
     title_bar_rect = pygame.Rect((0, 0), (win_width, bar_line_height))
-    title_bar_rect_center = (title_bar_rect.width // 2, title_bar_rect.height // 2)
+    title_bar_rect_center = (title_bar_rect.width / 2, title_bar_rect.height / 2)
 
     """render title"""
     title = pygame.image.load("wordle_title.png")
@@ -44,28 +44,28 @@ def render_title_bar(screen, win_width):
     menu_btn = pygame.image.load("menu_icon.png")
     menu_btn_pos = 60
     menu_btn_rect = pygame.Rect((0, 0), (menu_btn_pos, title_bar_rect.height))
-    menu_btn_rect_center_pos = (menu_btn_rect.width // 2, menu_btn_rect.height // 2)
+    menu_btn_rect_center_pos = (menu_btn_rect.width / 2, menu_btn_rect.height / 2)
     menu_btn_center = menu_btn.get_rect(center=menu_btn_rect_center_pos)
     screen.blit(menu_btn, menu_btn_center)
 
     """render help button"""
     help_btn = pygame.image.load("help_icon.png")
     help_btn_rect = pygame.Rect((0, 0), (menu_btn_pos + 65, title_bar_rect.height))
-    help_btn_rect_center_pos = (help_btn_rect.width // 2, help_btn_rect.height // 2)
+    help_btn_rect_center_pos = (help_btn_rect.width / 2, help_btn_rect.height / 2)
     help_btn_center = menu_btn.get_rect(center=help_btn_rect_center_pos)
     screen.blit(help_btn, help_btn_center)
 
     """render settings button"""
     settings_btn = pygame.image.load("settings_icon.png")
     settings_btn_rect = pygame.Rect((0, 0), (win_width * 2 - 50, title_bar_rect.height))
-    settings_btn_rect_center_pos = (settings_btn_rect.width // 2, settings_btn_rect.height // 2)
+    settings_btn_rect_center_pos = (settings_btn_rect.width / 2, settings_btn_rect.height / 2)
     settings_btn_center = menu_btn.get_rect(center=settings_btn_rect_center_pos)
     screen.blit(settings_btn, settings_btn_center)
 
     """render leaderboard button"""
     leaderboard_btn = pygame.image.load("leaderboard_icon.png")
     leaderboard_btn_rect = pygame.Rect((0, 0), (win_width * 2 - 120, title_bar_rect.height))
-    leaderboard_btn_rect_center_pos = (leaderboard_btn_rect.width // 2, leaderboard_btn_rect.height // 2)
+    leaderboard_btn_rect_center_pos = (leaderboard_btn_rect.width / 2, leaderboard_btn_rect.height / 2)
     leaderboard_btn_center = menu_btn.get_rect(center=leaderboard_btn_rect_center_pos)
     screen.blit(leaderboard_btn, leaderboard_btn_center)
 
