@@ -40,8 +40,9 @@ def update_display():
 tile_size = ((int(WIN_WIDTH//20), int(WIN_HEIGHT//13.37)))
 
 class Tile:
-    def __init__(self, x_pos, y_pos, render=True):
+    def __init__(self, x_pos, y_pos):
         self.color = TILE_GRAY
+        self.empty = True
         self.tile_thickness = 2
         self.position = x_pos, y_pos
         self.tile_size = (tile_size[0], tile_size[1])
@@ -50,13 +51,8 @@ class Tile:
         self.font_size = int(WIN_HEIGHT//30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-        # look at
-        self.render = render
-        self.empty = True
-
-        if self.render:
-            pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
-            update_display()
+        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
+        update_display()
 
     def display_letter(self, key):
         letter = self.font.render(key, True, WHITE)
@@ -201,10 +197,6 @@ for i in range(rows):
         tile = Tile((j*(tile_size[0]+tile_spacing) + x_position), (i*(tile_size[1]+tile_spacing)) + y_position,)
         board.append(tile)
 
-"render hidden tile and add to the last of the list to avoid index out of bounds error with curr_tile_index += 1"
-hidden_last_tile = Tile(588, 399, False)
-board.append(hidden_last_tile)
-
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -231,18 +223,28 @@ while running:
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
                 if game_playing:
-                    key_pressed = pygame.key.name(event.key).upper()
-                    curr_tile.display_letter(key_pressed)
-                    letter_list.append(key_pressed)
-                    curr_tile_index += 1
-                    curr_row.append(curr_tile)
-
+                    if curr_tile != board[-1]:
+                        key_pressed = pygame.key.name(event.key).upper()
+                        curr_tile.display_letter(key_pressed)
+                        letter_list.append(key_pressed)
+                        curr_tile_index += 1
+                        curr_row.append(curr_tile)
+                    else:
+                        key_pressed = pygame.key.name(event.key).upper()
+                        curr_tile.display_letter(key_pressed)
+                        letter_list.append(key_pressed)
+                        curr_row.append(curr_tile)
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and curr_tile_index != index_of_last_in_row - row_len:
                 if game_playing:
-                    previous_tile.backspace()
-                    curr_tile_index -= 1
-                    del curr_row[-1]
-                    del letter_list[-1]
+                    if curr_tile != board[-1]:
+                        previous_tile.backspace()
+                        curr_tile_index -= 1
+                        del curr_row[-1]
+                        del letter_list[-1]
+                    else:
+                        previous_tile.backspace()
+                        del curr_row[-1]
+                        del letter_list[-1]
 
             elif len(curr_row)-1 == index_of_last_in_row and pygame.key.get_pressed()[pygame.K_RETURN]:
                 last_five_tiles = curr_row[-5:]
