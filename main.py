@@ -194,8 +194,8 @@ rows = 6
 cols = 5
 tile_spacing = 6
 
-x_position = WIN_WIDTH/2.56
-y_position = WIN_HEIGHT/5
+x_position = WIN_WIDTH/2
+y_position = WIN_HEIGHT/2
 board = []
 for i in range(rows):
     for j in range(cols):
