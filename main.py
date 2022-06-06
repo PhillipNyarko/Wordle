@@ -37,7 +37,12 @@ def update_display():
 
 
 # define tile size (x,y / width, height) and create game tile
-tile_size = ((int(WIN_WIDTH//20), int(WIN_HEIGHT//13.37)))
+tile_sze = 62
+
+tile_x = WIN_WIDTH/tile_sze
+tile_y = WIN_HEIGHT/tile_sze
+tile_size = (int(WIN_WIDTH//tile_x), int(WIN_HEIGHT//tile_y))
+print(tile_size)
 
 class Tile:
     def __init__(self, x_pos, y_pos):
