@@ -44,21 +44,30 @@ def update_display():
 tile_size = 62
 tile_x = WIN_WIDTH/tile_size
 tile_y = WIN_HEIGHT/tile_size
+tile_spacing = 30
 tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
 print(tile_dimension)
 
+rows = 6
+cols = 5
+
+
 class Board:
-    def __init__(self):
-        pass
     board_x = WIN_WIDTH/2
     board_y = WIN_HEIGHT/4
-    board_rect = pygame.Rect((board_x, board_y), ((5*5)+(tile_size*5), (6*5)+tile_size*6))
+    board_rect = pygame.Rect((board_x, board_y), ((cols*tile_spacing+tile_size*cols)-tile_spacing, (rows*tile_spacing+tile_size*rows)-tile_spacing))
     board_rect.center = WIN_WIDTH/2, WIN_HEIGHT/2.5
-    pygame.draw.rect(SCREEN, "yellow", board_rect)
+    pygame.draw.rect(SCREEN, "yellow", board_rect, 1)
     pygame.display.update()
+
     class Row:
-        def __init__(self, x_pos, y_pos):
-            pass
+
+        row_x = WIN_WIDTH / 2
+        row_y = WIN_HEIGHT / 4
+        row_rect = pygame.Rect((0, 0), (200, 200))
+        row_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
+        #pygame.draw.rect(SCREEN, "pink", row_rect, 3)
+        pygame.display.update()
 
         class Tile:
             def __init__(self, board_x, board_y):
@@ -206,12 +215,7 @@ def word_of_the_day():
 
 num_wins = 8
 num_losses = 5
-rows = 6
-cols = 5
-tile_spacing = 6
 
-x_position = WIN_WIDTH/2
-y_position = WIN_HEIGHT/2
 board = []
 for i in range(rows):
     for j in range(cols):
