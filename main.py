@@ -47,48 +47,60 @@ tile_y = WIN_HEIGHT/tile_size
 tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
 print(tile_dimension)
 
+class Board:
+    def __init__(self):
+        pass
+    board_x = WIN_WIDTH/2
+    board_y = WIN_HEIGHT/4
+    board_rect = pygame.Rect((board_x, board_y), (338,340))
+    board_rect.center = WIN_WIDTH/2, WIN_HEIGHT/2.5
+    pygame.draw.rect(SCREEN, "yellow", board_rect, 1)
+    pygame.display.update()
+    class Row:
+        def __init__(self, x_pos, y_pos):
+            pass
 
-class Tile:
-    def __init__(self, x_pos, y_pos):
-        self.color = TILE_GRAY
-        self.empty = True
-        self.tile_thickness = 2
-        self.position = x_pos, y_pos
-        self.tile_dimension = (tile_dimension[0], tile_dimension[1])
-        self.letter_pos = (self.position[0] + (self.tile_dimension[0]/2), self.position[1] + (self.tile_dimension[1]/2))
-        self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_dimension)
-        self.font_size = int(WIN_HEIGHT/30)
-        self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
+        class Tile:
+            def __init__(self, board_x, board_y):
+                self.color = TILE_GRAY
+                self.empty = True
+                self.tile_thickness = 2
+                self.position = board_x, board_y
+                self.tile_dimension = (tile_dimension[0], tile_dimension[1])
+                self.letter_pos = (self.position[0] + (self.tile_dimension[0]/2), self.position[1] + (self.tile_dimension[1]/2))
+                self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_dimension)
+                self.font_size = int(WIN_HEIGHT/30)
+                self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
-        pygame.draw.line(SCREEN, "green", (self.position[0]+31, self.position[1]+62), (self.position[0]+31, 0))
-        update_display()
+                pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
+                pygame.draw.line(SCREEN, "green", (self.position[0]+tile_size/2, self.position[1]+tile_size), (self.position[0]+tile_size/2, 0))
+                update_display()
 
-    def display_letter(self, key):
-        letter = self.font.render(key, True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
-        SCREEN.blit(letter, letter_rect)
-        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_dimension, tile_spacing)
-        self.empty = False
+            def display_letter(self, key):
+                letter = self.font.render(key, True, WHITE)
+                letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
+                SCREEN.blit(letter, letter_rect)
+                animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_dimension, tile_spacing)
+                self.empty = False
 
-    def backspace(self):
-        letter = self.font.render("    ", True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # get the center of letter
-        letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-        letter_surface.fill(BG_BLACK)  # fill tile with background color
-        SCREEN.blit(letter_surface, letter_rect)
-        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)  # change tile color back
-        update_display()
-        self.empty = True
+            def backspace(self):
+                letter = self.font.render("    ", True, WHITE)
+                letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # get the center of letter
+                letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
+                letter_surface.fill(BG_BLACK)  # fill tile with background color
+                SCREEN.blit(letter_surface, letter_rect)
+                pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)  # change tile color back
+                update_display()
+                self.empty = True
 
-    def green(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, GREEN)
+            def green(self, key):
+                animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, GREEN)
 
-    def yellow(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, YELLOW)
+            def yellow(self, key):
+                animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, YELLOW)
 
-    def gray(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, TILE_GRAY)
+            def gray(self, key):
+                animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, TILE_GRAY)
 
 
 def title_bar():
@@ -203,7 +215,7 @@ y_position = WIN_HEIGHT/2
 board = []
 for i in range(rows):
     for j in range(cols):
-        tile = Tile((j*(tile_dimension[0]+tile_spacing) + x_position), (i*(tile_dimension[1]+tile_spacing)) + y_position)
+        tile = Board.Row.Tile((j*(tile_size+tile_spacing) + Board.board_rect.topleft[0]), (i*(tile_size+tile_spacing)) + Board.board_rect.topleft[1])
         board.append(tile)
 
 # define objects outside the class so that the object state parameter doesn't reset
