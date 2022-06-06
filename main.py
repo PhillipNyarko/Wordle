@@ -36,7 +36,11 @@ def update_display():
 
 
 # define tile size (x,y / width, height) and create game tile MY PRIDE AND JOY
-tile_dimension = (62,62)
+tile_size = 62
+tile_x = WIN_WIDTH/tile_size
+tile_y = WIN_HEIGHT/tile_size
+tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
+print(tile_dimension)
 
 
 class Tile:
