@@ -57,7 +57,7 @@ class Tile:
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
         pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
-        pygame.draw.line(SCREEN, "red", (self.position[0]+31, self.position[1]+62), (self.position[0]+31, 0))
+        pygame.draw.line(SCREEN, "green", (self.position[0]+31, self.position[1]+62), (self.position[0]+31, 0))
         update_display()
 
     def display_letter(self, key):
@@ -194,8 +194,8 @@ rows = 6
 cols = 5
 tile_spacing = 6
 
-x_position = WIN_WIDTH/2-167
-y_position = WIN_HEIGHT/2
+x_position = WIN_WIDTH/2.56
+y_position = WIN_HEIGHT/5
 board = []
 for i in range(rows):
     for j in range(cols):
@@ -218,7 +218,7 @@ while running:
     # end_card(num_wins, num_losses)
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
-
+    title_bar()
     if not game_playing:
         end_card(num_wins, num_losses)
     for event in pygame.event.get():
