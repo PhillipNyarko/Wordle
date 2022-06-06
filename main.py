@@ -8,7 +8,11 @@ from win32api import GetSystemMetrics
 
 pygame.init()
 
-
+'''
+MAKE BOARD RENDER IN THE MIDDLE
+MAKE WINDOW RESIZING WORK
+MAKE TILE CHANGE SIZE BASED ON WINDOW SIZE
+'''
 # global variables
 WIN_WIDTH = GetSystemMetrics(0)/1.1
 WIN_HEIGHT = GetSystemMetrics(1)/1.1
