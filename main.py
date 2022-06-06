@@ -11,7 +11,6 @@ pygame.init()
 # global variables
 WIN_WIDTH = GetSystemMetrics(0)/1.1
 WIN_HEIGHT = GetSystemMetrics(1)/1.1
-print("screen size",str(WIN_WIDTH), str(WIN_HEIGHT))
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 
@@ -31,16 +30,14 @@ pygame.display.set_caption("Wordle")
 pygame.display.set_icon(wordle_icon)
 SCREEN.fill(BG_BLACK)
 
+
 def update_display():
     pygame.display.update()
 
+
 # define tile size (x,y / width, height) and create game tile MY PRIDE AND JOY
-tile_size = 62
-tile_x = WIN_WIDTH/tile_size
-tile_y = WIN_HEIGHT/tile_size
-print("tile_x " + str(tile_x), "tile_y " + str(tile_y))
-tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
-print("tile dimensions" + str(tile_dimension))
+tile_dimension = (62,62)
+
 
 class Tile:
     def __init__(self, x_pos, y_pos):
@@ -49,7 +46,7 @@ class Tile:
         self.tile_thickness = 2
         self.position = x_pos, y_pos
         self.tile_dimension = (tile_dimension[0], tile_dimension[1])
-        self.letter_pos = (self.position[0] + (self.tile_dimension[0] / 2), self.position[1] + (self.tile_dimension[1] / 2))
+        self.letter_pos = (self.position[0] + (self.tile_dimension[0] / 2), self.position[1] + (self.tile_dimension[1]/2))
         self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_dimension)
         self.font_size = int(WIN_HEIGHT//30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
@@ -273,7 +270,3 @@ while running:
                         game_playing = False
             print(word_of_the_day)
             print(letter_list)
-
-
-
-
