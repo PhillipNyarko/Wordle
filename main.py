@@ -9,9 +9,8 @@ from win32api import GetSystemMetrics
 pygame.init()
 
 '''
-MAKE BOARD RENDER IN THE MIDDLE
 MAKE WINDOW RESIZING WORK
-MAKE TILE CHANGE SIZE BASED ON WINDOW SIZE
+MAKE TILE and tile spacing CHANGE SIZE BASED ON WINDOW SIZE
 '''
 # global variables
 WIN_WIDTH = GetSystemMetrics(0)/1.1
@@ -44,9 +43,10 @@ def update_display():
 tile_size = 62
 tile_x = WIN_WIDTH/tile_size
 tile_y = WIN_HEIGHT/tile_size
-tile_spacing = 40
 tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
 print(tile_dimension)
+
+tile_spacing = 6
 
 rows = 6
 cols = 5
