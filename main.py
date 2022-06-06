@@ -8,6 +8,7 @@ from win32api import GetSystemMetrics
 
 pygame.init()
 
+
 # global variables
 WIN_WIDTH = GetSystemMetrics(0)/1.1
 WIN_HEIGHT = GetSystemMetrics(1)/1.1
