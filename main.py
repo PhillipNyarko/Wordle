@@ -2,19 +2,18 @@ import json
 import random
 import pygame
 import time
+import render
 import animations
 from win32api import GetSystemMetrics
 
-import render
-
 pygame.init()
 
-"""look @"""
 # global variables
-WIN_LENGTH = GetSystemMetrics(0)-GetSystemMetrics(0)//2
-WIN_HEIGHT = GetSystemMetrics(0)-((GetSystemMetrics(0)//2)+150)
+WIN_WIDTH = GetSystemMetrics(0)//1.1
+WIN_HEIGHT = GetSystemMetrics(1)//1.1
+
 CLOCK = pygame.time.Clock()
-SCREEN = pygame.display.set_mode((WIN_LENGTH, WIN_HEIGHT))
+SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 
 # colors
 WHITE = (225, 225, 225)
@@ -37,9 +36,8 @@ def update_display():
     pygame.display.update()
 
 
-# define tile size (x,y / length, height) and create game tile
-tile_size = (61, 61)
-
+# define tile size (x,y / width, height) and create game tile
+tile_size = ((int(WIN_WIDTH//20), int(WIN_HEIGHT//13.37)))
 
 class Tile:
     def __init__(self, x_pos, y_pos, render=True):
@@ -49,7 +47,7 @@ class Tile:
         self.tile_size = (tile_size[0], tile_size[1])
         self.letter_pos = (self.position[0] + (self.tile_size[0] / 2), self.position[1] + (self.tile_size[1] / 2))
         self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_size)
-        self.font_size = WIN_HEIGHT//20
+        self.font_size = int(WIN_HEIGHT//30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
         """look@"""
@@ -64,7 +62,7 @@ class Tile:
         letter = self.font.render(key, True, WHITE)
         letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
         SCREEN.blit(letter, letter_rect)
-        animations.display_letter(self.tile, self.tile_thickness, self.position, self.tile_size, tile_spacing)
+        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_size, tile_spacing)
         self.empty = False
 
     def backspace(self):
@@ -78,17 +76,17 @@ class Tile:
         self.empty = True
 
     def green(self, key):
-        animations.animate_tile(key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, GREEN)
+        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, GREEN)
 
     def yellow(self, key):
-        animations.animate_tile(key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, YELLOW)
+        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, YELLOW)
 
     def gray(self, key):
-        animations.animate_tile(key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, TILE_GRAY)
+        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_size, self.tile_thickness, TILE_GRAY)
 
 
 def title_bar():
-    return render.render_title_bar()
+    return render.render_title_bar(SCREEN, WIN_WIDTH)
 
 
 def evaluate_row(letters, tiles, word):
@@ -115,7 +113,7 @@ def evaluate_row(letters, tiles, word):
     
 
 def display_word(word):
-    render.show_word(word)
+    render.show_word(word, SCREEN, WIN_WIDTH)
 
 
 def end_card(win_num, loss_num):
@@ -126,48 +124,48 @@ def end_card(win_num, loss_num):
         inc += 1
         time.sleep(0.09)
 
-    card_length = WIN_LENGTH/2
+    card_width = WIN_WIDTH/2
     card_height = WIN_HEIGHT/2
 
-    end_card_rect = pygame.Rect(card_length-card_length//2, card_height//2.7, card_length, card_height*1.3)
+    end_card_rect = pygame.Rect(card_width-card_width//2, card_height//2.7, card_width, card_height*1.3)
     pygame.draw.rect(SCREEN, BG_BLACK, end_card_rect, 0, border_radius=3)
-    local_length = end_card_rect.width
+    local_width = end_card_rect.width
     local_height = end_card_rect.height
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
 
     stats = font.render("Statistics", True, WHITE)
-    SCREEN.blit(stats, (local_length-stats.get_width()/2, local_height//3.3))
+    SCREEN.blit(stats, (local_width-stats.get_width()/2, local_height//3.3))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     wins = font.render("Wins", True, WHITE)
-    SCREEN.blit(wins, (local_length - wins.get_width() / .32, local_height // 2.1))
+    SCREEN.blit(wins, (local_width - wins.get_width() / .32, local_height // 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     wins_num = font.render(str(win_num), True, WHITE)
-    SCREEN.blit(wins_num, (local_length-wins.get_width()/0.35, local_height//2.5))
+    SCREEN.blit(wins_num, (local_width-wins.get_width()/0.35, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     losses = font.render("Losses", True, WHITE)
-    SCREEN.blit(losses, (local_length - losses.get_width() / 2, local_height // 2.1))
+    SCREEN.blit(losses, (local_width - losses.get_width() / 2, local_height // 2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     losses_num = font.render(str(loss_num), True, WHITE)
-    SCREEN.blit(losses_num, (local_length-losses_num.get_width()/2, local_height//2.5))
+    SCREEN.blit(losses_num, (local_width-losses_num.get_width()/2, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
     percent = font.render("Win %", True, WHITE)
-    SCREEN.blit(percent, (WIN_LENGTH/1.76, local_height//2.1))
+    SCREEN.blit(percent, (WIN_WIDTH/1.76, local_height//2.1))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
 
     percent_num = font.render(str(round((win_num/(win_num + loss_num)*10), 1)), True, WHITE)
-    SCREEN.blit(percent_num, (WIN_LENGTH/1.75, local_height//2.5))
+    SCREEN.blit(percent_num, (WIN_WIDTH/1.75, local_height//2.5))
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
 
@@ -195,7 +193,7 @@ cols = 5
 tile_spacing = 6
 title_bar_and_board_space = 60
 board_height = title_bar() + title_bar_and_board_space # THIS IS INITIALIZING THE TITLE BAR
-x_position = (WIN_LENGTH//2)-((tile_size[0]+tile_spacing)*5)//2
+x_position = (WIN_WIDTH//2)-((tile_size[0]+tile_spacing)*5)//2
 y_position = board_height
 board = []
 for i in range(rows):
