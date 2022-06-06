@@ -11,8 +11,6 @@ TILE_GRAY = (58, 58, 60)
 FULL_TILE_GRAY = (86, 87, 88)
 font = pygame.font.Font("NeueHelvetica-Bold.otf", 30)
 
-bg_rect = pygame.Rect(800//2 - 75, 57, 150, 45)
-
 
 def update_display():
     pygame.display.update()
@@ -66,7 +64,7 @@ def animate_tile(screen, key, letter_pos, position, tile_size, tile_thickness, c
     y_pos = position[1]
 
     change_rate = 0
-    speed = 0.001
+    speed = 0.0011
     for x in range(tile_size[0]):
         tile = pygame.Rect((x_pos, y_pos), tile_size)
         tile.inflate_ip(0, change_rate)

@@ -50,7 +50,7 @@ class Tile:
         self.font_size = int(WIN_HEIGHT//30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-
+        # look at
         self.render = render
         self.empty = True
 
