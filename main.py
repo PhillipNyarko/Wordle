@@ -11,6 +11,8 @@ pygame.init()
 '''
 MAKE WINDOW RESIZING WORK
 MAKE TILE and tile spacing CHANGE SIZE BASED ON WINDOW SIZE
+MAKE WORD TEXT CHANGE TO THE RIGHT SIZE BASED ON TILE SIZ3E
+set the minimum window size to the with of all the items in the title bar
 '''
 # global variables
 WIN_WIDTH = GetSystemMetrics(0)/1.1
@@ -50,7 +52,6 @@ tile_spacing = 6
 
 rows = 6
 cols = 5
-
 
 class Board:
     board_x = WIN_WIDTH/2
@@ -110,12 +111,6 @@ class Board:
             def gray(self, key):
                 animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, TILE_GRAY)
 
-
-board = []
-for i in range(rows):
-    for j in range(cols):
-        tile = Board.Row.Tile((j*(tile_size+tile_spacing) + Board.board_rect.topleft[0]), (i*(tile_size+tile_spacing)) + Board.board_rect.topleft[1])
-        board.append(tile)
 
 def title_bar():
     return render.render_title_bar(SCREEN, WIN_WIDTH)
@@ -228,22 +223,35 @@ curr_tile_index = 0
 curr_row = []
 index_of_last_in_row = 4
 row_len = 4
+board = []
 letter_list = []
 last_tile = len(board)-1
 word_of_the_day = word_of_the_day()
 game_playing = True
 
+for i in range(rows):
+    for j in range(cols):
+        tile = Board.Row.Tile((j * (tile_size + tile_spacing) + Board.board_rect.topleft[0]), (i * (tile_size + tile_spacing)) + Board.board_rect.topleft[1])
+        board.append(tile)
+
 while running:
-    # end_card(num_wins, num_losses)
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
     title_bar()
+
     if not game_playing:
         end_card(num_wins, num_losses)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+
+        if event.type == pygame.VIDEORESIZE:
+            WIN_WIDTH = pygame.display.get_surface().get_size()[0]
+            WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
+            SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
+            SCREEN.fill(BG_BLACK)
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
                 if game_playing:
@@ -258,6 +266,7 @@ while running:
                         curr_tile.display_letter(key_pressed)
                         letter_list.append(key_pressed)
                         curr_row.append(curr_tile)
+
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and curr_tile_index != index_of_last_in_row - row_len:
                 if game_playing:
                     if curr_tile != board[-1]:
@@ -296,5 +305,12 @@ while running:
             print(letter_list)
         pygame.draw.line(SCREEN, "red", (WIN_WIDTH / 2, 0), (WIN_WIDTH / 2, WIN_HEIGHT))
         pygame.draw.line(SCREEN, "red", (0, WIN_HEIGHT / 2), (WIN_WIDTH, WIN_HEIGHT / 2))
+        board_x = WIN_WIDTH / 2
+        board_y = WIN_HEIGHT / 4
+        board_rect = pygame.Rect((board_x, board_y), ((cols * tile_spacing + tile_size * cols) - tile_spacing,
+                                                      (rows * tile_spacing + tile_size * rows) - tile_spacing))
+        board_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
+        pygame.draw.rect(SCREEN, "yellow", board_rect, 1)
+        pygame.display.update()
         pygame.display.update()
 
