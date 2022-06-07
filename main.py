@@ -53,6 +53,7 @@ tile_spacing = 6
 rows = 6
 cols = 5
 
+
 class Board:
     board_x = WIN_WIDTH/2
     board_y = WIN_HEIGHT/4
@@ -233,6 +234,7 @@ for i in range(rows):
     for j in range(cols):
         tile = Board.Row.Tile((j * (tile_size + tile_spacing) + Board.board_rect.topleft[0]), (i * (tile_size + tile_spacing)) + Board.board_rect.topleft[1])
         board.append(tile)
+        """for stuff to happen every time the window size changes you must have it in the loop"""
 
 while running:
     curr_tile = board[curr_tile_index]
@@ -313,4 +315,3 @@ while running:
         pygame.draw.rect(SCREEN, "yellow", board_rect, 1)
         pygame.display.update()
         pygame.display.update()
-
