@@ -13,6 +13,8 @@ MAKE WINDOW RESIZING WORK
 MAKE TILE and tile spacing CHANGE SIZE BASED ON WINDOW SIZE
 MAKE WORD TEXT CHANGE TO THE RIGHT SIZE BASED ON TILE SIZ3E
 set the minimum window size to the with of all the items in the title bar
+fix when you change the window size you loose all the previous tile
+fix if you type a little bit of the word and then move the window and then press enter it renders at the old position
 clean exit
 '''
 # global variables
@@ -239,6 +241,12 @@ def render_board():
             board.append(tile)
 
 
+def create_board(board_x, board_y):
+    board_rect = pygame.Rect((board_x, board_y), ((cols * tile_spacing + tile_size * cols) - tile_spacing,
+                                                  (rows * tile_spacing + tile_size * rows) - tile_spacing))
+    board_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
+
+
 render_board()
 while running:
     if video_resize:
@@ -263,7 +271,7 @@ while running:
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
             SCREEN.fill(BG_BLACK)
             video_resize = True
-            board.clear()
+            board = []
 
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
@@ -323,7 +331,7 @@ while running:
         board_y = WIN_HEIGHT / 4
         board_rect = pygame.Rect((board_x, board_y), ((cols * tile_spacing + tile_size * cols) - tile_spacing,
                                                       (rows * tile_spacing + tile_size * rows) - tile_spacing))
+        create_board(board_x,board_y)
         board_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
         pygame.draw.rect(SCREEN, "yellow", board_rect, 1)
-        pygame.display.update()
         pygame.display.update()
