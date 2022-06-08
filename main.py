@@ -67,7 +67,6 @@ class Tile:
         self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-    def render(self):
         pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
         pygame.draw.line(SCREEN, "green", (self.position[0]+tile_size/2, self.position[1]+tile_size), (self.position[0]+tile_size/2, 0))
         update_display()
@@ -133,7 +132,7 @@ def display_word(word):
 def end_card(win_num, loss_num):
     inc = 0
     SCREEN.fill((8, 8, 8))
-    for x in range(255):
+    for _ in range(255):
         SCREEN.set_alpha(0)
         inc += 1
         time.sleep(0.09)
@@ -215,6 +214,7 @@ letter_list = []
 last_tile = len(board)-1
 word_of_the_day = word_of_the_day()
 game_playing = True
+video_resize = False
 
 board_x = WIN_WIDTH/2
 board_y = WIN_HEIGHT/4
@@ -232,13 +232,19 @@ pygame.draw.rect(SCREEN, "pink", row_rect, 3)
 pygame.display.update()
 
 
-for i in range(rows):
-    for j in range(cols):
-        tile = Tile(WIN_WIDTH/2,WIN_HEIGHT/4)
-        board.append(tile)
-        tile.render()
+def render_board():
+    for i in range(rows):
+        for j in range(cols):
+            tile = Tile((j * (tile_size + tile_spacing) + board_rect.topleft[0]), (i * (tile_size + tile_spacing)) + board_rect.topleft[1])
+            board.append(tile)
 
+
+render_board()
 while running:
+    if video_resize:
+        render_board()
+        video_resize = False
+
     title_bar()
     curr_tile = board[curr_tile_index]
     previous_tile = board[curr_tile_index - 1]
@@ -256,9 +262,8 @@ while running:
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
             SCREEN.fill(BG_BLACK)
-            curr_tile = board[12]
-            previous_tile = board[curr_tile_index - 1]
-            last_tile = len(board) - 1
+            video_resize = True
+            board.clear()
 
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and curr_tile_index <= index_of_last_in_row and curr_tile.empty:
