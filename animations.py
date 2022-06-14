@@ -64,7 +64,7 @@ def animate_tile(screen, key, letter_pos, position, tile_size, tile_thickness, c
     y_pos = position[1]
 
     change_rate = 0
-    speed = 0.0011
+    speed = 0.0001
     for x in range(tile_size[0]):
         tile = pygame.Rect((x_pos, y_pos), tile_size)
         tile.inflate_ip(0, change_rate)
