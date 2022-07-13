@@ -44,48 +44,47 @@ def update_display():
     pygame.display.update()
 
 
-# define tile size (x,y / width, height) and create game tile MY PRIDE AND JOY
-tile_size = 62
-tile_x = WIN_WIDTH/tile_size
-tile_y = WIN_HEIGHT/tile_size
-tile_dimension = (int(WIN_WIDTH/tile_x), int(WIN_HEIGHT/tile_y))
-print(tile_dimension)
-
-tile_spacing = 6
-
-rows = 6
-cols = 5
+# define tile size (x,y / width, height) and create game board with child row and tile
 
 class Board:
-    board_x = WIN_WIDTH / 2
-    board_y = WIN_HEIGHT / 4
-    board_rect = pygame.Rect((board_x, board_y), ((cols * tile_spacing + tile_size * cols) - tile_spacing,
-                                                  (rows * tile_spacing + tile_size * rows) - tile_spacing))
-    board_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
-    def __init__(self):
-        pass
 
-    def create(self):
+    def __init__(self):
+        self.rows = 6
+        self.cols = 5
+        self.tile_size = 62
+        self.tile_spacing = 6
+        self.board_x = WIN_WIDTH / 2
+        self.board_y = WIN_HEIGHT / 4
+        self.board_rect = pygame.Rect((self.board_x, self.board_y), ((self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing,
+                                                      (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing))
+        self.board_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
         pygame.draw.rect(SCREEN, "yellow", self.board_rect, 1)
 
-class Row(Board):
-    pass
 
+    def render(self):
+        self.board_rect = pygame.Rect((self.board_x, self.board_y), ((self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing,
+                                                        (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing))
+
+
+class Row(Board):
+    def __init__(self, x_pos, y_pos):
+        pass
 class Tile(Row):
     def __init__(self, x_pos, y_pos):
         self.color = TILE_GRAY
         self.empty = True
         self.tile_thickness = 2
         self.position = x_pos, y_pos
-        self.tile_dimension = (tile_dimension[0], tile_dimension[1])
-        self.letter_pos = (self.position[0] + (self.tile_dimension[0]/2), self.position[1] + (self.tile_dimension[1]/2))
-        self.tile = pygame.Rect((self.position[0], self.position[1]), self.tile_dimension)
+        self.tile_dimension = (x_pos, y_pos)
+        self.letter_pos = (self.position[0] + (x_pos/2), self.position[1] + (y_pos/2))
+        self.tile = pygame.Rect((self.position[0], self.position[1]), (x_pos, y_pos))
         self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
-        #pygame.draw.line(SCREEN, "green", (self.position[0]+tile_size/2, self.position[1]+tile_size), (self.position[0]+tile_size/2, 0))
-        update_display()
+        for i in range(rows):
+            for j in range(cols):
+                pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
+                update_display()
 
     def display_letter(self, key):
         letter = self.font.render(key, True, WHITE)
@@ -145,65 +144,6 @@ def display_word(word):
     render.show_word(word, SCREEN, WIN_WIDTH)
 
 
-def end_card(win_num, loss_num):
-    inc = 0
-    SCREEN.fill((8, 8, 8))
-    for _ in range(255):
-        SCREEN.set_alpha(0)
-        inc += 1
-        time.sleep(0.09)
-
-    card_width = WIN_WIDTH/2
-    card_height = WIN_HEIGHT/2
-
-    end_card_rect = pygame.Rect(card_width-card_width/2, card_height/2.7, card_width, card_height*1.3)
-    pygame.draw.rect(SCREEN, BG_BLACK, end_card_rect, 0, border_radius=3)
-    local_width = end_card_rect.width
-    local_height = end_card_rect.height
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 25)
-
-    stats = font.render("Statistics", True, WHITE)
-    SCREEN.blit(stats, (local_width-stats.get_width()/2, local_height/3.3))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
-
-    wins = font.render("Wins", True, WHITE)
-    SCREEN.blit(wins, (local_width - wins.get_width() / .32, local_height / 2.1))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
-
-    wins_num = font.render(str(win_num), True, WHITE)
-    SCREEN.blit(wins_num, (local_width-wins.get_width()/0.35, local_height/2.5))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
-
-    losses = font.render("Losses", True, WHITE)
-    SCREEN.blit(losses, (local_width - losses.get_width() / 2, local_height / 2.1))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
-
-    losses_num = font.render(str(loss_num), True, WHITE)
-    SCREEN.blit(losses_num, (local_width-losses_num.get_width()/2, local_height/2.5))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
-
-    percent = font.render("Win %", True, WHITE)
-    SCREEN.blit(percent, (WIN_WIDTH/1.76, local_height/2.1))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 20)
-
-    percent_num = font.render(str(round((win_num/(win_num + loss_num)*10), 1)), True, WHITE)
-    SCREEN.blit(percent_num, (WIN_WIDTH/1.75, local_height/2.5))
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 12)
-
-    font = pygame.font.Font("NeueHelvetica-Bold.otf", 23)
-    nxt_wordle = font.render("NEXT WORDLE", True, WHITE)
-    SCREEN.blit(nxt_wordle, (0,0))
-    update_display()
-
-
 with open("word_list.json", "r") as file:
     data = json.load(file)
     word_list = data["word_list"]
@@ -214,42 +154,21 @@ def word_of_the_day():
     word = word_list[random.randint(0, len(word_list))].upper()
     return word
 
-
-num_wins = 8
-num_losses = 5
-
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-curr_tile_index = 0
-curr_row = []
-index_of_last_in_row = 4
-row_len = 4
-board = []
-letter_list = []
-last_tile = len(board)-1
 word_of_the_day = word_of_the_day()
-game_playing = True
-video_resize = False
+b = Board()
 
-row = Board()
 while running:
-    if video_resize:
-        render_board()
-        video_resize = False
-
-
-
-    if not game_playing:
-        end_card(num_wins, num_losses)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
-
-
-
-        row.create()
+        if event.type == pygame.VIDEORESIZE:
+            WIN_WIDTH = pygame.display.get_surface().get_size()[0]
+            WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
+            SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
+            SCREEN.fill(BG_BLACK)
 
         pygame.display.update()
