@@ -45,30 +45,31 @@ def update_display():
 
 
 # define tile size (x,y / width, height) and create game board with child row and tile
-
 class Board:
-
     def __init__(self):
         self.rows = 6
         self.cols = 5
-        self.tile_size = 62
+        self.tile_size = WIN_HEIGHT/15
         self.tile_spacing = 6
-        self.board_x = WIN_WIDTH / 2
-        self.board_y = WIN_HEIGHT / 4
-        self.board_rect = pygame.Rect((self.board_x, self.board_y), ((self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing,
-                                                      (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing))
-        self.board_rect.center = WIN_WIDTH / 2, WIN_HEIGHT / 2.5
+        self.board_x_pos = WIN_WIDTH / 2
+        self.board_y_pos = WIN_HEIGHT / 4
+        self.board_width = (self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing
+        self.board_height = (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing
+        self.board_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height))
+        self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5)
         pygame.draw.rect(SCREEN, "yellow", self.board_rect, 1)
 
 
-    def render(self):
-        self.board_rect = pygame.Rect((self.board_x, self.board_y), ((self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing,
-                                                        (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing))
-
-
 class Row(Board):
-    def __init__(self, x_pos, y_pos):
-        pass
+    def __init__(self):
+        super(Row, self).__init__()
+        for i in range(self.rows):
+            self.row_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height/self.rows))
+        self.row_rect.x = self.board_rect.x
+        pygame.draw.rect(SCREEN, "blue", self.row_rect, 1)
+
+
+
 class Tile(Row):
     def __init__(self, x_pos, y_pos):
         self.color = TILE_GRAY
@@ -81,8 +82,8 @@ class Tile(Row):
         self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-        for i in range(rows):
-            for j in range(cols):
+        for i in range(self.rows):
+            for j in range(self.cols):
                 pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
                 update_display()
 
@@ -90,7 +91,7 @@ class Tile(Row):
         letter = self.font.render(key, True, WHITE)
         letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
         SCREEN.blit(letter, letter_rect)
-        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_dimension, tile_spacing)
+        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_dimension, self.tile_spacing)
         self.empty = False
 
     def backspace(self):
@@ -154,21 +155,26 @@ def word_of_the_day():
     word = word_list[random.randint(0, len(word_list))].upper()
     return word
 
+
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 word_of_the_day = word_of_the_day()
-b = Board()
-
+board = Board()
+r = Row()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
+            exit()
         if event.type == pygame.VIDEORESIZE:
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
             SCREEN.fill(BG_BLACK)
+            board.__init__()
+            r.__init__()
 
-        pygame.display.update()
+    pygame.display.update()
+
