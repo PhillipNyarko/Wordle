@@ -57,17 +57,30 @@ class Board:
         self.board_height = (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing
         self.board_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height))
         self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5)
-        pygame.draw.rect(SCREEN, "yellow", self.board_rect, 1)
+        pygame.draw.rect(SCREEN, "red", self.board_rect, 3)
+
+
+""" goal: six individually accessible rows"""
 
 
 class Row(Board):
     def __init__(self):
         super(Row, self).__init__()
-        for i in range(self.rows):
-            self.row_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height/self.rows))
-        self.row_rect.x = self.board_rect.x
-        pygame.draw.rect(SCREEN, "blue", self.row_rect, 1)
 
+        row_width = self.board_width
+        row_height = self.board_height / self.rows
+        row_y_pos = self.board_rect.y
+        row_list = []
+
+        for i in range(self.rows):
+            row_list.append(pygame.Rect((self.board_x_pos, row_y_pos), (row_width, row_height)))
+            row_y_pos += row_height
+
+        for i in row_list:
+            i.x = self.board_rect.x
+
+        for i in range(self.rows):
+            pygame.draw.rect(SCREEN, "green", row_list[i], 1)
 
 
 class Tile(Row):
@@ -161,7 +174,7 @@ running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 word_of_the_day = word_of_the_day()
 board = Board()
-r = Row()
+rows = Row()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -174,7 +187,7 @@ while running:
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
             SCREEN.fill(BG_BLACK)
             board.__init__()
-            r.__init__()
+            rows.__init__()
 
     pygame.display.update()
 
