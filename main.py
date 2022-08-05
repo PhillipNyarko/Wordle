@@ -60,78 +60,54 @@ class Board:
         pygame.draw.rect(SCREEN, "red", self.board_rect, 3)
 
 
-""" goal: six individually accessible rows"""
-
-
-class Row(Board):
+class Rows(Board):
     def __init__(self):
-        super(Row, self).__init__()
-
-        row_width = self.board_width
-        row_height = self.board_height / self.rows
-        row_y_pos = self.board_rect.y
-        row_list = []
+        super(Rows, self).__init__()
+        self.row_width = self.board_width
+        self.row_height = self.board_height / self.rows
+        self.row_x_pos = self.board_rect.x
+        self.row_y_pos = self.board_rect.y
+        self.row_list = []
 
         for i in range(self.rows):
-            row_list.append(pygame.Rect((self.board_x_pos, row_y_pos), (row_width, row_height)))
-            row_y_pos += row_height
+            self.row_list.append(pygame.Rect((self.row_x_pos, self.row_y_pos), (self.row_width, self.row_height)))
+            self.row_y_pos += self.row_height
 
-        for i in row_list:
+        for i in self.row_list:
             i.x = self.board_rect.x
 
         for i in range(self.rows):
-            pygame.draw.rect(SCREEN, "green", row_list[i], 1)
+            pygame.draw.rect(SCREEN, "green", self.row_list[i], 1)
+
+"""have 5 independent tiles show up in a selected row and inherit a relative x/y position based on the row position SPACING MUST ALSO BE RELATIVE TO THE ROW"""
 
 
-class Tile(Row):
-    def __init__(self, x_pos, y_pos):
-        self.color = TILE_GRAY
-        self.empty = True
-        self.tile_thickness = 2
-        self.position = x_pos, y_pos
-        self.tile_dimension = (x_pos, y_pos)
-        self.letter_pos = (self.position[0] + (x_pos/2), self.position[1] + (y_pos/2))
-        self.tile = pygame.Rect((self.position[0], self.position[1]), (x_pos, y_pos))
-        self.font_size = int(WIN_HEIGHT/30)
-        self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
+class Tiles(Rows):
+    def __init__(self):
+        super(Tiles, self).__init__()
+
+        x_pos_inc = 0
+        self.tile_matrix = []
 
         for i in range(self.rows):
             for j in range(self.cols):
-                pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)
-                update_display()
-
-    def display_letter(self, key):
-        letter = self.font.render(key, True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # move by center
-        SCREEN.blit(letter, letter_rect)
-        animations.display_letter(SCREEN, self.tile, self.tile_thickness, self.position, self.tile_dimension, self.tile_spacing)
-        self.empty = False
-
-    def backspace(self):
-        letter = self.font.render("    ", True, WHITE)
-        letter_rect = letter.get_rect(center=(self.letter_pos[0], self.letter_pos[1]))  # get the center of letter
-        letter_surface = pygame.Surface(letter.get_size())  # get full unseen area that letter takes up
-        letter_surface.fill(BG_BLACK)  # fill tile with background color
-        SCREEN.blit(letter_surface, letter_rect)
-        pygame.draw.rect(SCREEN, self.color, self.tile, self.tile_thickness)  # change tile color back
-        update_display()
-        self.empty = True
-
-    def green(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, GREEN)
-
-    def yellow(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, YELLOW)
-
-    def gray(self, key):
-        animations.animate_tile(SCREEN, key, self.letter_pos, self.position, self.tile_dimension, self.tile_thickness, TILE_GRAY)
-
+                self.x_pos = self.row_list[i].x + x_pos_inc
+                self.y_pos = self.row_list[j].y
+                self.tile_thickness = 2
+                self.tile = pygame.Rect(self.x_pos, self.y_pos, self.tile_size, self.tile_size)
+                self.tile.centery = self.row_list[i].centery
+                self.tile_matrix.append(self.tile)
+                x_pos_inc += self.tile_size + self.tile_spacing
+            x_pos_inc = 0
+        for i in self.tile_matrix:
+            pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
 
 def title_bar():
     return render.render_title_bar(SCREEN, WIN_WIDTH)
 
 
 def evaluate_row(letters, tiles, word):
+    """ use list functions to help with coming up with the logic"""
     inc = 0
     guess = ''.join(letters)
 
@@ -174,7 +150,9 @@ running = True
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 word_of_the_day = word_of_the_day()
 board = Board()
-rows = Row()
+rows = Rows()
+tiles = Tiles()
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -188,6 +166,6 @@ while running:
             SCREEN.fill(BG_BLACK)
             board.__init__()
             rows.__init__()
+            tiles.__init__()
 
-    pygame.display.update()
-
+    update_display()
