@@ -79,8 +79,6 @@ class Rows(Board):
         for i in range(self.rows):
             pygame.draw.rect(SCREEN, "green", self.row_list[i], 1)
 
-"""have 5 independent tiles show up in a selected row and inherit a relative x/y position based on the row position SPACING MUST ALSO BE RELATIVE TO THE ROW"""
-
 
 class Tiles(Rows):
     def __init__(self):
@@ -102,36 +100,13 @@ class Tiles(Rows):
         for i in self.tile_matrix:
             pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
 
-def title_bar():
-    return render.render_title_bar(SCREEN, WIN_WIDTH)
+        self.letter_pos = (self.x_pos + (self.x_pos / 2), self.y_pos + (self.y_pos / 2))
+        self.font_size = int(WIN_HEIGHT / 30)
+        self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
+    def print_letter(self, letter):
+        letter = self.font.render(letter, True, WHITE)
 
-def evaluate_row(letters, tiles, word):
-    """ use list functions to help with coming up with the logic"""
-    inc = 0
-    guess = ''.join(letters)
-
-    if guess.lower() in acceptable_words or guess.lower() in word_list:
-
-        for x in range(5):
-            if guess[inc] == word[inc]:
-                tiles[inc].green(guess[inc])
-            if guess[inc] != word[inc] and guess[inc] in word:
-                tiles[inc].yellow(guess[inc])
-            if guess[inc] not in word:
-                tiles[inc].gray(guess[inc])
-            inc += 1
-        in_word_list = True
-        return in_word_list
-    else:
-        display_word("not in word list")
-        print("not in word list")
-        in_word_list = False
-        return in_word_list
-
-
-def display_word(word):
-    render.show_word(word, SCREEN, WIN_WIDTH)
 
 
 with open("word_list.json", "r") as file:
@@ -167,5 +142,8 @@ while running:
             board.__init__()
             rows.__init__()
             tiles.__init__()
+        if event.type == pygame.KEYDOWN:
+            if pygame.key.name(event.key) in alphabet:
+                tiles.print_letter(pygame.key.name(event.key))
 
     update_display()
