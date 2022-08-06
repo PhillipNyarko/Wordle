@@ -104,9 +104,9 @@ class Tiles(Rows):
         self.font_size = int(WIN_HEIGHT / 30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-    def print_letter(self, letter):
+    def print_letter(self, letter, tile):
         letter = self.font.render(letter, True, WHITE)
-
+        SCREEN.blit(letter, (self.tile_matrix[tile].x, self.tile_matrix[tile].y))
 
 
 with open("word_list.json", "r") as file:
@@ -127,7 +127,7 @@ word_of_the_day = word_of_the_day()
 board = Board()
 rows = Rows()
 tiles = Tiles()
-
+inc = 0
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -144,6 +144,8 @@ while running:
             tiles.__init__()
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet:
-                tiles.print_letter(pygame.key.name(event.key))
+                tiles.print_letter(pygame.key.name(event.key).upper(), inc)
+                if inc != 29:
+                    inc += 1
 
     update_display()
