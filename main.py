@@ -100,13 +100,22 @@ class Tiles(Rows):
         for i in self.tile_matrix:
             pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
 
-        self.letter_pos = (self.x_pos + (self.x_pos / 2), self.y_pos + (self.y_pos / 2))
+
+class Letter(Tiles):
+    def __init__(self):
+        super(Letter, self).__init__()
+
         self.font_size = int(WIN_HEIGHT / 30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
-    def print_letter(self, letter, tile):
-        letter = self.font.render(letter, True, WHITE)
-        SCREEN.blit(letter, (self.tile_matrix[tile].x, self.tile_matrix[tile].y))
+        self.letter = "W"
+        char = self.font.render(self.letter, True, WHITE)
+        for i in range(len(self.tile_matrix)):
+            self.letter_pos = (self.tile_matrix[i].centerx - (self.font.size(self.letter)[0]/2), self.tile_matrix[i].centery - (self.font.size(self.letter)[0]/2))
+            SCREEN.blit(char, self.letter_pos)
+
+        def clear_tile(self):
+            pass
 
 
 with open("word_list.json", "r") as file:
@@ -127,13 +136,16 @@ word_of_the_day = word_of_the_day()
 board = Board()
 rows = Rows()
 tiles = Tiles()
-inc = 0
+letters = Letter()
+current_tile = 0
 while running:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             pygame.quit()
             exit()
+
         if event.type == pygame.VIDEORESIZE:
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
@@ -142,10 +154,14 @@ while running:
             board.__init__()
             rows.__init__()
             tiles.__init__()
+            letters.__init__()
+
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet:
-                tiles.print_letter(pygame.key.name(event.key).upper(), inc)
-                if inc != 29:
-                    inc += 1
+                pass
 
+            elif pygame.key.name(event.key) == "backspace":
+                pass
+
+        print(current_tile)
     update_display()
