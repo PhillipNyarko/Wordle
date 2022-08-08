@@ -8,15 +8,6 @@ from win32api import GetSystemMetrics
 
 pygame.init()
 
-'''
-MAKE WINDOW RESIZING WORK
-MAKE TILE and tile spacing CHANGE SIZE BASED ON WINDOW SIZE
-MAKE WORD TEXT CHANGE TO THE RIGHT SIZE BASED ON TILE SIZ3E
-set the minimum window size to the with of all the items in the title bar
-fix when you change the window size you loose all the previous tile
-fix if you type a little bit of the word and then move the window and then press enter it renders at the old position
-clean exit
-'''
 # global variables
 WIN_WIDTH = GetSystemMetrics(0)/1.1
 WIN_HEIGHT = GetSystemMetrics(1)/1.1
@@ -107,15 +98,7 @@ class Letter(Tiles):
 
         self.font_size = int(WIN_HEIGHT / 30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
-
-        self.letter = "W"
-        char = self.font.render(self.letter, True, WHITE)
-        for i in range(len(self.tile_matrix)):
-            self.letter_pos = (self.tile_matrix[i].centerx - (self.font.size(self.letter)[0]/2), self.tile_matrix[i].centery - (self.font.size(self.letter)[0]/2))
-            SCREEN.blit(char, self.letter_pos)
-
-        def clear_tile(self):
-            pass
+        self.letter_list = []
 
 
 with open("word_list.json", "r") as file:
@@ -137,7 +120,7 @@ board = Board()
 rows = Rows()
 tiles = Tiles()
 letters = Letter()
-current_tile = 0
+
 while running:
 
     for event in pygame.event.get():
@@ -158,10 +141,9 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet:
-                pass
+                print(pygame.key.name(event.key))
 
             elif pygame.key.name(event.key) == "backspace":
-                pass
+                print(pygame.key.name(event.key))
 
-        print(current_tile)
     update_display()
