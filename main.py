@@ -88,6 +88,7 @@ class Tiles(Rows):
                 self.tile_matrix.append(self.tile)
                 x_pos_inc += self.tile_size + self.tile_spacing
             x_pos_inc = 0
+
         for i in self.tile_matrix:
             pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
 
@@ -121,6 +122,11 @@ rows = Rows()
 tiles = Tiles()
 letters = Letter()
 
+input_list = [["None" for i in range(board.cols)] for j in range(board.rows)]
+current_tile = 0
+current_row = 0
+print(input_list)
+
 while running:
 
     for event in pygame.event.get():
@@ -140,10 +146,15 @@ while running:
             letters.__init__()
 
         if event.type == pygame.KEYDOWN:
-            if pygame.key.name(event.key) in alphabet:
-                print(pygame.key.name(event.key))
 
-            elif pygame.key.name(event.key) == "backspace":
-                print(pygame.key.name(event.key))
+            if pygame.key.name(event.key) in alphabet and len(input_list[current_row]) != 5:
+                pass
 
+            if current_tile % 5 == 0 and current_row != 5 and pygame.key.get_pressed()[pygame.K_RETURN]:
+                pass "YOU IDIOT STOP CHECKING THE TILE VALUE AND LOOK AT THE INDEXES EITHER THROUHG THOSE STUPID VARIABLES YOU MADE OR THE ACTUALLLLL INDEX"
+
+            elif pygame.key.name(event.key) == "backspace" and input_list[current_row][current_tile] != 0:
+                pass
+
+            print(input_list)
     update_display()
