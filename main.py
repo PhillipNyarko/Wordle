@@ -13,7 +13,7 @@ WIN_WIDTH = GetSystemMetrics(0)/1.1
 WIN_HEIGHT = GetSystemMetrics(1)/1.1
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
-
+print(WIN_WIDTH)
 # colors
 WHITE = (225, 225, 225)
 BG_BLACK = (18, 18, 19)
@@ -41,7 +41,7 @@ class Board:
         self.rows = 6
         self.cols = 5
         self.tile_size = WIN_HEIGHT/15
-        self.tile_spacing = 6
+        self.tile_spacing = WIN_WIDTH/207.27
         self.board_x_pos = WIN_WIDTH / 2
         self.board_y_pos = WIN_HEIGHT / 4
         self.board_width = (self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing
@@ -91,15 +91,23 @@ class Tiles(Rows):
 
         for i in self.tile_matrix:
             pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
-
+""" set up all the proper tile inputs evals and animations"""
 
 class Letter(Tiles):
     def __init__(self):
-        super(Letter, self).__init__()
 
+        self.letter_list = []
+
+    def render(self):
+        super(Letter, self).__init__()
         self.font_size = int(WIN_HEIGHT / 30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
-        self.letter_list = []
+        for index, value in enumerate(self.letter_list):
+            self.letter_x = self.tile_matrix[index].x + (self.tile_matrix[index].width/2)
+            self.letter_y = self.tile_matrix[index].y + (self.tile_matrix[index].height/2)
+            self.letter = self.font.render(self.letter_list[index].upper(), True, WHITE)
+            self.letter_rect = self.letter.get_rect(center=(self.letter_x, self.letter_y))  # move by center
+            SCREEN.blit(self.letter, self.letter_rect)
 
 
 with open("word_list.json", "r") as file:
@@ -122,10 +130,7 @@ rows = Rows()
 tiles = Tiles()
 letters = Letter()
 
-input_list = [["None" for i in range(board.cols)] for j in range(board.rows)]
-current_tile = 0
-current_row = 0
-print(input_list)
+
 
 while running:
 
@@ -143,18 +148,12 @@ while running:
             board.__init__()
             rows.__init__()
             tiles.__init__()
-            letters.__init__()
+            letters.render()
 
         if event.type == pygame.KEYDOWN:
 
-            if pygame.key.name(event.key) in alphabet and len(input_list[current_row]) != 5:
-                pass
+            if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
+                letters.letter_list.append(pygame.key.name(event.key))
+                letters.render()
 
-            if current_tile % 5 == 0 and current_row != 5 and pygame.key.get_pressed()[pygame.K_RETURN]:
-                pass "YOU IDIOT STOP CHECKING THE TILE VALUE AND LOOK AT THE INDEXES EITHER THROUHG THOSE STUPID VARIABLES YOU MADE OR THE ACTUALLLLL INDEX"
-
-            elif pygame.key.name(event.key) == "backspace" and input_list[current_row][current_tile] != 0:
-                pass
-
-            print(input_list)
     update_display()
