@@ -93,10 +93,18 @@ class Tiles(Rows):
             pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
 """ set up all the proper tile inputs evals and animations"""
 
+
 class Letter(Tiles):
     def __init__(self):
-
+        super(Letter, self).__init__()
         self.letter_list = []
+
+        self.font_size = int(WIN_HEIGHT / 30)
+        self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
+        self.letter_x = 0
+        self.letter_y = 0
+        self.letter = None
+        self.letter_rect = None
 
     def render(self):
         super(Letter, self).__init__()
@@ -131,7 +139,6 @@ tiles = Tiles()
 letters = Letter()
 
 
-
 while running:
 
     for event in pygame.event.get():
@@ -151,9 +158,9 @@ while running:
             letters.render()
 
         if event.type == pygame.KEYDOWN:
-
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
                 letters.letter_list.append(pygame.key.name(event.key))
                 letters.render()
 
+            print(letters.letter_list)
     update_display()
