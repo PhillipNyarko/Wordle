@@ -1,9 +1,6 @@
 import json
 import random
 import pygame
-import time
-import render
-import animations
 from win32api import GetSystemMetrics
 
 pygame.init()
@@ -48,7 +45,7 @@ class Board:
         self.board_height = (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing
         self.board_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height))
         self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5)
-        pygame.draw.rect(SCREEN, "red", self.board_rect, 3)
+        pygame.draw.rect(SCREEN, BG_BLACK, self.board_rect, 3)
 
 
 class Rows(Board):
@@ -68,7 +65,7 @@ class Rows(Board):
             i.x = self.board_rect.x
 
         for i in range(self.rows):
-            pygame.draw.rect(SCREEN, "green", self.row_list[i], 1)
+            pygame.draw.rect(SCREEN, BG_BLACK, self.row_list[i], 1)
 
 
 class Tiles(Rows):
@@ -90,8 +87,7 @@ class Tiles(Rows):
             x_pos_inc = 0
 
         for i in self.tile_matrix:
-            pygame.draw.rect(SCREEN, "blue", i, self.tile_thickness)
-""" set up all the proper tile inputs evals and animations"""
+            pygame.draw.rect(SCREEN, TILE_GRAY, i, self.tile_thickness)
 
 
 class Letter(Tiles):
@@ -106,19 +102,29 @@ class Letter(Tiles):
         self.letter = None
         self.letter_rect = None
 
+        self.fill_rect = None
+
     def render(self):
         super(Letter, self).__init__()
+
         self.font_size = int(WIN_HEIGHT / 30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
+
         for index, value in enumerate(self.letter_list):
             self.letter_x = self.tile_matrix[index].x + (self.tile_matrix[index].width/2)
             self.letter_y = self.tile_matrix[index].y + (self.tile_matrix[index].height/2)
             self.letter = self.font.render(self.letter_list[index].upper(), True, WHITE)
             self.letter_rect = self.letter.get_rect(center=(self.letter_x, self.letter_y))  # move by center
-            SCREEN.blit(self.letter, self.letter_rect)
+            SCREEN.blit(self.letter, self.letter_rect)  # draw letter
+            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, self.tile_matrix[index], self.tile_thickness)  # new letter color
 
     def clear(self):
-        pygame.draw.rect(SCREEN, "red", self.tile_matrix[len(self.letter_list)], width=0)
+        self.fill_rect = self.tile_matrix[len(self.letter_list)]
+        self.fill_rect.size = (self.tile_matrix[len(self.letter_list)].width,
+                               self.tile_matrix[len(self.letter_list)].height)
+        pygame.draw.rect(SCREEN, BG_BLACK, self.fill_rect, width=0)
+        pygame.draw.rect(SCREEN, TILE_GRAY, self.tile_matrix[len(self.letter_list)], width=2)
+
 
 with open("word_list.json", "r") as file:
     data = json.load(file)
@@ -127,8 +133,18 @@ with open("word_list.json", "r") as file:
 
 
 def word_of_the_day():
-    word = word_list[random.randint(0, len(word_list))].upper()
+    word = word_list[random.randint(0, len(word_list))]
     return word
+
+
+def evaluate_row(user_guess, actual_word):
+    output = ["None", "None", "None", "None", "None"]
+    print(output)
+
+
+def refresh_screen():
+    SCREEN.fill(BG_BLACK)
+    letters.render()
 
 
 # define objects outside the class so that the object state parameter doesn't reset
@@ -167,13 +183,15 @@ while running:
 
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) < 30 and len(letters.letter_list) == last_index_of_row:
+                    evaluate_row(letters.letter_list[-5:], word_of_the_day)
                     last_index_of_row += 5
-                    print(last_index_of_row)
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
-                if len(letters.letter_list) > 0:
+                if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
                     letters.letter_list.pop()
                     letters.clear()
 
+            refresh_screen()
             print(letters.letter_list)
+
     update_display()
