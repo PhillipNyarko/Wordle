@@ -13,7 +13,7 @@ WIN_WIDTH = GetSystemMetrics(0)/1.1
 WIN_HEIGHT = GetSystemMetrics(1)/1.1
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
-print(WIN_WIDTH)
+
 # colors
 WHITE = (225, 225, 225)
 BG_BLACK = (18, 18, 19)
@@ -117,6 +117,8 @@ class Letter(Tiles):
             self.letter_rect = self.letter.get_rect(center=(self.letter_x, self.letter_y))  # move by center
             SCREEN.blit(self.letter, self.letter_rect)
 
+    def clear(self):
+        pygame.draw.rect(SCREEN, "red", self.tile_matrix[len(self.letter_list)], width=0)
 
 with open("word_list.json", "r") as file:
     data = json.load(file)
@@ -137,7 +139,7 @@ board = Board()
 rows = Rows()
 tiles = Tiles()
 letters = Letter()
-
+last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 
 while running:
 
@@ -159,8 +161,19 @@ while running:
 
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
-                letters.letter_list.append(pygame.key.name(event.key))
-                letters.render()
+                if len(letters.letter_list) < last_index_of_row:
+                    letters.letter_list.append(pygame.key.name(event.key))
+                    letters.render()
+
+            if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
+                if len(letters.letter_list) < 30 and len(letters.letter_list) == last_index_of_row:
+                    last_index_of_row += 5
+                    print(last_index_of_row)
+
+            if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
+                if len(letters.letter_list) > 0:
+                    letters.letter_list.pop()
+                    letters.clear()
 
             print(letters.letter_list)
     update_display()
