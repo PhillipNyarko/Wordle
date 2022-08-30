@@ -137,9 +137,10 @@ def word_of_the_day():
     return word
 
 
-def evaluate_row(user_guess, actual_word):
+def evaluate_row(user_guess):
     output = ["None", "None", "None", "None", "None"]
     print(output)
+    return True  # return True takes to next line, return False keeps on same line
 
 
 def refresh_screen():
@@ -183,8 +184,14 @@ while running:
 
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) < 30 and len(letters.letter_list) == last_index_of_row:
-                    evaluate_row(letters.letter_list[-5:], word_of_the_day)
-                    last_index_of_row += 5
+                    """
+                    function eval should check if user input is not in word list, if the input has won the game, and 
+                    evaluate the tiles. the function should return True if one or both the first two conditions are 
+                    False else False
+                    Takes in the user input only
+                    """
+                    if evaluate_row(letters.letter_list[-5:]):
+                        last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
