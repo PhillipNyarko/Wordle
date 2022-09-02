@@ -123,7 +123,6 @@ class Letter(Tiles):
 with open("word_list.json", "r") as file:
     data = json.load(file)
     word_list = data["word_list"]
-    acceptable_words = data["acceptable_input_list"]
 
 
 def word_of_the_day():
@@ -131,10 +130,20 @@ def word_of_the_day():
     return word
 
 
-def evaluate_row(user_guess):
+def evaluate_row(user_guess, actual_word):
     output = ["None", "None", "None", "None", "None"]
-    print(output)
-    return True  # return True takes to next line, return False keeps on same line
+    user_guess = ''.join(user_guess)
+
+    if user_guess not in word_list:
+        print(user_guess)
+        print(actual_word)
+        return False  # invalid input
+    elif user_guess == actual_word:
+        print(user_guess)
+        print(actual_word)
+        return False  # game won
+    else:
+        return True  # return True takes to next line, return False keeps on same line
 
 
 def refresh_screen():
@@ -144,13 +153,13 @@ def refresh_screen():
 
 # define objects outside the class so that the object state parameter doesn't reset
 running = True
-alphabet = "abcdefghijklmnopqrstuvwxyz"
-word_of_the_day = word_of_the_day()
 board = Board()
 rows = Rows()
 tiles = Tiles()
 letters = Letter()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
+wrd_of_the_day = word_of_the_day()
+alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 while running:
 
@@ -184,7 +193,7 @@ while running:
                     False else False
                     Takes in the user input only
                     """
-                    if evaluate_row(letters.letter_list[-5:]):
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day) == True:
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
