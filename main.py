@@ -193,7 +193,7 @@ while running:
                     False else False
                     Takes in the user input only
                     """
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day) == True:
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
