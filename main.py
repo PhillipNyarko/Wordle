@@ -186,10 +186,10 @@ while running:
                     letters.render()
 
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
-                if len(letters.letter_list) < 30 and len(letters.letter_list) == last_index_of_row: # IF YOU CHANGE THIS TO ANYTHING ABOVE 30 AFTER FIRST INPUT IT WONT ALLOW ANOTHER WHICH IS WHAT YOU WANT MAY JUST GET RID OF THE IF TILE = 30 CHECK?
+                if len(letters.letter_list) == last_index_of_row:
                     """
                     function eval should check if user input is not in word list, if the input has won the game, and 
-                    evaluate the tiles. the function should return True if one or both the first two conditions are 
+                    evaluate the tiles. the function should return False if one or both the first two conditions are 
                     False else False
                     Takes in the user input only
                     """
