@@ -135,12 +135,10 @@ def evaluate_row(user_guess, actual_word):
     user_guess = ''.join(user_guess)
 
     if user_guess not in word_list:
-        print(user_guess)
-        print(actual_word)
+
         return False  # invalid input
     elif user_guess == actual_word:
-        print(user_guess)
-        print(actual_word)
+
         return False  # game won
     else:
         return True  # return True takes to next line, return False keeps on same line
