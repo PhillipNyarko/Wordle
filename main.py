@@ -135,13 +135,15 @@ def evaluate_row(user_guess, actual_word):
     user_guess = ''.join(user_guess)
 
     if user_guess not in word_list:
-
-        return False  # invalid input
+        # run function that shows the "not in word list box"
+        return False  # keep us on the same line
     elif user_guess == actual_word:
-
-        return False  # game won
+        # run function that ends game and tells while loop to stop input
+        return False  # keep us on the same line
     else:
-        return True  # return True takes to next line, return False keeps on same line
+        return True
+
+    # return True takes to next line, return False keeps on same line
 
 
 def refresh_screen():
@@ -185,12 +187,7 @@ while running:
 
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    """
-                    function eval should check if user input is not in word list, if the input has won the game, and 
-                    evaluate the tiles. the function should return False if one or both the first two conditions are 
-                    False else False
-                    Takes in the user input only
-                    """
+
                     if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
                         last_index_of_row += 5  # go to next row
 
