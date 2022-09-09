@@ -152,6 +152,7 @@ def evaluate_row(user_guess, actual_word):
         return False  # keep us on the same line
     else:
         for i in user_guess:
+            pass
             #find first i in hash map
 
     # return True takes to next line, return False keeps on same line
