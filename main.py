@@ -134,14 +134,25 @@ def evaluate_row(user_guess, actual_word):
     output = ["None", "None", "None", "None", "None"]
     user_guess = ''.join(user_guess)
 
+    actual_word_hash_map = dict(
+        letter1=("h", 1),
+        letter2=("e", 1),
+        letter3=("l", 2),
+        letter4=("l", 2),
+        letter5=("0", 1),
+    )
+    print(actual_word_hash_map)
     if user_guess not in word_list:
-        # run function that shows the "not in word list box"
+        print("not in word list")
+        # run function that shows not in word list card
         return False  # keep us on the same line
     elif user_guess == actual_word:
+        print("game won")
         # run function that ends game and tells while loop to stop input
         return False  # keep us on the same line
     else:
-        return True
+        for i in user_guess:
+            #find first i in hash map
 
     # return True takes to next line, return False keeps on same line
 
@@ -188,7 +199,7 @@ while running:
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
 
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
+                    if evaluate_row(letters.letter_list[-5:], "hello"):
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
