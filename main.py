@@ -135,11 +135,9 @@ def evaluate_row(user_guess, actual_word):
     user_guess = ''.join(user_guess)
 
     actual_word_hash_map = {
-        "p": 1,
-        "r": 1,
-        "i": 1,
-        "c": 1,
-        "k": 1
+        "l": 2,
+        "e": 2,
+        "v": 1
     }
 
     if user_guess not in word_list:
@@ -160,7 +158,7 @@ def evaluate_row(user_guess, actual_word):
                 else:
                     output[index] = "yellow"
                 actual_word_hash_map[value] -= 1
-
+            print(actual_word_hash_map)
     # return True takes to next line, return False keeps on same line
         print(output)
 
