@@ -131,17 +131,17 @@ def word_of_the_day():
 
 
 def evaluate_row(user_guess, actual_word):
-    output = ["None", "None", "None", "None", "None"]
+    output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
-    actual_word_hash_map = dict(
-        letter1=("h", 1),
-        letter2=("e", 1),
-        letter3=("l", 2),
-        letter4=("l", 2),
-        letter5=("0", 1),
-    )
-    print(actual_word_hash_map)
+    actual_word_hash_map = {
+        "p": 1,
+        "r": 1,
+        "i": 1,
+        "c": 1,
+        "k": 1
+    }
+
     if user_guess not in word_list:
         print("not in word list")
         # run function that shows not in word list card
@@ -151,11 +151,18 @@ def evaluate_row(user_guess, actual_word):
         # run function that ends game and tells while loop to stop input
         return False  # keep us on the same line
     else:
-        for i in user_guess:
-            pass
-            #find first i in hash map
+        for index, value in enumerate(user_guess):  # since (values = s i n c e , index = 0, 1, 2, 3, 4)
+            if value not in actual_word_hash_map or actual_word_hash_map[value] <= 0:
+                output[index] = "Gray"
+            elif actual_word_hash_map[value] > 0:
+                if value == list(actual_word_hash_map.keys())[index]:
+                    output[index] = "Green"
+                else:
+                    output[index] = "yellow"
+                actual_word_hash_map[value] -= 1
 
     # return True takes to next line, return False keeps on same line
+        print(output)
 
 
 def refresh_screen():
@@ -200,7 +207,7 @@ while running:
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
 
-                    if evaluate_row(letters.letter_list[-5:], "hello"):
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
