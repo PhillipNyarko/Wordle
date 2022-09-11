@@ -134,11 +134,13 @@ def evaluate_row(user_guess, actual_word):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
-    actual_word_hash_map = {
-        "l": 2,
-        "e": 2,
-        "v": 1
-    }
+    actual_word_hash_map = {}
+
+    for index, value in enumerate(actual_word):
+        if actual_word[index] in actual_word_hash_map:
+            actual_word_hash_map[actual_word[index]] += 1
+        else:
+            actual_word_hash_map[actual_word[index]] = 1
 
     if user_guess not in word_list:
         print("not in word list")
@@ -153,15 +155,16 @@ def evaluate_row(user_guess, actual_word):
             if value not in actual_word_hash_map or actual_word_hash_map[value] <= 0:
                 output[index] = "Gray"
             elif actual_word_hash_map[value] > 0:
-                if value == list("level")[index]:
+                if value == list(actual_word)[index]:
                     output[index] = "Green"
                 else:
-                    print(list(actual_word)[index])
                     output[index] = "yellow"
                 actual_word_hash_map[value] -= 1
-
-        # return True takes to next line, return False keeps on same line
+        print(actual_word_hash_map)
         print(output)
+        print(actual_word)
+        return True
+        # return True takes to next line, return False keeps on same line
 
 
 def refresh_screen():
