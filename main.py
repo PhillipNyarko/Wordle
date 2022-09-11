@@ -185,7 +185,7 @@ letters = Letter()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-count = 0
+current_row = -1
 while running:
 
     for event in pygame.event.get():
@@ -214,8 +214,8 @@ while running:
                 if len(letters.letter_list) == last_index_of_row:
 
                     if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
-                        count += 1
-                        animations.animate_row(evaluate_row(letters.letter_list[-5:], wrd_of_the_day), tiles.tile_matrix, count)  # run animate tiles with colors here
+                        current_row += 5
+                        animations.animate_row(evaluate_row(letters.letter_list[-5:], wrd_of_the_day), tiles.tile_matrix, current_row)  # run animate tiles with colors here
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
