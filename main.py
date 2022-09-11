@@ -1,6 +1,7 @@
 import json
 import random
 import pygame
+import animations
 from win32api import GetSystemMetrics
 
 pygame.init()
@@ -142,13 +143,16 @@ def evaluate_row(user_guess, actual_word):
         else:
             actual_word_hash_map[actual_word[index]] = 1
 
-    if user_guess not in word_list:
-        print("not in word list")
-        # run function that shows not in word list card
-        return False  # keep us on the same line
-    elif user_guess == actual_word:
+    if user_guess == actual_word:
         print("game won")
         # run function that ends game and tells while loop to stop input
+        return False
+    elif user_guess == "ezera":
+        print("game won ezera mode")
+        return False
+    elif user_guess not in word_list:
+        print("not in word list")
+        # run function that shows not in word list card
         return False  # keep us on the same line
     else:
         for index, value in enumerate(user_guess):  # (values = s i n c e , index = 0, 1, 2, 3, 4)
@@ -163,7 +167,7 @@ def evaluate_row(user_guess, actual_word):
         print(actual_word_hash_map)
         print(output)
         print(actual_word)
-        return True
+        return output
         # return True takes to next line, return False keeps on same line
 
 
@@ -210,6 +214,7 @@ while running:
                 if len(letters.letter_list) == last_index_of_row:
 
                     if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
+                        # animations.animate_row() # run animate tiles with colors here
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
