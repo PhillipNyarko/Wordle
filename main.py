@@ -149,17 +149,18 @@ def evaluate_row(user_guess, actual_word):
         # run function that ends game and tells while loop to stop input
         return False  # keep us on the same line
     else:
-        for index, value in enumerate(user_guess):  # since (values = s i n c e , index = 0, 1, 2, 3, 4)
+        for index, value in enumerate(user_guess):  # (values = s i n c e , index = 0, 1, 2, 3, 4)
             if value not in actual_word_hash_map or actual_word_hash_map[value] <= 0:
                 output[index] = "Gray"
             elif actual_word_hash_map[value] > 0:
-                if value == list(actual_word_hash_map.keys())[index]:
+                if value == list("level")[index]:
                     output[index] = "Green"
                 else:
+                    print(list(actual_word)[index])
                     output[index] = "yellow"
                 actual_word_hash_map[value] -= 1
-            print(actual_word_hash_map)
-    # return True takes to next line, return False keeps on same line
+
+        # return True takes to next line, return False keeps on same line
         print(output)
 
 
