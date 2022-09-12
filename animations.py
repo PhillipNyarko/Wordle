@@ -25,12 +25,23 @@ def update_display():
     pygame.display.update()
 
 
-def animate_row(output, tile_matrix, current_row):
-    for i in tile_matrix[current_row:current_row+5]:
-        pygame.draw.rect(SCREEN, BG_BLACK, i, tile_thickness)
-        update_display()
-        time.sleep(.05)
+def fade_rect_in():
+    pass
 
 
-    print(tile_matrix)
-    print(output)
+def fade_rect_out():
+    pass
+
+
+def animate_not_in_word_list():
+    pass
+
+
+def animate_row():  # animation that plays after enter on each row
+    pass
+
+
+def game_won():
+    pass
+
+

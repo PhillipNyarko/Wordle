@@ -46,7 +46,9 @@ class Board:
         self.board_height = (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing
         self.board_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height))
         self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5)
-        pygame.draw.rect(SCREEN, BG_BLACK, self.board_rect, 3)
+
+        """renders an outline of the board"""
+        # pygame.draw.rect(SCREEN, BG_BLACK, self.board_rect, 3)
 
 
 class Rows(Board):
@@ -65,8 +67,9 @@ class Rows(Board):
         for i in self.row_list:
             i.x = self.board_rect.x
 
-        for i in range(self.rows):
-            pygame.draw.rect(SCREEN, BG_BLACK, self.row_list[i], 1)
+        """renders an outline of the row"""
+        # for i in range(self.rows):
+        #   pygame.draw.rect(SCREEN, BG_BLACK, self.row_list[i], 1)
 
 
 class Tiles(Rows):
@@ -114,11 +117,14 @@ class Letter(Tiles):
             self.letter_y = self.tile_matrix[index].y + (self.tile_matrix[index].height/2)
             self.letter = self.font.render(self.letter_list[index].upper(), True, WHITE)
             self.letter_rect = self.letter.get_rect(center=(self.letter_x, self.letter_y))  # move by center
+
+            SCREEN.fill(BG_BLACK, rect=self.tile_matrix[index])
             SCREEN.blit(self.letter, self.letter_rect)  # draw letter
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, self.tile_matrix[index], self.tile_thickness)  # new letter color
 
     def clear(self):
-        pygame.draw.rect(SCREEN, TILE_GRAY, self.tile_matrix[len(self.letter_list)], width=2)  # change box color back
+        SCREEN.fill(BG_BLACK, rect=self.tile_matrix[len(self.letter_list)])
+        pygame.draw.rect(SCREEN, TILE_GRAY, self.tile_matrix[len(self.letter_list)], width=self.tile_thickness)
 
 
 with open("word_list.json", "r") as file:
@@ -131,7 +137,7 @@ def word_of_the_day():
     return word
 
 
-def evaluate_row(user_guess, actual_word):
+def evaluate_row(user_guess, actual_word, current_row):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
@@ -164,16 +170,12 @@ def evaluate_row(user_guess, actual_word):
                 else:
                     output[index] = "yellow"
                 actual_word_hash_map[value] -= 1
+
         print(actual_word_hash_map)
         print(output)
         print(actual_word)
-        return output
+        return True
         # return True takes to next line, return False keeps on same line
-
-
-def refresh_screen():
-    SCREEN.fill(BG_BLACK)
-    letters.render()
 
 
 # define objects outside the class so that the object state parameter doesn't reset
@@ -185,9 +187,8 @@ letters = Letter()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-current_row = -1
-while running:
 
+while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -212,17 +213,12 @@ while running:
 
             if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day):
-                        current_row += 5
-                        animations.animate_row(evaluate_row(letters.letter_list[-5:], wrd_of_the_day), tiles.tile_matrix, current_row)  # run animate tiles with colors here
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
 
             if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
                     letters.letter_list.pop()
                     letters.clear()
-
-            refresh_screen()
 
     update_display()
