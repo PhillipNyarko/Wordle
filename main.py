@@ -1,7 +1,5 @@
 import json
 import random
-import time
-
 import pygame
 import animations
 from win32api import GetSystemMetrics
@@ -120,14 +118,14 @@ class Letter(Tiles):
             self.letter = self.font.render(self.letter_list[index].upper(), True, WHITE)
             self.letter_rect = self.letter.get_rect(center=(self.letter_x, self.letter_y))  # move by center
 
-            if index == 0:
+            if tile_color_values[index] == "Unevaluated":
                 SCREEN.fill(BG_BLACK, rect=self.tile_matrix[index])
                 pygame.draw.rect(SCREEN, FULL_TILE_GRAY, self.tile_matrix[index], self.tile_thickness)
-            elif index == 1:
+            elif tile_color_values[index] == "Green":
                 SCREEN.fill(GREEN, rect=self.tile_matrix[index])
-            elif index == 2:
+            elif tile_color_values[index] == "Yellow":
                 SCREEN.fill(YELLOW, rect=self.tile_matrix[index])
-            elif index == 3:
+            elif tile_color_values[index] == "Gray":
                 SCREEN.fill(TILE_GRAY, rect=self.tile_matrix[index])
 
             SCREEN.blit(self.letter, self.letter_rect)  # draw letter
@@ -147,45 +145,55 @@ def word_of_the_day():
     return word
 
 
+tile_color_values = ["Unevaluated"]*30
+
+
 def evaluate_row(user_guess, actual_word, current_row):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
     actual_word_hash_map = {}
 
-    for index, value in enumerate(actual_word):
+    for index, value in enumerate(actual_word):  # create hash map
         if actual_word[index] in actual_word_hash_map:
             actual_word_hash_map[actual_word[index]] += 1
         else:
             actual_word_hash_map[actual_word[index]] = 1
 
-    if user_guess == actual_word:
-        print("game won")
-        # run function that ends game and tells while loop to stop input
-        return False
-    elif user_guess == "ezera":
-        print("game won ezera mode")
-        return False
-    elif user_guess not in word_list:
-        print("not in word list")
-        # run function that shows not in word list card
-        return False  # keep us on the same line
-    else:
-        for index, value in enumerate(user_guess):  # (values = s i n c e , index = 0, 1, 2, 3, 4)
-            if value not in actual_word_hash_map or actual_word_hash_map[value] <= 0:
-                output[index] = "Gray"
-            elif actual_word_hash_map[value] > 0:
-                if value == list(actual_word)[index]:
-                    output[index] = "Green"
-                else:
-                    output[index] = "yellow"
-                actual_word_hash_map[value] -= 1
+    for index, value in enumerate(user_guess):  # iterate over word and determine wod letter color values
+        if value not in actual_word_hash_map or actual_word_hash_map[value] <= 0:
+            output[index] = "Gray"
+        elif actual_word_hash_map[value] > 0:
+            if value == list(actual_word)[index]:
+                output[index] = "Green"
+            else:
+                output[index] = "Yellow"
+            actual_word_hash_map[value] -= 1
 
-        print(actual_word_hash_map)
-        print(output)
-        print(actual_word)
+    """return True takes to next line, return False keeps on same line"""
+
+    print(actual_word)
+    print(output)
+
+    if user_guess in word_list:
+        # row animation goes here
+        for index, value in enumerate(output):  # map color values to list
+            tile_color_values[index + current_row] = output[index]
+            letters.render()
+
+        if user_guess == actual_word:
+            print("game won")
+            return False
         return True
-        # return True takes to next line, return False keeps on same line
+
+    elif user_guess == "ezera":
+        # do animation for ezera's name and then clear the row and start them on the first tile of row
+        print("ezera animation")
+        return False
+
+    else:
+        print("not in word list") # not in word list animations
+        return False
 
 
 # define objects outside the class so that the object state parameter doesn't reset
