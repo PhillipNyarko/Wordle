@@ -1,5 +1,7 @@
 import json
 import random
+import time
+
 import pygame
 import animations
 from win32api import GetSystemMetrics
@@ -118,13 +120,21 @@ class Letter(Tiles):
             self.letter = self.font.render(self.letter_list[index].upper(), True, WHITE)
             self.letter_rect = self.letter.get_rect(center=(self.letter_x, self.letter_y))  # move by center
 
-            SCREEN.fill(BG_BLACK, rect=self.tile_matrix[index])
+            if index == 0:
+                SCREEN.fill(BG_BLACK, rect=self.tile_matrix[index])
+                pygame.draw.rect(SCREEN, FULL_TILE_GRAY, self.tile_matrix[index], self.tile_thickness)
+            elif index == 1:
+                SCREEN.fill(GREEN, rect=self.tile_matrix[index])
+            elif index == 2:
+                SCREEN.fill(YELLOW, rect=self.tile_matrix[index])
+            elif index == 3:
+                SCREEN.fill(TILE_GRAY, rect=self.tile_matrix[index])
+
             SCREEN.blit(self.letter, self.letter_rect)  # draw letter
-            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, self.tile_matrix[index], self.tile_thickness)  # new letter color
 
     def clear(self):
         SCREEN.fill(BG_BLACK, rect=self.tile_matrix[len(self.letter_list)])
-        pygame.draw.rect(SCREEN, TILE_GRAY, self.tile_matrix[len(self.letter_list)], width=self.tile_thickness)
+        pygame.draw.rect(SCREEN, TILE_GRAY, self.tile_matrix[len(self.letter_list)], self.tile_thickness)
 
 
 with open("word_list.json", "r") as file:
