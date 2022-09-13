@@ -140,7 +140,7 @@ with open("word_list.json", "r") as file:
 
 
 def word_of_the_day():
-    word = word_list[random.randint(0, len(word_list))]
+    word = word_list[random.randint(0, 2306)]  # word of the day can only be one of the first 2,309 words
     return word
 
 
