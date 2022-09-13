@@ -1,7 +1,6 @@
 import json
 import random
 import pygame
-import animations
 from win32api import GetSystemMetrics
 
 pygame.init()
@@ -207,6 +206,7 @@ wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 while running:
+    CLOCK.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
