@@ -38,7 +38,7 @@ class Board:
         self.rows = 6
         self.cols = 5
         self.tile_size = WIN_HEIGHT/15
-        self.tile_spacing = WIN_WIDTH/207.27
+        self.tile_spacing = 6
         self.board_x_pos = WIN_WIDTH / 2
         self.board_y_pos = WIN_HEIGHT / 4
         self.board_width = (self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing
@@ -98,7 +98,7 @@ class Letter(Tiles):
         super(Letter, self).__init__()
         self.letter_list = []
 
-        self.font_size = int(WIN_HEIGHT / 30)
+        self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
         self.letter_x = 0
         self.letter_y = 0
@@ -108,7 +108,7 @@ class Letter(Tiles):
     def render(self):
         super(Letter, self).__init__()
 
-        self.font_size = int(WIN_HEIGHT / 30)
+        self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
 
         for index, value in enumerate(self.letter_list):
