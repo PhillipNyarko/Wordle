@@ -228,15 +228,12 @@ while running:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
                     letters.render()
-
-            if pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
-                if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
-                        last_index_of_row += 5  # go to next row
-
-            if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
                     letters.letter_list.pop()
                     letters.clear()
-
+            elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
+                if len(letters.letter_list) == last_index_of_row:
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
+                        last_index_of_row += 5  # go to next row
     update_display()
