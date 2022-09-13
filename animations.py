@@ -82,7 +82,6 @@ def multiply_matrix(a, b):
 def connect_points(i, j, points):
     pygame.draw.line(SCREEN, (255, 255, 255), (points[i][0], points[i][1]), (points[j][0], points[j][1]))
 
-
 running = True
 
 SCALE = 100

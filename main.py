@@ -191,7 +191,7 @@ def evaluate_row(user_guess, actual_word, current_row):
         return False
 
     else:
-        print("not in word list") # not in word list animations
+        print("not in word list")  # not in word list animations
         return False
 
 
