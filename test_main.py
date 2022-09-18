@@ -2,10 +2,10 @@ import unittest
 from main import evaluate_row
 
 
-class TestEvaluateROW(unittest.TestCase):
+class TestEvaluateRow(unittest.TestCase):
     def test_heterogram(self):
         actual = evaluate_row("spits", "since", 1, unittest=True)
-        expected = (["Green", "Gray", "Yellow", "Gray", "Gray"], True)
+        expected = (["Green", "Gray", "Yellow", "Gray", "Gray"])
         self.assertEqual(actual, expected)
 
 
