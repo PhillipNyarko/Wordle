@@ -147,7 +147,7 @@ def word_of_the_day():
 tile_color_values = ["Unevaluated"]*30
 
 
-def evaluate_row(user_guess, actual_word, current_row, unittest=False):
+def evaluate_row(user_guess, actual_word, current_row):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
@@ -169,8 +169,6 @@ def evaluate_row(user_guess, actual_word, current_row, unittest=False):
                 output[index] = "Yellow"
             actual_word_hash_map[value] -= 1
 
-    if unittest:
-        return output
     if user_guess in word_list:
         # row animation goes here
         for index, value in enumerate(output):  # map color values to list
