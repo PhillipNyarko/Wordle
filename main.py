@@ -147,7 +147,7 @@ def word_of_the_day():
 tile_color_values = ["Unevaluated"]*30
 
 
-def evaluate_row(user_guess, actual_word, current_row):
+def evaluate_row(user_guess, actual_word, current_row, unittest=False):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
@@ -169,17 +169,13 @@ def evaluate_row(user_guess, actual_word, current_row):
                 output[index] = "Yellow"
             actual_word_hash_map[value] -= 1
 
-    """return True takes to next line, return False keeps on same line"""
-
-    print(actual_word)
-    print(output)
-
+    if unittest:
+        return output
     if user_guess in word_list:
         # row animation goes here
         for index, value in enumerate(output):  # map color values to list
             tile_color_values[index + current_row] = output[index]
             letters.render()
-
         if user_guess == actual_word:
             print("game won")
             return False
@@ -189,7 +185,6 @@ def evaluate_row(user_guess, actual_word, current_row):
         # do animation for ezera's name and then clear the row and start them on the first tile of row
         print("ezera animation")
         return False
-
     else:
         print("not in word list")  # not in word list animations
         return False
