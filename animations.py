@@ -39,3 +39,21 @@ def animate_not_in_word_list():
 
 def game_won():
     pass
+
+
+def animate_tile(x_pos, y_pos, size, letter, value):
+    pass
+
+
+running = True
+while running:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.quit()
+            exit()
+
+    animate_tile(WIN_WIDTH/2.3, WIN_HEIGHT/2, 100, "x", "Green")
+
+    update_display()
