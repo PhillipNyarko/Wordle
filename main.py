@@ -1,13 +1,14 @@
 import json
 import random
 import pygame
-from win32api import GetSystemMetrics
-
+import os
+os.environ["SDL_VIDEODRIVER"] = "0.0"
 pygame.init()
+pygame.display.list_modes()
 
 # global variables
-WIN_WIDTH = GetSystemMetrics(0)/1.1
-WIN_HEIGHT = GetSystemMetrics(1)/1.1
+WIN_WIDTH = 500
+WIN_HEIGHT = 500
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 
