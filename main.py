@@ -4,7 +4,6 @@ import pygame
 import pyautogui
 
 pygame.init()
-pygame.display.list_modes()
 
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
