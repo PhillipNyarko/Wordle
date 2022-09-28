@@ -1,14 +1,14 @@
 import json
 import random
 import pygame
-import os
-os.environ["SDL_VIDEODRIVER"] = "0.0"
+import pyautogui
+
 pygame.init()
 pygame.display.list_modes()
 
 # global variables
-WIN_WIDTH = 500
-WIN_HEIGHT = 500
+WIN_WIDTH = pyautogui.size()[0]/1.2
+WIN_HEIGHT = pyautogui.size()[1]/1.2
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 
