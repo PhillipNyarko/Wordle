@@ -1,15 +1,18 @@
-import pygame
 import time
-from win32api import GetSystemMetrics
 
+import pygame
+import pyautogui
 
 pygame.init()
 
 # global variables
+WIN_WIDTH = pyautogui.size()[0]/1.2
+WIN_HEIGHT = pyautogui.size()[1]/1.2
 CLOCK = pygame.time.Clock()
-WIN_WIDTH = 800  # GetSystemMetrics(0)/1.1
-WIN_HEIGHT = 800  # GetSystemMetrics(1)/1.1
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
+TILE_SIZE = WIN_HEIGHT/15
+
+# font and styling variables
 tile_thickness = 2
 
 # colors
@@ -41,19 +44,51 @@ def game_won():
     pass
 
 
-def animate_tile(x_pos, y_pos, size, letter, value):
-    pass
+def animate_tile(x_pos, y_pos, size, input_letter, value):
+    font_size = int(WIN_HEIGHT / 30)
+    ry = size
+    ry_pos = y_pos
+    for i in range(60):
+        rect = pygame.Rect(x_pos, ry_pos, size, ry)
+        rect.center = (rect.x + rect.width / 2, rect.y + rect.height / 2)
 
+        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-running = True
-while running:
+        letter_x = rect.x + (rect.width / 2)
+        letter_y = rect.y + (rect.height / 2)
+        letter = font.render(input_letter.upper(), True, WHITE)
+        letter_rect = letter.get_rect(center=(letter_x, letter_y))
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            pygame.quit()
-            exit()
+        pygame.draw.rect(SCREEN, TILE_GRAY, rect, tile_thickness)
+        SCREEN.blit(letter, letter_rect)
+        update_display()
 
-    animate_tile(WIN_WIDTH/2.3, WIN_HEIGHT/2, 100, "x", "Green")
+        time.sleep(0.003)
+        SCREEN.fill(BG_BLACK)
+        font_size -= 1
+        ry -= 1
+        ry_pos += .5
 
-    update_display()
+    for i in range(60):
+        rect = pygame.Rect(x_pos, ry_pos, size, ry)
+        rect.center = (rect.x + rect.width / 2, rect.y + rect.height / 2)
+
+        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+
+        letter_x = rect.x + (rect.width / 2)
+        letter_y = rect.y + (rect.height / 2)
+        letter = font.render(input_letter.upper(), True, WHITE)
+        letter_rect = letter.get_rect(center=(letter_x, letter_y))
+
+        pygame.draw.rect(SCREEN, GREEN, rect, 0)
+        SCREEN.blit(letter, letter_rect)
+        update_display()
+
+        time.sleep(0.003)
+        SCREEN.fill(BG_BLACK)
+        font_size += 1
+        ry += 1
+        ry_pos -= .5
+
+while True:
+    animate_tile(WIN_WIDTH/2.3, WIN_HEIGHT/2, TILE_SIZE, "x", "Green")

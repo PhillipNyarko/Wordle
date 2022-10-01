@@ -151,23 +151,23 @@ def evaluate_row(user_guess, actual_word, current_row):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
 
-    actual_word_hash_map = {}
+    actual_word_map = {}
 
     for index, value in enumerate(actual_word):  # create hash map
-        if actual_word[index] in actual_word_hash_map:
-            actual_word_hash_map[actual_word[index]] += 1
+        if actual_word[index] in actual_word_map:
+            actual_word_map[actual_word[index]] += 1
         else:
-            actual_word_hash_map[actual_word[index]] = 1
+            actual_word_map[actual_word[index]] = 1
 
     unchecked = []
     for i in range(len(user_guess)):
         if user_guess[i] == actual_word[i]:
             output[i] = "Green"
-            actual_word_hash_map[actual_word[i]] -= 1
+            actual_word_map[actual_word[i]] -= 1
         else:
             unchecked.append(i)
     for i in range(len(unchecked)):
-        if user_guess[unchecked[i]] not in actual_word_hash_map or actual_word_hash_map[user_guess[unchecked[i]]] <= 0:
+        if user_guess[unchecked[i]] not in actual_word_map or actual_word_map[user_guess[unchecked[i]]] <= 0:
             output[unchecked[i]] = "Gray"
         else:
             output[unchecked[i]] = "Yellow"
@@ -200,7 +200,7 @@ letters = Letter()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-
+print(wrd_of_the_day)
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
@@ -230,6 +230,6 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], "crust", last_index_of_row-5):
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
     update_display()
