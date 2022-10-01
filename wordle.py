@@ -159,15 +159,18 @@ def evaluate_row(user_guess, actual_word, current_row):
         else:
             actual_word_hash_map[actual_word[index]] = 1
 
-    for index, value in enumerate(user_guess):  # iterate over word and determine wod letter color values
-        if value not in actual_word_hash_map or actual_word_hash_map[value] <= 0:
-            output[index] = "Gray"
-        elif actual_word_hash_map[value] > 0:
-            if value == list(actual_word)[index]:
-                output[index] = "Green"
-            else:
-                output[index] = "Yellow"
-            actual_word_hash_map[value] -= 1
+    unchecked = []
+    for i in range(len(user_guess)):
+        if user_guess[i] == actual_word[i]:
+            output[i] = "Green"
+            actual_word_hash_map[actual_word[i]] -= 1
+        else:
+            unchecked.append(i)
+    for i in range(len(unchecked)):
+        if user_guess[unchecked[i]] not in actual_word_hash_map or actual_word_hash_map[user_guess[unchecked[i]]] <= 0:
+            output[unchecked[i]] = "Gray"
+        else:
+            output[unchecked[i]] = "Yellow"
 
     if user_guess in word_list:
         # row animation goes here
@@ -227,6 +230,6 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
+                    if evaluate_row(letters.letter_list[-5:], "crust", last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
     update_display()
