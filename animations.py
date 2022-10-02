@@ -48,7 +48,7 @@ def animate_tile(x_pos, y_pos, size, input_letter, value):
     font_size = int(WIN_HEIGHT / 30)
     ry = size
     ry_pos = y_pos
-    for i in range(60):
+    for i in range(100):
         rect = pygame.Rect(x_pos, ry_pos, size, ry)
         rect.center = (rect.x + rect.width / 2, rect.y + rect.height / 2)
 
@@ -65,11 +65,11 @@ def animate_tile(x_pos, y_pos, size, input_letter, value):
 
         time.sleep(0.003)
         SCREEN.fill(BG_BLACK)
-        font_size -= 1
+        #font_size -= 1
         ry -= 1
         ry_pos += .5
 
-    for i in range(60):
+    for i in range(100):
         rect = pygame.Rect(x_pos, ry_pos, size, ry)
         rect.center = (rect.x + rect.width / 2, rect.y + rect.height / 2)
 
@@ -86,9 +86,10 @@ def animate_tile(x_pos, y_pos, size, input_letter, value):
 
         time.sleep(0.003)
         SCREEN.fill(BG_BLACK)
-        font_size += 1
+        #font_size += 1
         ry += 1
         ry_pos -= .5
 
-while True:
-    animate_tile(WIN_WIDTH/2.3, WIN_HEIGHT/2, TILE_SIZE, "x", "Green")
+
+animate_tile(WIN_WIDTH/2.3, WIN_HEIGHT/2, TILE_SIZE, "x", "Green")
+time.sleep(1)
