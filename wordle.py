@@ -204,6 +204,7 @@ last_index_of_row = 5  # holds the index value of the last tile in the row. Incr
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 print(wrd_of_the_day)
+
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
