@@ -3,6 +3,8 @@ import random
 import pygame
 import pyautogui
 
+import animations
+
 pygame.init()
 
 # global variables
@@ -188,6 +190,7 @@ def evaluate_row(user_guess, actual_word, current_row):
         return False
     else:
         print("not in word list")  # not in word list animations
+        animations.invalid_word_animation(rows.row_list[current_row//5])
         return False
 
 
@@ -223,6 +226,8 @@ while running:
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
+                    last_tile = tiles.tile_matrix[len(letters.letter_list)-1]
+                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing-2)
                     letters.render()
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:

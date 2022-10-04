@@ -12,6 +12,7 @@ CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 TILE_SIZE = WIN_HEIGHT/15
 
+
 # font and styling variables
 tile_thickness = 2
 
@@ -36,12 +37,54 @@ def fade_rect_out():
     pass
 
 
-def animate_not_in_word_list():
-    pass
+def invalid_word_animation(row=pygame.Rect(200,200, 320, 62)):
+    for i in range(5):
+        pygame.draw.rect(SCREEN, TILE_GRAY, row, tile_thickness)
+        update_display()
+        time.sleep(0.05)
+        SCREEN.fill(BG_BLACK, rect=row)
+        row.x += 10
+        pygame.draw.rect(SCREEN, TILE_GRAY, row, tile_thickness)
+        update_display()
+        time.sleep(0.05)
+        SCREEN.fill(BG_BLACK, rect=row)
+        row.x -= 20
+        pygame.draw.rect(SCREEN, TILE_GRAY, row, tile_thickness)
+        update_display()
+        time.sleep(0.05)
+        SCREEN.fill(BG_BLACK, rect=row)
+        row.x += 10
+        pygame.draw.rect(SCREEN, TILE_GRAY, row, tile_thickness)
+        update_display()
+        time.sleep(0.05)
 
 
 def game_won():
     pass
+
+
+def input_animation(tile, input_letter, offset=5):
+    def inflate_tile(tile_offset, negative=False):
+        if negative:
+            tile_offset -= tile_offset*2
+
+        font_size = int(WIN_HEIGHT / 30) + tile_offset
+        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+
+        letter_x = tile.x + (tile.width / 2)
+        letter_y = tile.y + (tile.height / 2)
+        letter = font.render(input_letter.upper(), True, WHITE)
+        letter_rect = letter.get_rect(center=(letter_x, letter_y))
+
+        SCREEN.fill(BG_BLACK, rect=tile)
+        tile.inflate_ip(tile_offset, tile_offset)
+        SCREEN.blit(letter, letter_rect)
+        pygame.draw.rect(SCREEN, TILE_GRAY, tile, tile_thickness)
+        update_display()
+
+    inflate_tile(offset)
+    time.sleep(0.051)
+    inflate_tile(offset, negative=True)
 
 
 def animate_tile(x_pos, y_pos, size, input_letter, value):
@@ -91,5 +134,3 @@ def animate_tile(x_pos, y_pos, size, input_letter, value):
         ry_pos -= .5
 
 
-animate_tile(WIN_WIDTH/2.3, WIN_HEIGHT/2, TILE_SIZE, "x", "Green")
-time.sleep(1)
