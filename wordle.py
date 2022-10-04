@@ -190,7 +190,7 @@ def evaluate_row(user_guess, actual_word, current_row):
         return False
     else:
         print("not in word list")  # not in word list animations
-        animations.invalid_word_animation(rows.row_list[current_row//5])
+        animations.invalid_word_animation(tile_spacing=tiles.tile_spacing, tile_size=tiles.tile_size, letters=user_guess, row=rows.row_list[current_row//5])
         return False
 
 

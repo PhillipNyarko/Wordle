@@ -58,8 +58,10 @@ def invalid_word_animation(tile_spacing=6, tile_size=62, letters=["c","r","a","n
         letter_rect_list.append(letter_rect)
 
         SCREEN.blit(letter, letter_rect)
-        pygame.draw.rect(SCREEN, TILE_GRAY, tile, TILE_THICKNESS)
+        pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
         update_display()
+    """" i think its getting old data causing the letters to lag behind
+            also why doesnt it return to the original spot? is it even starting at the right spot?"""
 
     number = 10
     oscillation_multiplier = 1.1
@@ -72,14 +74,15 @@ def invalid_word_animation(tile_spacing=6, tile_size=62, letters=["c","r","a","n
             SCREEN.fill(BG_BLACK, rect=j)
 
         for k in range(len(tile_list)):
-            letter_rect_list[k] = letter_list[k].get_rect(center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
+            letter_rect_list[k] = letter_list[k].get_rect(
+                center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
             tile_list[k].x += translation
-            pygame.draw.rect(SCREEN, TILE_GRAY, tile_list[k], TILE_THICKNESS)
             SCREEN.blit(letter_list[k], letter_rect_list[k])
+            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile_list[k], TILE_THICKNESS)
         update_display()
         time.sleep(0.1)
 
-    for y in range(number//2, -1, -1):
+    for y in range(number//2, 0, -1):
         translation = y ** oscillation_multiplier
         if y % 2 == 0:
             translation = -(y ** oscillation_multiplier)
@@ -91,10 +94,11 @@ def invalid_word_animation(tile_spacing=6, tile_size=62, letters=["c","r","a","n
             letter_rect_list[k] = letter_list[k].get_rect(
                 center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
             tile_list[k].x += translation
-            pygame.draw.rect(SCREEN, TILE_GRAY, tile_list[k], TILE_THICKNESS)
             SCREEN.blit(letter_list[k], letter_rect_list[k])
+            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile_list[k], TILE_THICKNESS)
         update_display()
         time.sleep(0.1)
+
 
 def game_won():
     pass
