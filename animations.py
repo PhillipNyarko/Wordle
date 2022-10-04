@@ -33,21 +33,33 @@ def fade_rect_out():
     pass
 
 
-def invalid_word_animation(tile_spacing=6, tile_size=62, letters=["c","r","a","n","e"], row=pygame.Rect(400, 200, 320, 62)):
+def bad_input_animation(row, tile_size, tile_spacing, letters):
     x_pos_inc = 0
+
     tile_list = []
     letter_list = []
     letter_rect_list = []
+
     win_height = pygame.display.get_surface().get_size()[1]
     font_size = int(win_height / 30)
+
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+
+    def fill_tiles():
+        for index in tile_list:
+            SCREEN.fill(BG_BLACK, rect=index)
+
+    def draw_tile_and_letter():
+        SCREEN.blit(letter_list[k], letter_rect_list[k])
+        pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile_list[k], TILE_THICKNESS)
+
+    SCREEN.fill(BG_BLACK, rect=row)
 
     for j in range(len(letters)):
         x_pos = row.x + x_pos_inc
-        y_pos = row.y
-        tile = pygame.Rect(x_pos, y_pos, tile_size, tile_size)
-        tile_list.append(tile)
+        tile = pygame.Rect(x_pos, row.y, tile_size, tile_size)
         tile.centery = row.centery
+        tile_list.append(tile)
         x_pos_inc += tile_size + tile_spacing
 
         letter_x = tile.x + (tile.width / 2)
@@ -60,44 +72,27 @@ def invalid_word_animation(tile_spacing=6, tile_size=62, letters=["c","r","a","n
         SCREEN.blit(letter, letter_rect)
         pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
         update_display()
-    """" i think its getting old data causing the letters to lag behind
-            also why doesnt it return to the original spot? is it even starting at the right spot?"""
 
-    number = 10
-    oscillation_multiplier = 1.1
-    for i in range(number//2):
-        translation = i**oscillation_multiplier
+    oscillations = 8
+    oscillation_multiplier = .8 # scales the translations
+    for i in range(oscillations):
+
         if i % 2 == 0:
             translation = -(i**oscillation_multiplier)
+        else:
+            translation = i ** oscillation_multiplier
 
-        for j in tile_list:
-            SCREEN.fill(BG_BLACK, rect=j)
+        fill_tiles()
 
         for k in range(len(tile_list)):
-            letter_rect_list[k] = letter_list[k].get_rect(
-                center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
             tile_list[k].x += translation
-            SCREEN.blit(letter_list[k], letter_rect_list[k])
-            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile_list[k], TILE_THICKNESS)
+            letter_rect_list[k] = letter_list[k].get_rect(center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
+            draw_tile_and_letter()
+
         update_display()
         time.sleep(0.1)
 
-    for y in range(number//2, 0, -1):
-        translation = y ** oscillation_multiplier
-        if y % 2 == 0:
-            translation = -(y ** oscillation_multiplier)
-
-        for j in tile_list:
-            SCREEN.fill(BG_BLACK, rect=j)
-
-        for k in range(len(tile_list)):
-            letter_rect_list[k] = letter_list[k].get_rect(
-                center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
-            tile_list[k].x += translation
-            SCREEN.blit(letter_list[k], letter_rect_list[k])
-            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile_list[k], TILE_THICKNESS)
-        update_display()
-        time.sleep(0.1)
+    fill_tiles()
 
 
 def game_won():
@@ -174,8 +169,3 @@ def animate_tile(x_pos, y_pos, size, input_letter, value):
         #font_size += 1
         ry += 1
         ry_pos -= .5
-
-
-SCREEN.fill(BG_BLACK)
-invalid_word_animation()
-time.sleep(1)

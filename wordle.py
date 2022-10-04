@@ -152,7 +152,6 @@ tile_color_values = ["Unevaluated"]*30
 def evaluate_row(user_guess, actual_word, current_row):
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
-
     actual_word_map = {}
 
     for index, value in enumerate(actual_word):  # create hash map
@@ -162,6 +161,7 @@ def evaluate_row(user_guess, actual_word, current_row):
             actual_word_map[actual_word[index]] = 1
 
     unchecked = []
+    """ CHANGE TO ENUMERATE"""
     for i in range(len(user_guess)):
         if user_guess[i] == actual_word[i]:
             output[i] = "Green"
@@ -190,7 +190,8 @@ def evaluate_row(user_guess, actual_word, current_row):
         return False
     else:
         print("not in word list")  # not in word list animations
-        animations.invalid_word_animation(tile_spacing=tiles.tile_spacing, tile_size=tiles.tile_size, letters=user_guess, row=rows.row_list[current_row//5])
+        animations.bad_input_animation(rows.row_list[current_row//5], tiles.tile_size, tiles.tile_spacing, user_guess)
+        letters.render()
         return False
 
 
