@@ -74,7 +74,7 @@ def bad_input_animation(row, tile_size, tile_spacing, letters):
         update_display()
 
     oscillations = 8
-    oscillation_multiplier = .8 # scales the translations
+    oscillation_multiplier = .8   # scales the translations
     for i in range(oscillations):
 
         if i % 2 == 0:
