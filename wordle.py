@@ -95,9 +95,9 @@ class Tiles(Rows):
             pygame.draw.rect(SCREEN, TILE_GRAY, i, self.tile_thickness)
 
 
-class Letter(Tiles):
+class Letters(Tiles):
     def __init__(self):
-        super(Letter, self).__init__()
+        super(Letters, self).__init__()
         self.letter_list = []
 
         self.font_size = int(WIN_HEIGHT/30)
@@ -108,7 +108,7 @@ class Letter(Tiles):
         self.letter_rect = None
 
     def render(self):
-        super(Letter, self).__init__()
+        super(Letters, self).__init__()
 
         self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
@@ -190,8 +190,7 @@ def evaluate_row(user_guess, actual_word, current_row):
         return False
     else:
         print("not in word list")  # not in word list animations
-        animations.bad_input_animation(rows.row_list[current_row//5], tiles.tile_size, tiles.tile_spacing, user_guess)
-        letters.render()
+        animations.bad_input_animation(tiles.tile_matrix[current_row//5: (current_row//5) + 5], "crane", tiles.tile_size,)
         return False
 
 
@@ -200,7 +199,7 @@ running = True
 board = Board()
 rows = Rows()
 tiles = Tiles()
-letters = Letter()
+letters = Letters()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
