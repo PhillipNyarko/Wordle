@@ -19,18 +19,20 @@ GREEN = (83, 141, 78)
 YELLOW = (181, 159, 59)
 TILE_GRAY = (58, 58, 60)
 FULL_TILE_GRAY = (86, 87, 88)
-
+BLACK = (0, 0, 0)
 
 def update_display():
     pygame.display.update()
 
 
-def fade_rect_in():
-    pass
-
-
-def fade_rect_out():
-    pass
+def fade_rect(rect, fade_in=True, fade_out=False):
+    if fade_in:
+        for i in range(100):
+            rect = pygame.Rect(200, 300, 45, 30)
+            pygame.draw.rect(SCREEN, WHITE, rect, 0, 1)
+            update_display()
+    else:
+        pass
 
 
 def bad_input_animation(row, tile_size, tile_spacing, letters):
@@ -40,7 +42,9 @@ def bad_input_animation(row, tile_size, tile_spacing, letters):
     letter_list = []
     letter_rect_list = []
 
+    win_width = pygame.display.get_surface().get_size()[0]
     win_height = pygame.display.get_surface().get_size()[1]
+
     font_size = int(win_height / 30)
 
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
@@ -54,6 +58,16 @@ def bad_input_animation(row, tile_size, tile_spacing, letters):
         pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile_list[k], TILE_THICKNESS)
 
     SCREEN.fill(BG_BLACK, rect=row)
+    bad_input_card_font_size = int(win_height / 65)
+    bad_input_card_font = pygame.font.Font("NeueHelvetica-Bold.otf", bad_input_card_font_size)
+
+    bad_input_card = pygame.Rect(win_width / 2 - tile_size, win_height / 10, tile_size * 2, tile_size / 1.4)
+    bad_input_text = bad_input_card_font.render("Not in word list", True, BLACK)
+    bad_input_text_x = bad_input_card.x + (bad_input_card.width / 2)
+    bad_input_text_y = bad_input_card.y + (bad_input_card.height / 2)
+    bad_input_card_rect = bad_input_text.get_rect(center=(bad_input_text_x, bad_input_text_y))
+    pygame.draw.rect(SCREEN, WHITE, bad_input_card, 0, 3)
+    SCREEN.blit(bad_input_text, bad_input_card_rect)
 
     for j in range(len(letters)):
         x_pos = row.x + x_pos_inc
@@ -76,23 +90,40 @@ def bad_input_animation(row, tile_size, tile_spacing, letters):
     oscillations = 8
     oscillation_multiplier = .8   # scales the translations
     for i in range(oscillations):
-
-        if i % 2 == 0:
-            translation = -(i**oscillation_multiplier)
+        if i <= oscillations / 2:
+            if i % 2 == 0:
+                translation = -(i**oscillation_multiplier)
+            else:
+                translation = i ** oscillation_multiplier
         else:
-            translation = i ** oscillation_multiplier
+            if i % 2 == 0:
+                translation = -(i**oscillation_multiplier)
+            else:
+                translation = i ** oscillation_multiplier
 
         fill_tiles()
 
         for k in range(len(tile_list)):
-            tile_list[k].x += translation
+            if i <= oscillations/2:
+                tile_list[k].x += translation
+            else:
+                tile_list[k].x -= translation
             letter_rect_list[k] = letter_list[k].get_rect(center=(tile_list[k].x + tile_list[k].width / 2, tile_list[k].y + tile_list[k].height / 2))
             draw_tile_and_letter()
 
         update_display()
         time.sleep(0.1)
 
-    fill_tiles()
+    time.sleep(1)
+    for i in range(WHITE[0], 17, -3):
+        txt_color = abs(i - WHITE[0])
+        pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), bad_input_card, 0, 3)
+        txt_r = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
+        txt_g = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
+        txt_b = txt_color if txt_color < BG_BLACK[2] else BG_BLACK[2]
+        bad_input_text = bad_input_card_font.render("Not in word list", True, (txt_r, txt_g, txt_b))
+        SCREEN.blit(bad_input_text, bad_input_card_rect)
+        update_display()
 
 
 def game_won():
