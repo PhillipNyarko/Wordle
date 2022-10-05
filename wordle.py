@@ -190,7 +190,8 @@ def evaluate_row(user_guess, actual_word, current_row):
         return False
     else:
         print("not in word list")  # not in word list animations
-        animations.bad_input_animation(tiles.tile_matrix[current_row//5: (current_row//5) + 5], "crane", tiles.tile_size,)
+        """ this is not passing the exact correct row indexes of the tiles in the row i need"""
+        animations.bad_input_animation(tiles.tile_matrix[current_row//5: (current_row//5) + 20], "crane", tiles.tile_size)
         return False
 
 

@@ -96,6 +96,7 @@ def bad_input_animation(tiles, letters, tile_size):
             """ give this function the right letters to render
             have the function recieve five text "font" objects then when you need
             the rect try using letter.get_rect() also get the letter value from this one value"""
+            """ function call is not passing the exact correct row indexes of the tiles in the row i need"""
             #SCREEN.blit(letter_rects[k], letter_rects[k].get_rect())
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tiles[k], TILE_THICKNESS)
 
