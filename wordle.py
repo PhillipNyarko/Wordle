@@ -161,18 +161,18 @@ def evaluate_row(user_guess, actual_word, current_row):
             actual_word_map[actual_word[index]] = 1
 
     unchecked = []
-    """ CHANGE TO ENUMERATE"""
+
     for i in range(len(user_guess)):
         if user_guess[i] == actual_word[i]:
             output[i] = "Green"
             actual_word_map[actual_word[i]] -= 1
         else:
             unchecked.append(i)
-    for i in range(len(unchecked)):
-        if user_guess[unchecked[i]] not in actual_word_map or actual_word_map[user_guess[unchecked[i]]] <= 0:
-            output[unchecked[i]] = "Gray"
+    for index, value in enumerate(unchecked):
+        if user_guess[value] not in actual_word_map or actual_word_map[user_guess[value]] <= 0:
+            output[value] = "Gray"
         else:
-            output[unchecked[i]] = "Yellow"
+            output[value] = "Yellow"
 
     if user_guess in word_list:
         # row animation goes here
