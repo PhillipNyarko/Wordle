@@ -149,34 +149,41 @@ def word_of_the_day():
 tile_color_values = ["Unevaluated"]*30
 
 
-def evaluate_row(user_guess, actual_word, current_row):
+def evaluate_row(user_guess, actual_word, current_row):  # current row returns the first tile in the row
     output = ["None"]*tiles.cols
     user_guess = ''.join(user_guess)
     actual_word_map = {}
 
     for index, value in enumerate(actual_word):  # create hash map
         if actual_word[index] in actual_word_map:
-            actual_word_map[actual_word[index]] += 1
+            actual_word_map[value] += 1
         else:
-            actual_word_map[actual_word[index]] = 1
+            actual_word_map[value] = 1
 
     unchecked = []
-
-    for i in range(len(user_guess)):
-        if user_guess[i] == actual_word[i]:
-            output[i] = "Green"
-            actual_word_map[actual_word[i]] -= 1
+    print("INITIAL WORD MAP " + str(actual_word_map))
+    for index, value in enumerate(actual_word):
+        if user_guess[index] == actual_word[index]:
+            output[index] = "Green"
+            actual_word_map[value] -= 1
         else:
-            unchecked.append(i)
+            unchecked.append(index)
+    print("map after checked_green " + str(actual_word_map))
+    print("unchecked indices after checked_green: " + str(unchecked))
 
     for index, value in enumerate(unchecked):
         if user_guess[value] in actual_word_map and actual_word_map[user_guess[value]] > 0:
             output[value] = "Yellow"
             actual_word_map[user_guess[value]] -= 1
             del unchecked[index]
-    """find way to make everything else gray(litteraly just print debug the unchecked list and make sure
-    the two functions above do what you think they do"""
 
+    print("map after checked_yellow " + str(actual_word_map))
+    print("unchecked indices after checked_yellow " + str(unchecked))
+
+    for index, value in enumerate(unchecked):
+        output[value] = "Gray"
+    del unchecked[:]
+    print("unchecked indices after checked_gray " + str(unchecked))
 
     if user_guess in word_list:
         # row animation goes here
