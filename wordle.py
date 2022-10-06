@@ -174,7 +174,8 @@ def evaluate_row(user_guess, actual_word, current_row):
             output[value] = "Yellow"
             actual_word_map[user_guess[value]] -= 1
             del unchecked[index]
-    """find way to make everything else gray"""
+    """find way to make everything else gray(litteraly just print debug the unchecked list and make sure
+    the two functions above do what you think they do"""
 
 
     if user_guess in word_list:
