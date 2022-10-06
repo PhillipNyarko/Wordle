@@ -168,11 +168,14 @@ def evaluate_row(user_guess, actual_word, current_row):
             actual_word_map[actual_word[i]] -= 1
         else:
             unchecked.append(i)
+
     for index, value in enumerate(unchecked):
-        if user_guess[value] not in actual_word_map or actual_word_map[user_guess[value]] <= 0:
-            output[value] = "Gray"
-        else:
+        if user_guess[value] in actual_word_map and actual_word_map[user_guess[value]] > 0:
             output[value] = "Yellow"
+            actual_word_map[user_guess[value]] -= 1
+            del unchecked[index]
+    """find way to make everything else gray"""
+
 
     if user_guess in word_list:
         # row animation goes here
@@ -237,6 +240,6 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
+                    if evaluate_row(letters.letter_list[-5:], "smoke", last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
     update_display()
