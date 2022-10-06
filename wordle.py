@@ -1,5 +1,6 @@
 import json
 import random
+
 import pygame
 import pyautogui
 
@@ -240,7 +241,7 @@ while running:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
                     last_tile = tiles.tile_matrix[len(letters.letter_list)-1]
-                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing-2)
+                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing-2)  # 2=intensity
                     letters.render()
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
@@ -248,6 +249,6 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], "smoke", last_index_of_row-5):
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
     update_display()
