@@ -152,7 +152,7 @@ tile_color_values = ["Unevaluated"]*30
 
 def evaluate_row(user_guess, actual_word, current_row):  # current row returns the first tile in the row
     output = ["None"]*tiles.cols
-    user_guess = ''.join(user_guess)
+    guess = ''.join(user_guess)
     actual_word_map = {}
 
     for index, value in enumerate(actual_word):  # create hash map
@@ -164,7 +164,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     unchecked = []
     print("INITIAL WORD MAP " + str(actual_word_map))
     for index, value in enumerate(actual_word):
-        if user_guess[index] == actual_word[index]:
+        if guess[index] == actual_word[index]:
             output[index] = "Green"
             actual_word_map[value] -= 1
         else:
@@ -173,9 +173,9 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     print("unchecked indices after checked_green: " + str(unchecked))
 
     for index, value in enumerate(unchecked):
-        if user_guess[value] in actual_word_map and actual_word_map[user_guess[value]] > 0:
+        if guess[value] in actual_word_map and actual_word_map[guess[value]] > 0:
             output[value] = "Yellow"
-            actual_word_map[user_guess[value]] -= 1
+            actual_word_map[guess[value]] -= 1
             unchecked[index] = None
 
     print("map after checked_yellow " + str(actual_word_map))
@@ -187,23 +187,23 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     del unchecked[:]
     print("unchecked indices after checked_gray " + str(unchecked))
 
-    if user_guess in word_list:
+    if guess in word_list:
         # row animation goes here
         for index, value in enumerate(output):  # map color values to list
             tile_color_values[index + current_row] = output[index]
             letters.render()
-        if user_guess == actual_word:
+        if guess == actual_word:
             print("game won")
             return False
         return True
 
-    elif user_guess == "ezera":
+    elif guess == "ezera":
         # do animation for ezera's name and then clear the row and start them on the first tile of row
         print("ezera animation")
         return False
     else:
         print("not in word list")  # not in word list animations
-        animations.bad_input_animation(tiles.tile_matrix[len(letters.letter_list)-5:len(letters.letter_list)], user_guess)
+        animations.bad_input_animation(tiles.tile_matrix[len(letters.letter_list)-5:len(letters.letter_list)], guess)
         return False
 
 
@@ -249,6 +249,6 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], "rusty", last_index_of_row-5):
+                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
     update_display()
