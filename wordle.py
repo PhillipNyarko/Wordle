@@ -176,13 +176,14 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
         if user_guess[value] in actual_word_map and actual_word_map[user_guess[value]] > 0:
             output[value] = "Yellow"
             actual_word_map[user_guess[value]] -= 1
-            del unchecked[index]
+            unchecked[index] = None
 
     print("map after checked_yellow " + str(actual_word_map))
     print("unchecked indices after checked_yellow " + str(unchecked))
 
     for index, value in enumerate(unchecked):
-        output[value] = "Gray"
+        if not unchecked[index] is None:
+            output[value] = "Gray"
     del unchecked[:]
     print("unchecked indices after checked_gray " + str(unchecked))
 
@@ -248,6 +249,6 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
+                    if evaluate_row(letters.letter_list[-5:], "rusty", last_index_of_row-5):
                         last_index_of_row += 5  # go to next row
     update_display()
