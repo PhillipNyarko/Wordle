@@ -50,8 +50,6 @@ def bad_input_animation(tiles, user_guess):
     font_size = int(win_height / 30)
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-    letters = [font.render(i.upper(), True, WHITE) for i in user_guess]
-
     tile_size = tiles[0].width
     bad_input_crd_font_size = int(win_height / 65)
     bad_input_crd_font = pygame.font.Font("NeueHelvetica-Bold.otf", bad_input_crd_font_size)
@@ -63,22 +61,19 @@ def bad_input_animation(tiles, user_guess):
         for index in tiles:
             SCREEN.fill(BG_BLACK, rect=index)
 
-    oscillations = 8
-    oscillation_multiplier = .8   # scales the translations
+    oscillations = 10
+    translation_list = [-1]
     for i in range(oscillations):
-        if i <= oscillations / 2:
-            if i % 2 == 0:
-                translation = -(i**oscillation_multiplier)
-            else:
-                translation = i ** oscillation_multiplier
+        if i < oscillations/2:
+            translation = i + 1 if i % 2 == 0 else -(i+1)
+            translation_list.append(translation)
         else:
-            if i % 2 == 0:
-                translation = -(i**oscillation_multiplier)
-            else:
-                translation = i ** oscillation_multiplier
+            translation_list.pop()
+            translation = translation_list[-1]
 
+        print(i, translation)
+        print(translation_list)
         fill_tiles()
-
         for j in range(len(tiles)):
             tiles[j].x += translation
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tiles[j], TILE_THICKNESS)
@@ -111,10 +106,7 @@ def input_animation(tile, input_letter, offset=5):
         font_size = int(win_height / 30) + tile_offset
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-        letter_x = tile.x + (tile.width / 2)
-        letter_y = tile.y + (tile.height / 2)
-        letter = font.render(input_letter.upper(), True, WHITE)
-        letter_rect = letter.get_rect(center=(letter_x, letter_y))
+        letter, letter_rect = create_rect_and_letter(tile, TILE_GRAY, input_letter.upper(), WHITE, font, TILE_THICKNESS)
 
         SCREEN.fill(BG_BLACK, rect=tile)
         tile.inflate_ip(tile_offset, tile_offset)
