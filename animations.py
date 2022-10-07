@@ -60,7 +60,9 @@ def bad_input_animation(tiles, user_guess):
     def fill_tiles():
         for index in tiles:
             SCREEN.fill(BG_BLACK, rect=index)
-
+    """make it count downwards properly for all oscilation numbers? What numbers does translations need to be?"""
+    """ chaging time. sleep at bottom makes animation faster or slower. 
+        changing the amount of oscilations make the rows move a farther distance and in turn slows the animation down"""
     oscillations = 10
     translation_list = [-1]
     for i in range(oscillations):
@@ -80,7 +82,7 @@ def bad_input_animation(tiles, user_guess):
             create_rect_and_letter(tiles[j], FULL_TILE_GRAY, user_guess[j].upper(), WHITE, font, 2)
 
         update_display()
-        time.sleep(0.1)
+        time.sleep(0.06)
 
     for i in range(WHITE[0], 17, -1):
         txt_color = abs(i - WHITE[0])
