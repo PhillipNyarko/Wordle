@@ -43,34 +43,25 @@ def create_rect_and_letter(rect, rect_color, text, text_color, font_variable, re
     return new_letter, new_letter_rect
 
 
-def bad_input_animation(tiles, letters, tile_size):
-    x_pos_inc = 0
+def bad_input_animation(tiles, user_guess):
     win_width = pygame.display.get_surface().get_size()[0]
     win_height = pygame.display.get_surface().get_size()[1]
 
     font_size = int(win_height / 30)
-
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
-    for i in range(len(tiles)):
-        SCREEN.fill(BG_BLACK, rect=tiles[i])
+
+    letters = [font.render(i.upper(), True, WHITE) for i in user_guess]
+
+    tile_size = tiles[0].width
     bad_input_crd_font_size = int(win_height / 65)
     bad_input_crd_font = pygame.font.Font("NeueHelvetica-Bold.otf", bad_input_crd_font_size)
     bad_input_crd = pygame.Rect(win_width / 2 - tile_size, win_height / 10, tile_size * 2, tile_size / 1.4)
     bad_input_txt = "Not in word list"
-    bad_input_txt_rect = create_rect_and_letter(bad_input_crd, WHITE, bad_input_txt, BLACK, bad_input_crd_font, 0, 3)[1]
+    bad_input_txt_rect = create_rect_and_letter(bad_input_crd, WHITE, bad_input_txt, BLACK, bad_input_crd_font, 0, 4)[1]
 
     def fill_tiles():
         for index in tiles:
             SCREEN.fill(BG_BLACK, rect=index)
-
-    for j in range(len(letters)):
-        x_pos = tiles[j].x + x_pos_inc
-        tile = pygame.Rect(x_pos, tiles[j].y, tile_size, tile_size)
-        tile.centery = tiles[j].centery
-
-        letter = create_rect_and_letter(tile, FULL_TILE_GRAY, letters[j].upper(), WHITE, font, TILE_THICKNESS)
-        SCREEN.blit(letter[0], letter[1])
-        pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
 
     oscillations = 8
     oscillation_multiplier = .8   # scales the translations
@@ -88,22 +79,22 @@ def bad_input_animation(tiles, letters, tile_size):
 
         fill_tiles()
 
-        for k in range(len(tiles)):
+        for j in range(len(tiles)):
             if i <= oscillations/2:
-                tiles[k].x += translation
+                tiles[j].x += translation
             else:
-                tiles[k].x -= translation
-            """ give this function the right letters to render
-            have the function recieve five text "font" objects then when you need
-            the rect try using letter.get_rect() also get the letter value from this one value"""
-            """ function call is not passing the exact correct row indexes of the tiles in the row i need"""
-            #SCREEN.blit(letter_rects[k], letter_rects[k].get_rect())
-            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tiles[k], TILE_THICKNESS)
+                tiles[j].x -= translation
+
+            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tiles[j], TILE_THICKNESS)
+            letter_rects = [
+                letters[i].get_rect(center=(tiles[i].x + (tiles[i].width / 2), tiles[i].y + (tiles[i].height / 2))) for
+                i in range(len(letters))
+            ]
+            SCREEN.blit(letters[j], letter_rects[j])
 
         update_display()
         time.sleep(0.1)
 
-    time.sleep(1)
     for i in range(WHITE[0], 17, -1):
         txt_color = abs(i - WHITE[0])
         pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), bad_input_crd, 0, 3)
