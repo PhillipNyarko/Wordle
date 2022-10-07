@@ -80,17 +80,9 @@ def bad_input_animation(tiles, user_guess):
         fill_tiles()
 
         for j in range(len(tiles)):
-            if i <= oscillations/2:
-                tiles[j].x += translation
-            else:
-                tiles[j].x -= translation
-
+            tiles[j].x += translation
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tiles[j], TILE_THICKNESS)
-            letter_rects = [
-                letters[i].get_rect(center=(tiles[i].x + (tiles[i].width / 2), tiles[i].y + (tiles[i].height / 2))) for
-                i in range(len(letters))
-            ]
-            SCREEN.blit(letters[j], letter_rects[j])
+            create_rect_and_letter(tiles[j], FULL_TILE_GRAY, user_guess[j].upper(), WHITE, font, 2)
 
         update_display()
         time.sleep(0.1)
