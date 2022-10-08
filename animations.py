@@ -122,7 +122,10 @@ def valid_input_animation(tiles, color_values, user_guess):
     colors = []
     win_height = pygame.display.get_surface().get_size()[1]
     font_size = int(win_height / 30)
-
+    """  the loops that grow and shrink the tiles need to loop for the minimum amount of iterations
+    needed to make the tile shrink until its disappeared and grow back to its original size
+    ALSO, because the letter is visibly jarring when slapped on at the end of the animation ast slower speeds
+    we need some way of rendering sections of the letter as the tile grows"""
     for index, value in enumerate(color_values):
         if value == "Green":
             colors.append(GREEN)
