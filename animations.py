@@ -26,11 +26,8 @@ def update_display():
     pygame.display.update()
 
 
-def fade_rect(rect, fade_in=True, fade_out=False):
-    if fade_in:
-        pass
-    else:
-        pass
+def fade_rect():
+    pass
 
 
 def create_rect_and_letter(rect, rect_color, text, text_color, font_variable, rect_thickness, rounding=0):
@@ -41,6 +38,17 @@ def create_rect_and_letter(rect, rect_color, text, text_color, font_variable, re
     pygame.draw.rect(SCREEN, rect_color, rect, rect_thickness, rounding)
     SCREEN.blit(new_letter, new_letter_rect)
     return new_letter, new_letter_rect
+
+
+def fill_tiles(tiles, fill=True):
+    if isinstance(tiles, list):
+        for tile in tiles:
+            SCREEN.fill(BG_BLACK, rect=tile)
+    else:
+        if fill:
+            SCREEN.fill(BG_BLACK, rect=tiles)
+        else:
+            pygame.draw.rect(SCREEN, BG_BLACK, tiles, TILE_THICKNESS)
 
 
 def bad_input_animation(tiles, user_guess):
@@ -57,27 +65,22 @@ def bad_input_animation(tiles, user_guess):
     bad_input_txt = "Not in word list"
     bad_input_txt_rect = create_rect_and_letter(bad_input_crd, WHITE, bad_input_txt, BLACK, bad_input_crd_font, 0, 4)[1]
 
-    def fill_tiles():
-        for index in tiles:
-            SCREEN.fill(BG_BLACK, rect=index)
-
     def shake_row():
-        fill_tiles()
+        fill_tiles(tiles)
         for j in range(len(tiles)):
             tiles[j].x += translation
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tiles[j], TILE_THICKNESS)
             create_rect_and_letter(tiles[j], FULL_TILE_GRAY, user_guess[j].upper(), WHITE, font, 2)
         update_display()
-        time.sleep(0.06)
+        time.sleep(0.065)
 
-    oscillations = 1000
+    oscillations = 10
     for i in range(oscillations//2):
         translation = i + 1 if i % 2 == 0 else -(i+1)
         shake_row()
     for i in range(oscillations//2, 0, -1):
         translation = i if i % 2 == 0 else -i
         shake_row()
-
     for i in range(WHITE[0], 17, -1):
         txt_color = abs(i - WHITE[0])
         pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), bad_input_crd, 0, 3)
@@ -115,48 +118,32 @@ def input_animation(tile, input_letter, offset=5):
     inflate_tile(offset, negative=True)
 
 
-def animate_tile(x_pos, y_pos, size, input_letter, value):
-    font_size = int(WIN_HEIGHT / 30)
-    ry = size
-    ry_pos = y_pos
-    for i in range(100):
-        rect = pygame.Rect(x_pos, ry_pos, size, ry)
-        rect.center = (rect.x + rect.width / 2, rect.y + rect.height / 2)
+def valid_input_animation(tiles, color_values, user_guess):
+    colors = []
+    for index, value in enumerate(color_values):
+        if value == "Green":
+            colors.append(GREEN)
+        elif value == "Yellow":
+            colors.append(YELLOW)
+        elif value == "Gray":
+            colors.append(TILE_GRAY)
 
+    for index, tile in enumerate(tiles):
+        for i in range(30):
+            fill_tiles(tile)
+            tile.inflate_ip(0, -2)
+            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
+            update_display()
+            time.sleep(0.1)
+
+        for i in range(30):
+            fill_tiles(tile)
+            tile.inflate_ip(0, 2)
+            pygame.draw.rect(SCREEN, colors[index], tile, 0)
+            update_display()
+            time.sleep(0.1)
+        win_height = pygame.display.get_surface().get_size()[1]
+        font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
-
-        letter_x = rect.x + (rect.width / 2)
-        letter_y = rect.y + (rect.height / 2)
-        letter = font.render(input_letter.upper(), True, WHITE)
-        letter_rect = letter.get_rect(center=(letter_x, letter_y))
-
-        pygame.draw.rect(SCREEN, TILE_GRAY, rect, TILE_THICKNESS)
+        letter, letter_rect = create_rect_and_letter(tile, colors[index], user_guess[index].upper(), WHITE, font, 0)
         SCREEN.blit(letter, letter_rect)
-        update_display()
-
-        time.sleep(0.003)
-        SCREEN.fill(BG_BLACK)
-        #font_size -= 1
-        ry -= 1
-        ry_pos += .5
-
-    for i in range(100):
-        rect = pygame.Rect(x_pos, ry_pos, size, ry)
-        rect.center = (rect.x + rect.width / 2, rect.y + rect.height / 2)
-
-        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
-
-        letter_x = rect.x + (rect.width / 2)
-        letter_y = rect.y + (rect.height / 2)
-        letter = font.render(input_letter.upper(), True, WHITE)
-        letter_rect = letter.get_rect(center=(letter_x, letter_y))
-
-        pygame.draw.rect(SCREEN, GREEN, rect, 0)
-        SCREEN.blit(letter, letter_rect)
-        update_display()
-
-        time.sleep(0.003)
-        SCREEN.fill(BG_BLACK)
-        #font_size += 1
-        ry += 1
-        ry_pos -= .5

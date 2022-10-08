@@ -153,6 +153,7 @@ tile_color_values = ["Unevaluated"]*30
 def evaluate_row(user_guess, actual_word, current_row):  # current row returns the first tile in the row
     output = ["None"]*tiles.cols
     guess = ''.join(user_guess)
+    current_row_tiles = tiles.tile_matrix[len(letters.letter_list)-5:len(letters.letter_list)]
     actual_word_map = {}
 
     for index, value in enumerate(actual_word):  # create hash map
@@ -162,34 +163,25 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             actual_word_map[value] = 1
 
     unchecked = []
-    print("INITIAL WORD MAP " + str(actual_word_map))
     for index, value in enumerate(actual_word):
         if guess[index] == actual_word[index]:
             output[index] = "Green"
             actual_word_map[value] -= 1
         else:
             unchecked.append(index)
-    print("map after checked_green " + str(actual_word_map))
-    print("unchecked indices after checked_green: " + str(unchecked))
-
     for index, value in enumerate(unchecked):
         if guess[value] in actual_word_map and actual_word_map[guess[value]] > 0:
             output[value] = "Yellow"
             actual_word_map[guess[value]] -= 1
             unchecked[index] = None
-
-    print("map after checked_yellow " + str(actual_word_map))
-    print("unchecked indices after checked_yellow " + str(unchecked))
-
     for index, value in enumerate(unchecked):
         if not unchecked[index] is None:
             output[value] = "Gray"
     del unchecked[:]
-    print("unchecked indices after checked_gray " + str(unchecked))
 
     if guess in word_list:
-        # row animation goes here
-        for index, value in enumerate(output):  # map color values to list
+        animations.valid_input_animation(current_row_tiles, output, user_guess)
+        for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
             letters.render()
         if guess == actual_word:
@@ -203,7 +195,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
         return False
     else:
         print("not in word list")  # not in word list animations
-        animations.bad_input_animation(tiles.tile_matrix[len(letters.letter_list)-5:len(letters.letter_list)], guess)
+        animations.bad_input_animation(current_row_tiles, guess)
         return False
 
 
