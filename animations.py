@@ -120,6 +120,9 @@ def input_animation(tile, input_letter, offset=5):
 
 def valid_input_animation(tiles, color_values, user_guess):
     colors = []
+    win_height = pygame.display.get_surface().get_size()[1]
+    font_size = int(win_height / 30)
+
     for index, value in enumerate(color_values):
         if value == "Green":
             colors.append(GREEN)
@@ -129,19 +132,20 @@ def valid_input_animation(tiles, color_values, user_guess):
             colors.append(TILE_GRAY)
 
     for index, tile in enumerate(tiles):
+
         for i in range(30):
-            fill_tiles(tile)
+            fill_tiles(tile, fill=False)
             tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
             update_display()
-            time.sleep(0.1)
+            time.sleep(0.005)
 
         for i in range(30):
             fill_tiles(tile)
             tile.inflate_ip(0, 2)
             pygame.draw.rect(SCREEN, colors[index], tile, 0)
             update_display()
-            time.sleep(0.1)
+            time.sleep(0.005)
         win_height = pygame.display.get_surface().get_size()[1]
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
