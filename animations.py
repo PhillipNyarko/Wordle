@@ -136,15 +136,16 @@ def valid_input_animation(tiles, color_values, user_guess):
             colors.append(TILE_GRAY)
 
     for index, tile in enumerate(tiles):
-
-        for i in range(30):
+        init_height = tile.height
+        print(init_height)
+        for i in range(init_height//2):
             fill_tiles(tile, fill=False)
             tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
             update_display()
             time.sleep(0.005)
-
-        for i in range(30):
+            print(i)
+        for i in range(init_height//2):
             fill_tiles(tile)
             tile.inflate_ip(0, 2)
             pygame.draw.rect(SCREEN, colors[index], tile, 0)
