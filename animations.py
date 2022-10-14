@@ -133,21 +133,21 @@ def valid_input_animation(tiles, color_values, user_guess):
 
     for index, tile in enumerate(tiles):
         init_height = tile.height
-        fps = init_height*3.44827586207
-
+        fps = init_height/(init_height**2.5)
+        print(fps)
         for i in range(init_height//2):
             fill_tiles(tile, fill=False)
             tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
             update_display()
-            CLOCK.tick(fps)
+            time.sleep(fps)
 
         for i in range(init_height//2):
             fill_tiles(tile)
             tile.inflate_ip(0, 2)
             pygame.draw.rect(SCREEN, colors[index], tile, 0)
             update_display()
-            CLOCK.tick(fps)
+            time.sleep(fps)
 
         win_height = pygame.display.get_surface().get_size()[1]
         font_size = int(win_height / 30)
