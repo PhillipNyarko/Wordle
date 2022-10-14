@@ -12,6 +12,7 @@ CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 TILE_SIZE = WIN_HEIGHT/15
 TILE_THICKNESS = 2
+
 # colors
 WHITE = (225, 225, 225)
 BG_BLACK = (18, 18, 19)
@@ -121,12 +122,7 @@ def input_animation(tile, input_letter, offset=5):
 
 def valid_input_animation(tiles, color_values, user_guess):
     colors = []
-    win_height = pygame.display.get_surface().get_size()[1]
-    font_size = int(win_height / 30)
-    """  the loops that grow and shrink the tiles need to loop for the minimum amount of iterations
-    needed to make the tile shrink until its disappeared and grow back to its original size
-    ALSO, because the letter is visibly jarring when slapped on at the end of the animation ast slower speeds
-    we need some way of rendering sections of the letter as the tile grows"""
+
     for index, value in enumerate(color_values):
         if value == "Green":
             colors.append(GREEN)
@@ -137,20 +133,22 @@ def valid_input_animation(tiles, color_values, user_guess):
 
     for index, tile in enumerate(tiles):
         init_height = tile.height
-        print(init_height)
+        fps = init_height*3.44827586207
+
         for i in range(init_height//2):
             fill_tiles(tile, fill=False)
             tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
             update_display()
-            time.sleep(0.005)
-            print(i)
+            CLOCK.tick(fps)
+
         for i in range(init_height//2):
             fill_tiles(tile)
             tile.inflate_ip(0, 2)
             pygame.draw.rect(SCREEN, colors[index], tile, 0)
             update_display()
-            time.sleep(0.005)
+            CLOCK.tick(fps)
+
         win_height = pygame.display.get_surface().get_size()[1]
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)

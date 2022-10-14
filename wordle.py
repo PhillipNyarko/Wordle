@@ -1,6 +1,5 @@
 import json
 import random
-import time
 
 import pygame
 import pyautogui
