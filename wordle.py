@@ -1,5 +1,6 @@
 import json
 import random
+import time
 
 import pygame
 import pyautogui
@@ -194,7 +195,6 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
         print("ezera animation")
         return False
     else:
-        print("not in word list")  # not in word list animations
         animations.bad_input_animation(current_row_tiles, guess)
         return False
 
@@ -218,7 +218,7 @@ while running:
             pygame.quit()
             exit()
 
-        if event.type == pygame.VIDEORESIZE:
+        if event.type == pygame.WINDOWSIZECHANGED:
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)

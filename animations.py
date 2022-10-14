@@ -52,6 +52,7 @@ def fill_tiles(tiles, fill=True):
 
 
 def bad_input_animation(tiles, user_guess):
+    pygame.event.clear()
     win_width = pygame.display.get_surface().get_size()[0]
     win_height = pygame.display.get_surface().get_size()[1]
 
