@@ -185,7 +185,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             tile_color_values[index + current_row] = output[index]
             letters.render()
         if guess == actual_word:
-            print("game won")
+            animations.game_won(current_row_tiles, user_guess)
             return False
         return True
 

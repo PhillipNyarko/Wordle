@@ -76,7 +76,7 @@ def bad_input_animation(tiles, user_guess):
         update_display()
         time.sleep(0.065)
 
-    oscillations = 10
+    oscillations = 20
     for i in range(oscillations//2):
         translation = i + 1 if i % 2 == 0 else -(i+1)
         shake_row()
@@ -94,8 +94,30 @@ def bad_input_animation(tiles, user_guess):
         update_display()
 
 
-def game_won():
-    pass
+def game_won(tiles, user_guess):
+    for index, tile in enumerate(tiles):
+        init_height = tile.height
+        scale = 16
+        print(scale)
+        for i in range(init_height//scale):
+            fill_tiles(tile, fill=False)
+            tile.y -= 1000
+            pygame.draw.rect(SCREEN, GREEN, tile, 0)
+            update_display()
+            time.sleep(0.5)
+
+        for i in range(init_height//scale):
+            fill_tiles(tile)
+            tile.y += 10
+            pygame.draw.rect(SCREEN, GREEN, tile, 0)
+            update_display()
+            time.sleep(0.5)
+
+        win_height = pygame.display.get_surface().get_size()[1]
+        font_size = int(win_height / 30)
+        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+        letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0)
+        SCREEN.blit(letter, letter_rect)
 
 
 def input_animation(tile, input_letter, offset=5):
@@ -133,21 +155,21 @@ def valid_input_animation(tiles, color_values, user_guess):
 
     for index, tile in enumerate(tiles):
         init_height = tile.height
-        fps = init_height/(init_height**2.5)
-        print(fps)
-        for i in range(init_height//2):
+        scale = 16
+        print(scale)
+        for i in range(init_height//scale):
             fill_tiles(tile, fill=False)
-            tile.inflate_ip(0, -2)
+            tile.inflate_ip(0, -scale)
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
             update_display()
-            time.sleep(fps)
+            time.sleep(0.005)
 
-        for i in range(init_height//2):
+        for i in range(init_height//scale):
             fill_tiles(tile)
-            tile.inflate_ip(0, 2)
+            tile.inflate_ip(0, scale)
             pygame.draw.rect(SCREEN, colors[index], tile, 0)
             update_display()
-            time.sleep(fps)
+            time.sleep(0.005)
 
         win_height = pygame.display.get_surface().get_size()[1]
         font_size = int(win_height / 30)
