@@ -76,7 +76,7 @@ def bad_input_animation(tiles, user_guess):
         update_display()
         time.sleep(0.065)
 
-    oscillations = 20
+    oscillations = 10
     for i in range(oscillations//2):
         translation = i + 1 if i % 2 == 0 else -(i+1)
         shake_row()
@@ -127,7 +127,6 @@ def game_won(tiles, user_guess):
             time.sleep(0.035)
 
 
-
 def input_animation(tile, input_letter, offset=5):
     def inflate_tile(tile_offset, negative=False):
         if negative:
@@ -170,14 +169,14 @@ def valid_input_animation(tiles, color_values, user_guess):
             tile.inflate_ip(0, -scale)
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS)
             update_display()
-            time.sleep(0.005)
+            time.sleep(0.1)
 
         for i in range(init_height//scale):
             fill_tiles(tile)
             tile.inflate_ip(0, scale)
             pygame.draw.rect(SCREEN, colors[index], tile, 0)
             update_display()
-            time.sleep(0.005)
+            time.sleep(0.05)
 
         win_height = pygame.display.get_surface().get_size()[1]
         font_size = int(win_height / 30)
