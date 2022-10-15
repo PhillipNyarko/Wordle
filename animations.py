@@ -95,29 +95,37 @@ def bad_input_animation(tiles, user_guess):
 
 
 def game_won(tiles, user_guess):
+    win_height = pygame.display.get_surface().get_size()[1]
+    font_size = int(win_height / 30)
+    font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+
     for index, tile in enumerate(tiles):
-        init_height = tile.height
         scale = 16
-        print(scale)
-        for i in range(init_height//scale):
-            fill_tiles(tile, fill=False)
-            tile.y -= 1000
-            pygame.draw.rect(SCREEN, GREEN, tile, 0)
-            update_display()
-            time.sleep(0.5)
+        init_height = tile.height
+        letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0)
 
         for i in range(init_height//scale):
             fill_tiles(tile)
-            tile.y += 10
-            pygame.draw.rect(SCREEN, GREEN, tile, 0)
+            pygame.draw.rect(SCREEN, BG_BLACK, tile, 0)
             update_display()
-            time.sleep(0.5)
+            tile.y -= 10
+            pygame.draw.rect(SCREEN, GREEN, tile, 0)
+            letter_rect.y -= 10
+            SCREEN.blit(letter, letter_rect)
+            update_display()
+            time.sleep(0.035)
 
-        win_height = pygame.display.get_surface().get_size()[1]
-        font_size = int(win_height / 30)
-        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
-        letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0)
-        SCREEN.blit(letter, letter_rect)
+        for i in range(init_height//scale):
+            fill_tiles(tile)
+            pygame.draw.rect(SCREEN, BG_BLACK, tile, 0)
+            update_display()
+            tile.y += 10
+            letter_rect.y += 10
+            pygame.draw.rect(SCREEN, GREEN, tile, 0)
+            SCREEN.blit(letter, letter_rect)
+            update_display()
+            time.sleep(0.035)
+
 
 
 def input_animation(tile, input_letter, offset=5):
