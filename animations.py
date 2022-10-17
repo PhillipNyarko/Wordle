@@ -165,7 +165,11 @@ def valid_input_animation(tiles, color_values, user_guess):
         top_rect = pygame.Rect((tile.x, tile.y), (tile.width, 0))
         bottom_rect = pygame.Rect((tile.x, tile.y + tile.height), (tile.width, 0))
 
-        for i in range(init_height//2 + 2):
+        win_height = pygame.display.get_surface().get_size()[1]
+        font_size = int(win_height / 30)
+        font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+
+        for i in range(init_height//2 + 1):
             tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             top_rect.height += 1
@@ -176,18 +180,15 @@ def valid_input_animation(tiles, color_values, user_guess):
             update_display()
             time.sleep(0.005)
 
-        for i in range(init_height//2 + 2):
+        for i in range(init_height//2 + 1):
+            top_rect.height -= 1
+            bottom_rect.y += 1
+            bottom_rect.height -= 1
+            tile.inflate_ip(0, 2)
             pygame.draw.rect(SCREEN, GREEN, tile, 0)
-            win_height = pygame.display.get_surface().get_size()[1]
-            font_size = int(win_height / 30)
-            font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
             letter, letter_rect = create_rect_and_letter(tile, colors[index], user_guess[index].upper(), WHITE, font, 0)
             SCREEN.blit(letter, letter_rect)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.rect(SCREEN, BG_BLACK, bottom_rect, 0)
             update_display()
             time.sleep(0.005)
-            top_rect.height -= 1
-            bottom_rect.y += 1
-            bottom_rect.height -= 1
-            tile.inflate_ip(0, 2)
