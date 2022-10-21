@@ -178,7 +178,6 @@ def valid_input_animation(tiles, color_values, user_guess):
             bottom_rect.height += 1
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS-1)
             update_display()
-            time.sleep(0.005)
 
         for i in range(init_height//2 + 1):
             top_rect.height -= 1
@@ -191,4 +190,3 @@ def valid_input_animation(tiles, color_values, user_guess):
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.rect(SCREEN, BG_BLACK, bottom_rect, 0)
             update_display()
-            time.sleep(0.005)
