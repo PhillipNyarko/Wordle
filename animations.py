@@ -76,7 +76,7 @@ def bad_input_animation(tiles, user_guess):
         update_display()
         time.sleep(0.065)
 
-    oscillations = 10
+    oscillations = 20
     for i in range(oscillations//2):
         translation = i + 1 if i % 2 == 0 else -(i+1)
         shake_row()
@@ -94,7 +94,7 @@ def bad_input_animation(tiles, user_guess):
         update_display()
 
 
-def game_won(tiles, user_guess):
+def game_won(tiles, user_guess): # after every frame, re-render the row above the curent row
     win_height = pygame.display.get_surface().get_size()[1]
     font_size = int(win_height / 30)
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
@@ -169,7 +169,7 @@ def valid_input_animation(tiles, color_values, user_guess):
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-        loops = 60
+        loops = 120
         for i in range(loops//2):
             tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
@@ -179,7 +179,7 @@ def valid_input_animation(tiles, color_values, user_guess):
             bottom_rect.height += 1
             pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS-1)
             update_display()
-            time.sleep(0.5)
+            time.sleep(0.005)
 
         for i in range(loops//2):
             top_rect.height -= 1
@@ -192,4 +192,4 @@ def valid_input_animation(tiles, color_values, user_guess):
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.rect(SCREEN, BG_BLACK, bottom_rect, 0)
             update_display()
-            time.sleep(0.5)
+            time.sleep(0.005)
