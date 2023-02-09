@@ -84,6 +84,8 @@ def bad_input_animation(tiles, user_guess):
         translation = i if i % 2 == 0 else -i
         shake_row()
     for i in range(WHITE[0], 17, -1):
+        # it takes to long to finish so check for user input every loop and if the user presses bkspace just delete
+        # the box and break out of the loop going back to the game
         txt_color = abs(i - WHITE[0])
         pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), bad_input_crd, 0, 3)
         txt_r = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
@@ -94,7 +96,7 @@ def bad_input_animation(tiles, user_guess):
         update_display()
 
 
-def game_won(tiles, user_guess): # after every frame, re-render the row above the curent row
+def game_won(tiles, user_guess):  # after every frame, re-render the row above the current row
     win_height = pygame.display.get_surface().get_size()[1]
     font_size = int(win_height / 30)
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
@@ -161,7 +163,7 @@ def valid_input_animation(tiles, color_values, user_guess):
             colors.append(TILE_GRAY)
 
     for index, tile in enumerate(tiles):
-        init_height = tile.height
+        # init_height = tile.height
         top_rect = pygame.Rect((tile.x, tile.y), (tile.width, 0))
         bottom_rect = pygame.Rect((tile.x, tile.y + tile.height), (tile.width, 0))
 
