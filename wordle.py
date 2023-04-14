@@ -7,6 +7,10 @@ import pyautogui
 import animations
 
 pygame.init()
+# add on-screen keyboard
+# add wordle title bar
+# add win screen
+# make sure the word changes each day
 
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
@@ -153,7 +157,7 @@ tile_color_values = ["Unevaluated"]*30
 def evaluate_row(user_guess, actual_word, current_row):  # current row returns the first tile in the row
     output = ["None"]*tiles.cols
     guess = ''.join(user_guess)
-    current_row_tiles = tiles.tile_matrix[len(letters.letter_list)-5:len(letters.letter_list)]
+    current_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 5: len(letters.letter_list)]
     actual_word_map = {}
 
     for index, value in enumerate(actual_word):  # create hash map
@@ -194,7 +198,12 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
         print("ezera animation")
         return False
     else:
-        animations.bad_input_animation(current_row_tiles, guess)
+        if animations.bad_input_animation(current_row_tiles, guess):
+            letters.letter_list.pop()
+            board.__init__()
+            rows.__init__()
+            tiles.__init__()
+            letters.render()
         return False
 
 
@@ -207,7 +216,7 @@ letters = Letters()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-print(wrd_of_the_day)
+print(wrd_of_the_day)  # delete when finished coding
 
 while running:
     CLOCK.tick(60)

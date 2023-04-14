@@ -67,6 +67,13 @@ def bad_input_animation(tiles, user_guess):
     bad_input_txt = "Not in word list"
     bad_input_txt_rect = create_rect_and_letter(bad_input_crd, WHITE, bad_input_txt, BLACK, bad_input_crd_font, 0, 4)[1]
 
+    def user_skip_animation():
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
+                    pygame.draw.rect(SCREEN, BG_BLACK, bad_input_crd, 0, 3)
+                    return True
+
     def shake_row():
         fill_tiles(tiles)
         for j in range(len(tiles)):
@@ -77,14 +84,27 @@ def bad_input_animation(tiles, user_guess):
         time.sleep(0.065)
 
     oscillations = 20
+    skip_animation = False
     for i in range(oscillations//2):
+        if user_skip_animation():
+            skip_animation = True
+        if skip_animation:
+            break
         translation = i + 1 if i % 2 == 0 else -(i+1)
         shake_row()
     for i in range(oscillations//2, 0, -1):
+        if user_skip_animation():
+            skip_animation = True
+        if skip_animation:
+            break
         translation = i if i % 2 == 0 else -i
         shake_row()
     for i in range(WHITE[0], 17, -1):
-        # it takes to long to finish so check for user input every loop and if the user presses bkspace just delete
+        if user_skip_animation():
+            skip_animation = True
+        if skip_animation:
+            break
+        # it takes to long to finish so check for user input every loop and if the user presses backspace just delete
         # the box and break out of the loop going back to the game
         txt_color = abs(i - WHITE[0])
         pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), bad_input_crd, 0, 3)
@@ -151,6 +171,7 @@ def input_animation(tile, input_letter, offset=5):
     inflate_tile(offset, negative=True)
 
 
+# this animation does not run at the proper rate when the window is resized
 def valid_input_animation(tiles, color_values, user_guess):
     colors = []
 
