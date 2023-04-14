@@ -200,10 +200,12 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     else:
         if animations.bad_input_animation(current_row_tiles, guess):
             letters.letter_list.pop()
+            SCREEN.fill(BG_BLACK)
             board.__init__()
             rows.__init__()
             tiles.__init__()
             letters.render()
+            update_display()
         return False
 
 

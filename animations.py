@@ -99,13 +99,11 @@ def bad_input_animation(tiles, user_guess):
             break
         translation = i if i % 2 == 0 else -i
         shake_row()
-    for i in range(WHITE[0], 17, -1):
+    for i in range(WHITE[0], 17, -1):  # WHITE BOX FADES ABSURDLY SLOW
         if user_skip_animation():
             skip_animation = True
         if skip_animation:
             break
-        # it takes to long to finish so check for user input every loop and if the user presses backspace just delete
-        # the box and break out of the loop going back to the game
         txt_color = abs(i - WHITE[0])
         pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), bad_input_crd, 0, 3)
         txt_r = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
@@ -114,6 +112,8 @@ def bad_input_animation(tiles, user_guess):
         bad_input_txt = bad_input_crd_font.render("Not in word list", True, (txt_r, txt_g, txt_b))
         SCREEN.blit(bad_input_txt, bad_input_txt_rect)
         update_display()
+    if skip_animation:
+        return True
 
 
 def game_won(tiles, user_guess):  # after every frame, re-render the row above the current row
