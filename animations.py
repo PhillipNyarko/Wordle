@@ -99,7 +99,7 @@ def bad_input_animation(tiles, user_guess):
             break
         translation = i if i % 2 == 0 else -i
         shake_row()
-    for i in range(WHITE[0], 17, -1):  # WHITE BOX FADES ABSURDLY SLOW
+    for i in range(WHITE[0], 17, -1):
         if user_skip_animation():
             skip_animation = True
         if skip_animation:
@@ -184,7 +184,6 @@ def valid_input_animation(tiles, color_values, user_guess):
             colors.append(TILE_GRAY)
 
     for index, tile in enumerate(tiles):
-        # init_height = tile.height
         top_rect = pygame.Rect((tile.x, tile.y), (tile.width, 0))
         bottom_rect = pygame.Rect((tile.x, tile.y + tile.height), (tile.width, 0))
 
@@ -209,7 +208,6 @@ def valid_input_animation(tiles, color_values, user_guess):
             bottom_rect.y += 1
             bottom_rect.height -= 1
             tile.inflate_ip(0, 2)
-            pygame.draw.rect(SCREEN, GREEN, tile, 0)
             letter, letter_rect = create_rect_and_letter(tile, colors[index], user_guess[index].upper(), WHITE, font, 0)
             SCREEN.blit(letter, letter_rect)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)

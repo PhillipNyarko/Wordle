@@ -8,8 +8,8 @@ import animations
 
 pygame.init()
 # add on-screen keyboard
-# add wordle title bar
 # add win screen
+# add stats screen
 # make sure the word changes each day
 
 # global variables
@@ -38,6 +38,20 @@ SCREEN.fill(BG_BLACK)
 def update_display():
     pygame.display.update()
 
+def render_title_bar():
+    wordle_stats = pygame.image.load("Menu Bar Icons/leaderboard_icon.png")
+
+    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, 65), (WIN_WIDTH, 65))  # render line for bar
+
+    wordle_stats = pygame.transform.scale(wordle_stats, (wordle_stats.get_width()*2, wordle_stats.get_height()*2))
+    SCREEN.blit(wordle_stats, (WIN_WIDTH - 60, 10))  # render wordle title
+
+    font_size = 55
+    font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
+    wordle_title = font.render("Wordle", True, WHITE)
+    wordle_rect = wordle_title.get_rect(center=(WIN_WIDTH/2, 40))  # move by center
+    SCREEN.blit(wordle_title, wordle_rect)  # draw wordle title
+
 
 # define tile size (x,y / width, height) and create game board with child row and tile
 class Board:
@@ -54,7 +68,7 @@ class Board:
         self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5)
 
         """renders an outline of the board"""
-        # pygame.draw.rect(SCREEN, BG_BLACK, self.board_rect, 3)
+        # pygame.draw.rect(SCREEN, (255, 0, 0), self.board_rect, 3)
 
 
 class Rows(Board):
@@ -75,7 +89,7 @@ class Rows(Board):
 
         """renders an outline of the row"""
         # for i in range(self.rows):
-        #   pygame.draw.rect(SCREEN, BG_BLACK, self.row_list[i], 1)
+          # pygame.draw.rect(SCREEN, (0, 0, 255), self.row_list[i], 1)
 
 
 class Tiles(Rows):
@@ -192,15 +206,19 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             animations.game_won(current_row_tiles, user_guess)
             return False
         return True
-
-    elif guess == "ezera":
-        # do animation for ezera's name and then clear the row and start them on the first tile of row
-        print("ezera animation")
-        return False
     else:
         if animations.bad_input_animation(current_row_tiles, guess):
             letters.letter_list.pop()
             SCREEN.fill(BG_BLACK)
+            render_title_bar()
+            board.__init__()
+            rows.__init__()
+            tiles.__init__()
+            letters.render()
+            update_display()
+        else:
+            SCREEN.fill(BG_BLACK)
+            render_title_bar()
             board.__init__()
             rows.__init__()
             tiles.__init__()
@@ -220,6 +238,7 @@ wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 print(wrd_of_the_day)  # delete when finished coding
 
+render_title_bar()
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
@@ -233,10 +252,12 @@ while running:
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
             SCREEN.fill(BG_BLACK)
+            render_title_bar()
             board.__init__()
             rows.__init__()
             tiles.__init__()
             letters.render()
+            # make 232, 431 minimum size
 
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
