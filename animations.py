@@ -229,7 +229,7 @@ def valid_word_animation(tiles, color_values, user_guess):
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
-
+#
 def reset_animation():
     pass
 

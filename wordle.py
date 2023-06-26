@@ -174,7 +174,6 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             actual_word_map[value] += 1
         else:
             actual_word_map[value] = 1
-
     unchecked = []
     for index, value in enumerate(actual_word):
         if guess[index] == actual_word[index]:
