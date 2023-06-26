@@ -165,6 +165,7 @@ tile_color_values = ["Unevaluated"]*30
 def evaluate_row(user_guess, actual_word, current_row):  # current row returns the first tile in the row
     output = ["None"]*tiles.cols
     guess = ''.join(user_guess)
+    previous_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 10: len(letters.letter_list) - 5]
     current_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 5: len(letters.letter_list)]
     actual_word_map = {}
 
@@ -199,7 +200,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             tile_color_values[index + current_row] = output[index]
             letters.render()
         if guess == actual_word:
-            animations.game_won(current_row_tiles, user_guess)
+            animations.game_won(previous_row_tiles, current_row_tiles, user_guess)
             return False
         return True
     else:

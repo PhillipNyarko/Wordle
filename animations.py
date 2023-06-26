@@ -116,12 +116,12 @@ def bad_input_animation(tiles, user_guess):
         return True
 
 
-def game_won(tiles, user_guess):  # after every frame, re-render the row above the current row
+def game_won(prev_tiles, curr_tiles, user_guess):  # after every frame, re-render the row above the current row
     win_height = pygame.display.get_surface().get_size()[1]
     font_size = int(win_height / 30)
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-    for index, tile in enumerate(tiles):
+    for index, tile in enumerate(curr_tiles):
         scale = 16
         init_height = tile.height
         letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0)
@@ -129,24 +129,31 @@ def game_won(tiles, user_guess):  # after every frame, re-render the row above t
         for i in range(init_height//scale):
             fill_tiles(tile)
             pygame.draw.rect(SCREEN, BG_BLACK, tile, 0)
-            update_display()
-            tile.y -= 10
-            pygame.draw.rect(SCREEN, GREEN, tile, 0)
-            letter_rect.y -= 10
-            SCREEN.blit(letter, letter_rect)
-            update_display()
-            time.sleep(0.035)
 
-        for i in range(init_height//scale):
+            tile.y -= 10
+            letter_rect.y -= 10
+            pygame.draw.rect(SCREEN, GREEN, tile, 0)
+            SCREEN.blit(letter, letter_rect)
+            if i % 2 == 0:
+                update_display()
+                time.sleep(0.04)
+
+        for i in range(init_height//scale): #################
             fill_tiles(tile)
             pygame.draw.rect(SCREEN, BG_BLACK, tile, 0)
-            update_display()
+
             tile.y += 10
             letter_rect.y += 10
             pygame.draw.rect(SCREEN, GREEN, tile, 0)
             SCREEN.blit(letter, letter_rect)
-            update_display()
-            time.sleep(0.035)
+            if i % 2 == 0:
+                update_display()
+                time.sleep(0.04)
+
+def game_lost():
+    # render actual word at the end
+    # animate reset button
+    pass
 
 
 def input_animation(tile, input_letter, offset=5):
@@ -222,6 +229,10 @@ def valid_word_animation(tiles, color_values, user_guess):
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
+
+def reset_animation():
+    pass
+
 
 
 
