@@ -5,6 +5,10 @@ import pyautogui
 
 pygame.init()
 
+# fix tile flip animation
+# fix correct word animation
+# add play again button
+
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
 WIN_HEIGHT = pyautogui.size()[1]/1.2
@@ -15,6 +19,7 @@ TILE_THICKNESS = 2
 
 # colors
 WHITE = (225, 225, 225)
+RED = (225, 0, 0)
 BG_BLACK = (18, 18, 19)
 GREEN = (83, 141, 78)
 YELLOW = (181, 159, 59)
@@ -25,11 +30,6 @@ BLACK = (0, 0, 0)
 
 def update_display():
     pygame.display.update()
-
-
-def fade_rect():
-    pass
-
 
 def create_rect_and_letter(rect, rect_color, text, text_color, font_variable, rect_thickness, rounding=0):
     x_position = rect.x + (rect.width / 2)
@@ -171,7 +171,6 @@ def input_animation(tile, input_letter, offset=5):
     inflate_tile(offset, negative=True)
 
 
-# this animation does not run at the proper rate when the window is resized
 def valid_input_animation(tiles, color_values, user_guess):
     colors = []
 
@@ -186,31 +185,41 @@ def valid_input_animation(tiles, color_values, user_guess):
     for index, tile in enumerate(tiles):
         top_rect = pygame.Rect((tile.x, tile.y), (tile.width, 0))
         bottom_rect = pygame.Rect((tile.x, tile.y + tile.height), (tile.width, 0))
-
         win_height = pygame.display.get_surface().get_size()[1]
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-        loops = 120
+        loops = 108
+        rate = 1
+        delay = 0.0035 / (tile.height / 101)
+        print(delay)
         for i in range(loops//2):
-            tile.inflate_ip(0, -2)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
-            top_rect.height += 1
+            pygame.draw.line(SCREEN, FULL_TILE_GRAY,
+                             (top_rect.x, top_rect.y + top_rect.height),
+                             (top_rect.x + top_rect.width-1, top_rect.y + top_rect.height))
+            top_rect.height +=  rate
             pygame.draw.rect(SCREEN, BG_BLACK, bottom_rect, 0)
-            bottom_rect.y -= 1
-            bottom_rect.height += 1
-            pygame.draw.rect(SCREEN, FULL_TILE_GRAY, tile, TILE_THICKNESS-1)
-            update_display()
-            time.sleep(0.005)
+            pygame.draw.line(SCREEN, FULL_TILE_GRAY,
+                             (bottom_rect.x, bottom_rect.y-1),
+                             (bottom_rect.x + bottom_rect.width - 1, bottom_rect.y-1))
+            bottom_rect.height += rate
+            bottom_rect.y -= rate
+            if i % 5 == 0:
+                update_display()
+                time.sleep(delay)
 
         for i in range(loops//2):
-            top_rect.height -= 1
-            bottom_rect.y += 1
-            bottom_rect.height -= 1
-            tile.inflate_ip(0, 2)
+            top_rect.height -= rate
+            bottom_rect.y += rate
+            bottom_rect.height -= rate
             letter, letter_rect = create_rect_and_letter(tile, colors[index], user_guess[index].upper(), WHITE, font, 0)
             SCREEN.blit(letter, letter_rect)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.rect(SCREEN, BG_BLACK, bottom_rect, 0)
-            update_display()
-            time.sleep(0.005)
+            if i % 5 == 0:
+                update_display()
+                time.sleep(delay)
+
+
+

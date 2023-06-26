@@ -7,10 +7,7 @@ import pyautogui
 import animations
 
 pygame.init()
-# add on-screen keyboard
-# add win screen
-# add stats screen
-# make sure the word changes each day
+
 
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
@@ -39,17 +36,13 @@ def update_display():
     pygame.display.update()
 
 def render_title_bar():
-    wordle_stats = pygame.image.load("Menu Bar Icons/leaderboard_icon.png")
 
-    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, 65), (WIN_WIDTH, 65))  # render line for bar
+    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, 80), (WIN_WIDTH, 80))  # render line for bar
 
-    wordle_stats = pygame.transform.scale(wordle_stats, (wordle_stats.get_width()*2, wordle_stats.get_height()*2))
-    SCREEN.blit(wordle_stats, (WIN_WIDTH - 60, 10))  # render wordle title
-
-    font_size = 55
+    font_size = 60
     font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
     wordle_title = font.render("Wordle", True, WHITE)
-    wordle_rect = wordle_title.get_rect(center=(WIN_WIDTH/2, 40))  # move by center
+    wordle_rect = wordle_title.get_rect(center=(WIN_WIDTH/2, 45))  # move by center
     SCREEN.blit(wordle_title, wordle_rect)  # draw wordle title
 
 
