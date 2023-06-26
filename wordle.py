@@ -37,7 +37,8 @@ def update_display():
 
 def render_title_bar():
 
-    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, 80), (WIN_WIDTH, 80))  # render line for bar
+    line_height = 80
+    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (WIN_WIDTH, line_height))  # render line for bar
 
     font_size = 60
     font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
@@ -191,7 +192,9 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     del unchecked[:]
 
     if guess in word_list:
-        animations.valid_input_animation(current_row_tiles, output, user_guess)
+        if guess == "ezera":
+            animations.valid_word_animation(current_row_tiles, output, guess)
+        animations.valid_word_animation(current_row_tiles, output, user_guess)
         for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
             letters.render()
@@ -229,7 +232,7 @@ letters = Letters()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-print(wrd_of_the_day)  # delete when finished coding
+print(wrd_of_the_day)  # DELETE when finished coding
 
 render_title_bar()
 while running:

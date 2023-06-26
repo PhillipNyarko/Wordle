@@ -171,16 +171,19 @@ def input_animation(tile, input_letter, offset=5):
     inflate_tile(offset, negative=True)
 
 
-def valid_input_animation(tiles, color_values, user_guess):
+def valid_word_animation(tiles, color_values, user_guess):
     colors = []
 
-    for index, value in enumerate(color_values):
-        if value == "Green":
-            colors.append(GREEN)
-        elif value == "Yellow":
-            colors.append(YELLOW)
-        elif value == "Gray":
-            colors.append(TILE_GRAY)
+    if user_guess == "ezera":
+        colors = [(149,149,213), (170, 170, 80), (255,153,153), (96,155,103), (100,129,155)]
+    else:
+        for index, value in enumerate(color_values):
+            if value == "Green":
+                colors.append(GREEN)
+            elif value == "Yellow":
+                colors.append(YELLOW)
+            elif value == "Gray":
+                colors.append(TILE_GRAY)
 
     for index, tile in enumerate(tiles):
         top_rect = pygame.Rect((tile.x, tile.y), (tile.width, 0))
@@ -192,7 +195,6 @@ def valid_input_animation(tiles, color_values, user_guess):
         loops = 108
         rate = 1
         delay = 0.0035 / (tile.height / 101)
-        print(delay)
         for i in range(loops//2):
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.line(SCREEN, FULL_TILE_GRAY,
@@ -220,6 +222,7 @@ def valid_input_animation(tiles, color_values, user_guess):
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
+
 
 
 
