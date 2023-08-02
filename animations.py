@@ -1,13 +1,9 @@
+import random
 import time
-
 import pygame
 import pyautogui
 
 pygame.init()
-
-# fix tile flip animation
-# fix correct word animation
-# add play again button
 
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
@@ -116,15 +112,25 @@ def bad_input_animation(tiles, user_guess):
         return True
 
 
-def game_won(prev_tiles, curr_tiles, user_guess):  # after every frame, re-render the row above the current row
+def game_won(prev_tiles, curr_tiles, user_guess, tile_colors, tile_letters):  # after every frame, re-render the row above the current row
     win_height = pygame.display.get_surface().get_size()[1]
+    win_width = pygame.display.get_surface().get_size()[0]
     font_size = int(win_height / 30)
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
+
+    win_messages = ["Splendid", "Impressive", "Superb"]
+    win_message = random.choice(win_messages)
+    tile_size = curr_tiles[0].width
+    msg_crd_font_size = int(win_height / 60)
+    msg_crd_font = pygame.font.Font("NeueHelvetica-Bold.otf", msg_crd_font_size)
+    msg_crd = pygame.Rect(win_width / 2 - tile_size, win_height / 10, tile_size * 2, tile_size / 1.4)
+    msg_crd_rect = create_rect_and_letter(msg_crd, WHITE, win_message, BLACK, msg_crd_font, 0, 4)[1]
+
 
     for index, tile in enumerate(curr_tiles):
         scale = 16
         init_height = tile.height
-        letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0)
+        letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0, 3)
 
         for i in range(init_height//scale):
             fill_tiles(tile)
@@ -136,11 +142,19 @@ def game_won(prev_tiles, curr_tiles, user_guess):  # after every frame, re-rende
             SCREEN.blit(letter, letter_rect)
             if i % 2 == 0:
                 update_display()
-                time.sleep(0.04)
+                time.sleep(0.03)
 
-        for i in range(init_height//scale): #################
+        for i in range(init_height//scale):
             fill_tiles(tile)
             pygame.draw.rect(SCREEN, BG_BLACK, tile, 0)
+            if len(tile_letters) >= 10: # if we are on the second row or lower
+                prev_tile_colors = tile_colors[len(tile_letters) - 10: len(tile_letters) - 5]
+                prev_tile_letters = tile_letters[len(tile_letters) - 10: len(tile_letters) - 5]
+                prev_row_color = YELLOW if prev_tile_colors[index] == "Yellow" else GREEN if prev_tile_colors[index] == "Green" else TILE_GRAY
+                prev_letter, prev_letter_rect = create_rect_and_letter(prev_tiles[index], prev_row_color, prev_tile_letters[index].upper(), WHITE, font, 0)
+                fill_tiles(prev_tiles[index])
+                pygame.draw.rect(SCREEN, prev_row_color, prev_tiles[index], 0)
+                SCREEN.blit(prev_letter, prev_letter_rect)
 
             tile.y += 10
             letter_rect.y += 10
@@ -149,6 +163,19 @@ def game_won(prev_tiles, curr_tiles, user_guess):  # after every frame, re-rende
             if i % 2 == 0:
                 update_display()
                 time.sleep(0.04)
+
+    for i in range(WHITE[0], 17, -1):
+        txt_color = abs(i - WHITE[0])
+        pygame.draw.rect(SCREEN, (i, i, (i + 1 if i < WHITE[0] else WHITE[0])), msg_crd, 0, 3)
+        txt_r = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
+        txt_g = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
+        txt_b = txt_color if txt_color < BG_BLACK[2] else BG_BLACK[2]
+        txt = msg_crd_font.render(win_message, True, (txt_r, txt_g, txt_b))
+        SCREEN.blit(txt, msg_crd_rect)
+        if i % 2 == 0:
+            update_display()
+
+
 
 def game_lost():
     # render actual word at the end
@@ -182,7 +209,7 @@ def valid_word_animation(tiles, color_values, user_guess):
     colors = []
 
     if user_guess == "ezera":
-        colors = [(149,149,213), (170, 170, 80), (255,153,153), (96,155,103), (100,129,155)]
+        colors = [(149, 149, 213), (170, 170, 80), (255, 153, 153), (96, 155, 103), (100, 129, 155)]
     else:
         for index, value in enumerate(color_values):
             if value == "Green":
@@ -199,7 +226,7 @@ def valid_word_animation(tiles, color_values, user_guess):
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-        loops = 108
+        loops = 120
         rate = 1
         delay = 0.0035 / (tile.height / 101)
         for i in range(loops//2):
@@ -229,11 +256,6 @@ def valid_word_animation(tiles, color_values, user_guess):
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
-#
-def reset_animation():
-    pass
 
-
-
-
-
+    def reset_grid():
+        pass

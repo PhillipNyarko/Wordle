@@ -1,9 +1,7 @@
 import json
 import random
-
 import pygame
 import pyautogui
-
 import animations
 
 pygame.init()
@@ -81,11 +79,6 @@ class Rows(Board):
         for i in self.row_list:
             i.x = self.board_rect.x
 
-        """renders an outline of the row"""
-        # for i in range(self.rows):
-          # pygame.draw.rect(SCREEN, (0, 0, 255), self.row_list[i], 1)
-
-
 class Tiles(Rows):
     def __init__(self):
         super(Tiles, self).__init__()
@@ -162,10 +155,11 @@ def word_of_the_day():
 tile_color_values = ["Unevaluated"]*30
 
 
-def evaluate_row(user_guess, actual_word, current_row):  # current row returns the first tile in the row
+def evaluate_row(user_guess, actual_word, current_row):  # current row returns the number corresponding to the row
     output = ["None"]*tiles.cols
     guess = ''.join(user_guess)
-    previous_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 10: len(letters.letter_list) - 5]
+    prev_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 10: len(letters.letter_list)-5 ]
+
     current_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 5: len(letters.letter_list)]
     actual_word_map = {}
 
@@ -199,7 +193,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             tile_color_values[index + current_row] = output[index]
             letters.render()
         if guess == actual_word:
-            animations.game_won(previous_row_tiles, current_row_tiles, user_guess)
+            animations.game_won(prev_row_tiles, current_row_tiles, user_guess, tile_color_values, letters.letter_list)
             return False
         return True
     else:
@@ -253,14 +247,13 @@ while running:
             rows.__init__()
             tiles.__init__()
             letters.render()
-            # make 232, 431 minimum size
 
         if event.type == pygame.KEYDOWN:
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
                     last_tile = tiles.tile_matrix[len(letters.letter_list)-1]
-                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing-2)  # 2=intensity
+                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing-2)
                     letters.render()
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
