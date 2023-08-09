@@ -206,7 +206,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
         return "valid"
     else:
         if animations.bad_input_animation(current_row_tiles, guess): # show bad input animation if word isn't in list
-            letters.letter_list.pop() # backspace one letter if user interupts animation by pressing backspace
+            letters.letter_list.pop() # backspace one letter if user interrupts animation by pressing backspace
             reset()
         else:
             SCREEN.fill(BG_BLACK)
@@ -222,7 +222,6 @@ letters = Letters()
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
-print(wrd_of_the_day)  # DELETE when finished coding
 
 render_title_bar()
 while running:
@@ -266,7 +265,6 @@ while running:
                         tile_color_values = ["Unevaluated"] * 30
                         last_index_of_row = 5
                         wrd_of_the_day = word_of_the_day()
-                        print(wrd_of_the_day)
                         reset()
                     if eval_row == "valid" and len(letters.letter_list) != 30: # valid guess
                         last_index_of_row += 5  # go to next row
@@ -276,7 +274,6 @@ while running:
                         tile_color_values = ["Unevaluated"] * 30
                         last_index_of_row = 5
                         wrd_of_the_day = word_of_the_day()
-                        print(wrd_of_the_day)
                         reset()
                     # if nothing returned it will stay on this row
     update_display()
