@@ -177,10 +177,31 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors, tile_letters):  # 
 
 
 
-def game_lost():
-    # render actual word at the end
-    # animate reset button
-    pass
+def game_lost(tiles, word):
+    win_width = pygame.display.get_surface().get_size()[0]
+    win_height = pygame.display.get_surface().get_size()[1]
+
+    tile_size = tiles[0].width
+    wrd_crd_font_size = int(win_height / 65)
+    wrd_crd_font = pygame.font.Font("NeueHelvetica-Bold.otf", wrd_crd_font_size)
+    wrd_crd = pygame.Rect(win_width / 2 - tile_size, win_height / 10, tile_size * 2, tile_size / 1.4)
+    wrd_txt = word.upper()
+    wrd_txt_rect = create_rect_and_letter(wrd_crd, WHITE, wrd_txt, BLACK, wrd_crd_font, 0, 4)[1]
+
+
+    for i in range(WHITE[0], 17, -1):
+        txt_color = abs(i - WHITE[0])
+        pygame.draw.rect(SCREEN, (i, i, (i+1 if i < WHITE[0] else WHITE[0])), wrd_crd, 0, 3)
+        txt_r = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
+        txt_g = txt_color if txt_color < BG_BLACK[0] else BG_BLACK[0]
+        txt_b = txt_color if txt_color < BG_BLACK[2] else BG_BLACK[2]
+        wrd_txt = wrd_crd_font.render(word.upper(), True, (txt_r, txt_g, txt_b))
+        SCREEN.blit(wrd_txt, wrd_txt_rect)
+        update_display()
+        if WHITE[0] - 1 >= i >= WHITE[0] - 3:
+            time.sleep(0.5)
+
+
 
 
 def input_animation(tile, input_letter, offset=5):
@@ -256,6 +277,3 @@ def valid_word_animation(tiles, color_values, user_guess):
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
-
-    def reset_grid():
-        pass

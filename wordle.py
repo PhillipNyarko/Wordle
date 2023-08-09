@@ -1,5 +1,7 @@
 import json
 import random
+import time
+
 import pygame
 import pyautogui
 import animations
@@ -152,6 +154,16 @@ def word_of_the_day():
     return word
 
 
+def reset():
+    SCREEN.fill(BG_BLACK)
+    render_title_bar()
+    board.__init__()
+    rows.__init__()
+    tiles.__init__()
+    letters.render()
+    update_display()
+
+
 tile_color_values = ["Unevaluated"]*30
 
 
@@ -194,27 +206,15 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             letters.render()
         if guess == actual_word:
             animations.game_won(prev_row_tiles, current_row_tiles, user_guess, tile_color_values, letters.letter_list)
-            return False
-        return True
+            return "win"
+        return "valid"
     else:
         if animations.bad_input_animation(current_row_tiles, guess):
             letters.letter_list.pop()
-            SCREEN.fill(BG_BLACK)
-            render_title_bar()
-            board.__init__()
-            rows.__init__()
-            tiles.__init__()
-            letters.render()
-            update_display()
+            reset()
         else:
             SCREEN.fill(BG_BLACK)
-            render_title_bar()
-            board.__init__()
-            rows.__init__()
-            tiles.__init__()
-            letters.render()
-            update_display()
-        return False
+            reset()
 
 
 # define objects outside the class so that the object state parameter doesn't reset
@@ -261,6 +261,27 @@ while running:
                     letters.clear()
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
-                    if evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5):
+                    eval_row = evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5)
+                    if eval_row == "win": # game won
+                        time.sleep(1)
+                        # Reset the game state
+                        letters.letter_list.clear()
+                        tile_color_values = ["Unevaluated"] * 30
+                        last_index_of_row = 5
+                        wrd_of_the_day = word_of_the_day()
+                        print(wrd_of_the_day)
+                        reset()
+                        game_won = False
+                    if eval_row == "valid" and len(letters.letter_list) != 30: # valid guess
                         last_index_of_row += 5  # go to next row
+                    elif eval_row == "valid":
+                        animations.game_lost(tiles.tile_matrix[0:1], wrd_of_the_day)
+                        letters.letter_list.clear()
+                        tile_color_values = ["Unevaluated"] * 30
+                        last_index_of_row = 5
+                        wrd_of_the_day = word_of_the_day()
+                        print(wrd_of_the_day)
+                        reset()
+                        game_won = False
+                    # if nothing returned it will stay on this row
     update_display()
