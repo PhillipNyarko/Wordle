@@ -1,13 +1,11 @@
 import json
 import random
 import time
-
 import pygame
 import pyautogui
 import animations
 
 pygame.init()
-
 
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
@@ -48,66 +46,63 @@ def render_title_bar():
 
 
 # define tile size (x,y / width, height) and create game board with child row and tile
-class Board:
-    def __init__(self):
+class Board: # Main class that will have a subclass of rows and tiles as child objects
+    def __init__(self): # constructor to initialize the board with its size and location
         self.rows = 6
         self.cols = 5
-        self.tile_size = WIN_HEIGHT/15
-        self.tile_spacing = 6
+        self.tile_size = WIN_HEIGHT/15 # tile size changes based on screen size
+        self.tile_spacing = 6 # set spacing between each tile and consider this number when calculating board width
         self.board_x_pos = WIN_WIDTH / 2
         self.board_y_pos = WIN_HEIGHT / 4
         self.board_width = (self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing
         self.board_height = (self.rows * self.tile_spacing + self.tile_size * self.rows) - self.tile_spacing
         self.board_rect = pygame.Rect((self.board_x_pos, self.board_y_pos), (self.board_width, self.board_height))
-        self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5)
+        self.board_rect.center = (WIN_WIDTH / 2, WIN_HEIGHT / 2.5) # position board in upper center of the screen
 
-        """renders an outline of the board"""
-        # pygame.draw.rect(SCREEN, (255, 0, 0), self.board_rect, 3)
-
-
-class Rows(Board):
+class Rows(Board): # subclass of board class that treats each row of tiles as a singular object
     def __init__(self):
-        super(Rows, self).__init__()
+        super(Rows, self).__init__() # super call to give access to  properties from parent class
         self.row_width = self.board_width
         self.row_height = self.board_height / self.rows
         self.row_x_pos = self.board_rect.x
         self.row_y_pos = self.board_rect.y
-        self.row_list = []
+        self.row_list = [] # list to hold all the rows
 
-        for i in range(self.rows):
+        for i in range(self.rows): # create row pygame Rect, add to the row list, set y position for each row
             self.row_list.append(pygame.Rect((self.row_x_pos, self.row_y_pos), (self.row_width, self.row_height)))
             self.row_y_pos += self.row_height
 
         for i in self.row_list:
-            i.x = self.board_rect.x
+            i.x = self.board_rect.x # set the  x position of each row in the row list to match that of the board
 
-class Tiles(Rows):
+class Tiles(Rows): # subclass object of Rows class
     def __init__(self):
         super(Tiles, self).__init__()
 
         x_pos_inc = 0
         self.tile_matrix = []
 
-        for i in range(self.rows):
+        for i in range(self.rows): # create a 2d array of tile objects and add them to the tile matrix list
             for j in range(self.cols):
                 self.x_pos = self.row_list[i].x + x_pos_inc
                 self.y_pos = self.row_list[j].y
-                self.tile_thickness = 2
-                self.tile = pygame.Rect(self.x_pos, self.y_pos, self.tile_size, self.tile_size)
+                self.tile_thickness = 2 # set tile thickness
+                self.tile = pygame.Rect(self.x_pos, self.y_pos, self.tile_size, self.tile_size) # create tile rect
                 self.tile.centery = self.row_list[i].centery
                 self.tile_matrix.append(self.tile)
                 x_pos_inc += self.tile_size + self.tile_spacing
             x_pos_inc = 0
 
         for i in self.tile_matrix:
-            pygame.draw.rect(SCREEN, TILE_GRAY, i, self.tile_thickness)
+            pygame.draw.rect(SCREEN, TILE_GRAY, i, self.tile_thickness) # draw the tiles of the grid
 
 
-class Letters(Tiles):
+class Letters(Tiles): # subclass of tile class
     def __init__(self):
         super(Letters, self).__init__()
-        self.letter_list = []
+        self.letter_list = [] # list to hold all the letters in the grid
 
+        # initialize letter variables
         self.font_size = int(WIN_HEIGHT/30)
         self.font = pygame.font.Font("NeueHelvetica-Bold.otf", self.font_size)
         self.letter_x = 0
@@ -139,22 +134,22 @@ class Letters(Tiles):
 
             SCREEN.blit(self.letter, self.letter_rect)  # draw letter
 
-    def clear(self):
+    def clear(self): # clear the letter in the current tile
         SCREEN.fill(BG_BLACK, rect=self.tile_matrix[len(self.letter_list)])
         pygame.draw.rect(SCREEN, TILE_GRAY, self.tile_matrix[len(self.letter_list)], self.tile_thickness)
 
 
-with open("word_list.json", "r") as file:
+with open("word_list.json", "r") as file: # get the word list from the json file
     data = json.load(file)
     word_list = data["word_list"]
 
 
-def word_of_the_day():
+def word_of_the_day(): # function to pick a random word from the word list
     word = word_list[random.randint(0, 2306)]  # word of the day can only be one of the first 2,309 words
     return word
 
 
-def reset():
+def reset(): # reset all the game elements
     SCREEN.fill(BG_BLACK)
     render_title_bar()
     board.__init__()
@@ -164,23 +159,24 @@ def reset():
     update_display()
 
 
-tile_color_values = ["Unevaluated"]*30
+tile_color_values = ["Unevaluated"]*30 # list to store the current color values of the tiles. "Unevaluated" = empty
 
 
 def evaluate_row(user_guess, actual_word, current_row):  # current row returns the number corresponding to the row
     output = ["None"]*tiles.cols
     guess = ''.join(user_guess)
     prev_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 10: len(letters.letter_list)-5 ]
-
     current_row_tiles = tiles.tile_matrix[len(letters.letter_list) - 5: len(letters.letter_list)]
     actual_word_map = {}
 
-    for index, value in enumerate(actual_word):  # create hash map
+    # use a for loop to count how many of each letter is in the word of the day. Keep track of these
+    for index, value in enumerate(actual_word):
         if actual_word[index] in actual_word_map:
             actual_word_map[value] += 1
         else:
             actual_word_map[value] = 1
     unchecked = []
+    # append the proper color value to the tile color values list based on the wordle game rules
     for index, value in enumerate(actual_word):
         if guess[index] == actual_word[index]:
             output[index] = "Green"
@@ -197,20 +193,20 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
             output[value] = "Gray"
     del unchecked[:]
 
-    if guess in word_list:
+    if guess in word_list: # surprise animation for when the user enters my sisters name.
         if guess == "ezera":
             animations.valid_word_animation(current_row_tiles, output, guess)
         animations.valid_word_animation(current_row_tiles, output, user_guess)
         for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
             letters.render()
-        if guess == actual_word:
+        if guess == actual_word: # animate row if user wins by entering the correct word
             animations.game_won(prev_row_tiles, current_row_tiles, user_guess, tile_color_values, letters.letter_list)
             return "win"
         return "valid"
     else:
-        if animations.bad_input_animation(current_row_tiles, guess):
-            letters.letter_list.pop()
+        if animations.bad_input_animation(current_row_tiles, guess): # show bad input animation if word isn't in list
+            letters.letter_list.pop() # backspace one letter if user interupts animation by pressing backspace
             reset()
         else:
             SCREEN.fill(BG_BLACK)
@@ -237,7 +233,7 @@ while running:
             pygame.quit()
             exit()
 
-        if event.type == pygame.WINDOWSIZECHANGED:
+        if event.type == pygame.WINDOWSIZECHANGED: # adjust variables if user decides to play in a different window size
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
@@ -248,17 +244,18 @@ while running:
             tiles.__init__()
             letters.render()
 
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN: # render letter with animations when user presses key
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
                     last_tile = tiles.tile_matrix[len(letters.letter_list)-1]
                     animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing-2)
                     letters.render()
-            elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE]: # remove letter if user presses backspace
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
                     letters.letter_list.pop()
                     letters.clear()
+            # evaluate the row and color it correspondingly if user presses enter and the row is filled
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
                 if len(letters.letter_list) == last_index_of_row:
                     eval_row = evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row-5)
@@ -271,10 +268,9 @@ while running:
                         wrd_of_the_day = word_of_the_day()
                         print(wrd_of_the_day)
                         reset()
-                        game_won = False
                     if eval_row == "valid" and len(letters.letter_list) != 30: # valid guess
                         last_index_of_row += 5  # go to next row
-                    elif eval_row == "valid":
+                    elif eval_row == "valid": # valid guess but on last row == game over
                         animations.game_lost(tiles.tile_matrix[0:1], wrd_of_the_day)
                         letters.letter_list.clear()
                         tile_color_values = ["Unevaluated"] * 30
@@ -282,6 +278,5 @@ while running:
                         wrd_of_the_day = word_of_the_day()
                         print(wrd_of_the_day)
                         reset()
-                        game_won = False
                     # if nothing returned it will stay on this row
     update_display()

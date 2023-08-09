@@ -27,6 +27,9 @@ BLACK = (0, 0, 0)
 def update_display():
     pygame.display.update()
 
+
+# function to create rect and letter for animation purposes
+
 def create_rect_and_letter(rect, rect_color, text, text_color, font_variable, rect_thickness, rounding=0):
     x_position = rect.x + (rect.width / 2)
     y_position = rect.y + (rect.height / 2)
@@ -37,6 +40,7 @@ def create_rect_and_letter(rect, rect_color, text, text_color, font_variable, re
     return new_letter, new_letter_rect
 
 
+# used to fill tiles on command
 def fill_tiles(tiles, fill=True):
     if isinstance(tiles, list):
         for tile in tiles:
@@ -48,6 +52,7 @@ def fill_tiles(tiles, fill=True):
             pygame.draw.rect(SCREEN, BG_BLACK, tiles, TILE_THICKNESS)
 
 
+# animation for when user has attempted to push a word that is not in the word list
 def bad_input_animation(tiles, user_guess):
     pygame.event.clear()
     win_width = pygame.display.get_surface().get_size()[0]
@@ -63,14 +68,14 @@ def bad_input_animation(tiles, user_guess):
     bad_input_txt = "Not in word list"
     bad_input_txt_rect = create_rect_and_letter(bad_input_crd, WHITE, bad_input_txt, BLACK, bad_input_crd_font, 0, 4)[1]
 
-    def user_skip_animation():
+    def user_skip_animation(): # breaks the animation if the user presses backspace during the animation
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                     pygame.draw.rect(SCREEN, BG_BLACK, bad_input_crd, 0, 3)
                     return True
 
-    def shake_row():
+    def shake_row(): # animation for the row shake for invalid input
         fill_tiles(tiles)
         for j in range(len(tiles)):
             tiles[j].x += translation
@@ -79,6 +84,7 @@ def bad_input_animation(tiles, user_guess):
         update_display()
         time.sleep(0.065)
 
+    # oscillate the row back and forth at varying degrees of translation, then return to center
     oscillations = 20
     skip_animation = False
     for i in range(oscillations//2):
@@ -95,7 +101,7 @@ def bad_input_animation(tiles, user_guess):
             break
         translation = i if i % 2 == 0 else -i
         shake_row()
-    for i in range(WHITE[0], 17, -1):
+    for i in range(WHITE[0], 17, -1): # animation a fade out for the box that tells the user their input is invalid
         if user_skip_animation():
             skip_animation = True
         if skip_animation:
@@ -118,7 +124,7 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors, tile_letters):  # 
     font_size = int(win_height / 30)
     font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-    win_messages = ["Splendid", "Impressive", "Superb"]
+    win_messages = ["Splendid", "Impressive", "Superb"] # list of congrats messages for the winner
     win_message = random.choice(win_messages)
     tile_size = curr_tiles[0].width
     msg_crd_font_size = int(win_height / 60)
@@ -127,7 +133,7 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors, tile_letters):  # 
     msg_crd_rect = create_rect_and_letter(msg_crd, WHITE, win_message, BLACK, msg_crd_font, 0, 4)[1]
 
 
-    for index, tile in enumerate(curr_tiles):
+    for index, tile in enumerate(curr_tiles): # translate each tile up and down to show that the game is won
         scale = 16
         init_height = tile.height
         letter, letter_rect = create_rect_and_letter(tile, GREEN, user_guess[index].upper(), WHITE, font, 0, 3)
@@ -177,7 +183,7 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors, tile_letters):  # 
 
 
 
-def game_lost(tiles, word):
+def game_lost(tiles, word): # render the actual word of the day, then let the rect fade out.
     win_width = pygame.display.get_surface().get_size()[0]
     win_height = pygame.display.get_surface().get_size()[1]
 
@@ -199,12 +205,12 @@ def game_lost(tiles, word):
         SCREEN.blit(wrd_txt, wrd_txt_rect)
         update_display()
         if WHITE[0] - 1 >= i >= WHITE[0] - 3:
-            time.sleep(0.5)
+            time.sleep(1)
 
 
 
 
-def input_animation(tile, input_letter, offset=5):
+def input_animation(tile, input_letter, offset=5): # blip each tile just slightly and change the color to a lighter gray
     def inflate_tile(tile_offset, negative=False):
         if negative:
             tile_offset -= tile_offset*2
@@ -226,6 +232,7 @@ def input_animation(tile, input_letter, offset=5):
     inflate_tile(offset, negative=True)
 
 
+ # shrink and expand the tile on its y-axis, top and bottom, then reverse
 def valid_word_animation(tiles, color_values, user_guess):
     colors = []
 
