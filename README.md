@@ -37,6 +37,6 @@
 
 This project is licensed under the [Your License Name](LICENSE).
 
-## ContactMe
+## Contact Me
 
 For questions or feedback, please contact me at [phillip.k.nyarko@gmail.com](phillip.k.nyarko@gmail.com).
