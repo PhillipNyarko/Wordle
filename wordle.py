@@ -1,5 +1,6 @@
 import json
 import random
+import sys
 import time
 import pygame
 import pyautogui
@@ -22,7 +23,7 @@ TILE_GRAY = (58, 58, 60)
 FULL_TILE_GRAY = (86, 87, 88)
 
 # icon image
-wordle_icon = pygame.image.load("Menu Bar Icons/wordle_icon.png")
+wordle_icon = pygame.image.load("wordle_icon.png")
 
 # set caption and icon and background color
 pygame.display.set_caption("Wordle")
@@ -227,10 +228,6 @@ render_title_bar()
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            pygame.quit()
-            exit()
 
         if event.type == pygame.WINDOWSIZECHANGED: # adjust variables if user decides to play in a different window size
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
@@ -276,4 +273,10 @@ while running:
                         wrd_of_the_day = word_of_the_day()
                         reset()
                     # if nothing returned it will stay on this row
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.display.quit()
+            pygame.quit()
+            sys.exit()
+
     update_display()
