@@ -39,4 +39,4 @@ This project is licensed under the [Your License Name](LICENSE).
 
 ## Contact
 
-For questions or feedback, please contact [Phillip Nyarko](phillip.k.nyarko@gmail.com).
+For questions or feedback, please contact me at [phillip.k.nyarko@gmail.com](phillip.k.nyarko@gmail.com).
