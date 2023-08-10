@@ -9,14 +9,14 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 - [Contact Me](#contact-me)
 
 ## Installation
-  1. Download Installer ->
-  2. Choose the Installation Location
-      _
-  4. Find and open the Installed Folder
-      _
-  5. Click on Wordle Executable
-      _
+  1. Click on the _Releases_ page
+  2. Download the _wordle_installer.exe_ file
+  3. Open the Installation Wizard and choose the installation location
+  4. Find and open the installed folder
+  5. Click on Wordle executable
   6. Play Away!
+     
+*** You can pin the wordle.exe file to the taskbar for easier access. ***
 
 ## How To Play
 A random 5-letter word is selected. Your job is to guess the word in 6 guesses or less.
