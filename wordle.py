@@ -23,7 +23,7 @@ TILE_GRAY = (58, 58, 60)
 FULL_TILE_GRAY = (86, 87, 88)
 
 # icon image
-wordle_icon = pygame.image.load("wordle_icon.png")
+wordle_icon = pygame.image.load("wordle_icon.ico")
 
 # set caption and icon and background color
 pygame.display.set_caption("Wordle")
