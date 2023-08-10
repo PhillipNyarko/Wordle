@@ -10,8 +10,8 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 
 ## Installation
   1. Download Installer ->
-  2.  Click on Wordle Executable ->
-  3.   lay Away!
+  2. Click on Wordle Executable ->
+  3. Play Away!
 
 ## How To Play
 A random 5-letter word is selected. Your job is to guess the word in 6 guesses or less.
