@@ -16,7 +16,7 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
   5. Click on Wordle executable
   6. Play Away!
 
-:red_heart: You can pin the wordle.exe file to the taskbar for easier access..
+💡 You can pin the wordle.exe file to the taskbar for easier access
 
 ## How To Play
 A random 5-letter word is selected. Your job is to guess the word in 6 guesses or less.
