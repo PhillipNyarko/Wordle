@@ -27,30 +27,17 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 
 ## How To Play
 A random 5-letter word is selected. Your job is to guess the word in 6 guesses or less.
-  ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
   
 Each letter will be assigned a color value: Gray, Yellow, or Green.
   Gray means the letter is not in that word.
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
   Yellow means the letter is in that word, but not in that spot.
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
   Green means the letter is in the right spot!
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
 
 ## Behind The Scenes
-  Letter Input Animation
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
-  Valid Word animation
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
-  Invalid Word Animation
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
-  Game Won Animation
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
-  Game Lost Animation
-      ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
+Coming Soon
 
 ## Contact Me
 For questions or feedback, please contact me at [phillip.k.nyarko@gmail.com](phillip.k.nyarko@gmail.com).
