@@ -11,7 +11,7 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 ## Installation
 
   1. Click on the "Releases" page
-    -  ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
+    -![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
 
   3. Download the "wordle_installer.exe" file
   ![GitHub Logo](https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png)
