@@ -1,6 +1,6 @@
-# Project Name
+# Wordle 
 
-[Project description]
+This project is a clone of the popular word-guessing game, _Wordle_. The game was created only using Python and Pygame, which means, all logic, design, and animations, were created from scratch to the best of my ability. Try the game out for yourself! The instructions to download are below.
 
 ## Table of Contents
 - [Installation](#installation)
