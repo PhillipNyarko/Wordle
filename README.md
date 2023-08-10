@@ -10,10 +10,8 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 
 ## Installation
   1. Download Installer ->
-     Image
-  2. Click on Wordle Executable ->
-     Image
-  3. Play Away!
+  2.  Click on Wordle Executable ->
+  3.   lay Away!
 
 ## How To Play
 A random 5-letter word is selected. Your job is to guess the word in 6 guesses or less.
@@ -23,13 +21,12 @@ Each letter will be assigned a color value: Gray, Yellow, or Green.
   - Yellow means the letter is in that word, but not in that spot.
   - Green means the letter is in the right spot!
 
-
 ## Behind The Scenes
-Letter Input Animation
-Valid Word animation
-Invalid Word Animation
-Game Won Animation
-Game Lost Animation
+  - Letter Input Animation
+  - Valid Word animation
+  - Invalid Word Animation
+  - Game Won Animation
+  - Game Lost Animation
 
 ## Contact Me
 For questions or feedback, please contact me at [phillip.k.nyarko@gmail.com](phillip.k.nyarko@gmail.com).
