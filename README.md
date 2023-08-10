@@ -9,7 +9,7 @@
 - [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
+- [Contact Information](#contact_information)
 
 ## Installation
 
@@ -37,6 +37,6 @@
 
 This project is licensed under the [Your License Name](LICENSE).
 
-## Contact
+## Contact Information
 
 For questions or feedback, please contact me at [phillip.k.nyarko@gmail.com](phillip.k.nyarko@gmail.com).
