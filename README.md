@@ -4,38 +4,17 @@
 
 ## Table of Contents
 - [Installation](#installation)
-- [Usage](#usage)
-- [Videos](#videos)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact Me](#contactMe)
+- [How To Play](#how-to-play)
+- [Behind The Scenes](#behind-the-Scenes)
+- [Contact Me](#contact-me)
 
 ## Installation
 
 [Installation instructions]
 
-## Usage
+## How To Play
 
-[Usage instructions and examples]
-
-## Videos
-
-- [![Video Name 1](https://www.youtube.com/watch?v=VIDEO_ID_1)](https://www.youtube.com/watch?v=VIDEO_ID_1)
-- [![Video Name 2](https://www.youtube.com/watch?v=VIDEO_ID_2)](https://www.youtube.com/watch?v=VIDEO_ID_2)
-
-## Screenshots
-
-![Screenshot 1](screenshots/screenshot1.png)
-![Screenshot 2](screenshots/screenshot2.png)
-
-## Contributing
-
-[Contribution guidelines]
-
-## License
-
-This project is licensed under the [Your License Name](LICENSE).
+## Behind The Scenes
 
 ## Contact Me
 
