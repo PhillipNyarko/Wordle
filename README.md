@@ -18,7 +18,7 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 
   7. Find and open the installed folder
 
-  9. Click on the Wordle executable
+  9. Find and open the Wordle executable ("worldle.exe")
 
   11. Play Away!
 
