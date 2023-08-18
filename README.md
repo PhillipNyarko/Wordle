@@ -10,7 +10,7 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 
 ## Installation
 
-  1. Click on the "Releases" page
+  1. Click on the "Releases" link to left of this document
 
   3. Download the "wordle_installer.exe" file
 
