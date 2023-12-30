@@ -8,6 +8,7 @@ pygame.init()
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
 WIN_HEIGHT = pyautogui.size()[1]/1.2
+print(WIN_HEIGHT)
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 TILE_SIZE = WIN_HEIGHT/15
@@ -233,7 +234,7 @@ def input_animation(tile, input_letter, offset=5): # blip each tile just slightl
 
 
  # shrink and expand the tile on its y-axis, top and bottom, then reverse
-def valid_word_animation(tiles, color_values, user_guess):
+def valid_word_animation(tiles, color_values, user_guess, height):
     colors = []
 
     if user_guess == "ezera":
@@ -254,7 +255,8 @@ def valid_word_animation(tiles, color_values, user_guess):
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-        loops = 120
+        print(height)
+        loops = int(height/12)  # 117 @ 875 window height
         rate = 1
         delay = 0.0035 / (tile.height / 101)
         for i in range(loops//2):
