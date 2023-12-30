@@ -36,13 +36,13 @@ def update_display():
 
 def render_title_bar():
 
-    line_height = 80
+    line_height = 40
     pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (WIN_WIDTH, line_height))  # render line for bar
 
-    font_size = 60
+    font_size = 30
     font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
     wordle_title = font.render("Wordle", True, WHITE)
-    wordle_rect = wordle_title.get_rect(center=(WIN_WIDTH/2, 45))  # move by center
+    wordle_rect = wordle_title.get_rect(center=(WIN_WIDTH/2, 22.5))  # move by center
     SCREEN.blit(wordle_title, wordle_rect)  # draw wordle title
 
 

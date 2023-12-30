@@ -256,9 +256,10 @@ def valid_word_animation(tiles, color_values, user_guess, height):
 
         loops = int(height/12)  # 117 @ 875 window height
         rate = 1
-        delay = 2/(height*0.3)  # the smaller the height the longer the delay
+        delay = 2/(height*0.15)  # the smaller the height the longer the delay
 
         for i in range(loops//2):
+            CLOCK.tick(1500)
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.line(SCREEN, FULL_TILE_GRAY,
                              (top_rect.x, top_rect.y + top_rect.height),
@@ -275,6 +276,7 @@ def valid_word_animation(tiles, color_values, user_guess, height):
                 time.sleep(delay)
 
         for i in range(loops//2):
+            CLOCK.tick(1500)
             top_rect.height -= rate
             bottom_rect.y += rate
             bottom_rect.height -= rate
