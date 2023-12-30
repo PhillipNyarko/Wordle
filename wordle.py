@@ -1,12 +1,13 @@
-import json
 import sys
 import time
+import json
 import pygame
 import random
 import svgwrite
 import pyautogui
 import animations
-
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPM
 pygame.init()
 
 # global variables
@@ -37,26 +38,41 @@ def update_display():
 
 
 def svg_to_surface(svg_filename):
-    drawing = svgwrite.Drawing(size=('100%', '100%'))
-    drawing.add(svgwrite.image.Image(href=svg_filename, size=('100%', '100%')))
-    drawing.saveas("temp.svg")
+    try:
+        drawing = svgwrite.Drawing(size=('100%', '100%'))
+        drawing.add(svgwrite.image.Image(href=svg_filename, size=('100%', '100%')))
+        drawing.saveas("temp.svg")
 
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-    pygame.display.set_caption("SVG in Pygame")
+        svg_image = pygame.image.load("temp.svg")
+        pygame.image.save(svg_image, "temp.png")  # Convert to PNG
 
-    svg_image = pygame.image.load("temp.svg")
-    pygame.image.save(svg_image, "temp.png")  # Convert to PNG
+        return pygame.image.load("temp.png")
 
-    return pygame.image.load("temp.png")
+    except Exception as e:
+        print(f"Error loading SVG: {e}")
+        return None
+
+
+def convert_svg_to_png(input_svg, output_png):
+    drawing = svg2rlg(input_svg)
+    renderPM.drawToFile(drawing, output_png, fmt="PNG")
 
 
 def render_title_bar():
-    svg_filename = 'settings_svg.svg'
+    input_svg_file = "gear-solid.svg"
+    output_png_file = "gear-solid.png"
+    convert_svg_to_png(input_svg_file, output_png_file)
+
+    """
+    convert_svg_to_png(input_svg_file, output_png_file)
+    svg_filename = 'gear-solid.svg'
     icon_surface = svg_to_surface(svg_filename)
-    SCREEN.blit(icon_surface, (0, 0))
-    pygame.display.flip()
+    """
+    SCREEN.blit(output_png_file, (WIN_WIDTH / 4, WIN_HEIGHT / 2))
+    update_display()
     time.sleep(5)
+
+
     line_height = WIN_HEIGHT / 19.4
     pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (WIN_WIDTH, line_height))  # render line for bar
 
