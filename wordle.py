@@ -3,11 +3,8 @@ import time
 import json
 import pygame
 import random
-import svgwrite
 import pyautogui
 import animations
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
 pygame.init()
 
 # global variables
@@ -37,41 +34,7 @@ def update_display():
     pygame.display.update()
 
 
-def svg_to_surface(svg_filename):
-    try:
-        drawing = svgwrite.Drawing(size=('100%', '100%'))
-        drawing.add(svgwrite.image.Image(href=svg_filename, size=('100%', '100%')))
-        drawing.saveas("temp.svg")
-
-        svg_image = pygame.image.load("temp.svg")
-        pygame.image.save(svg_image, "temp.png")  # Convert to PNG
-
-        return pygame.image.load("temp.png")
-
-    except Exception as e:
-        print(f"Error loading SVG: {e}")
-        return None
-
-
-def convert_svg_to_png(input_svg, output_png):
-    drawing = svg2rlg(input_svg)
-    renderPM.drawToFile(drawing, output_png, fmt="PNG")
-
-
 def render_title_bar():
-    input_svg_file = "gear-solid.svg"
-    output_png_file = "gear-solid.png"
-    convert_svg_to_png(input_svg_file, output_png_file)
-
-    """
-    convert_svg_to_png(input_svg_file, output_png_file)
-    svg_filename = 'gear-solid.svg'
-    icon_surface = svg_to_surface(svg_filename)
-    """
-    SCREEN.blit(output_png_file, (WIN_WIDTH / 4, WIN_HEIGHT / 2))
-    update_display()
-    time.sleep(5)
-
 
     line_height = WIN_HEIGHT / 19.4
     pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (WIN_WIDTH, line_height))  # render line for bar
@@ -286,7 +249,7 @@ while running:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
                     last_tile = tiles.tile_matrix[len(letters.letter_list) - 1]
-                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing - 2)
+                    animations.input_animation(last_tile, letters.letter_list[-1])
                     letters.render()
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:  # remove letter if user presses backspace
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:

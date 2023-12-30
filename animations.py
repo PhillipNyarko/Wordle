@@ -210,7 +210,8 @@ def game_lost(tiles, word): # render the actual word of the day, then let the re
 
 
 
-def input_animation(tile, input_letter, offset=5): # blip each tile just slightly and change the color to a lighter gray
+def input_animation(tile, input_letter): # blip each tile just slightly and change the color to a lighter gray
+    offset = 6
     def inflate_tile(tile_offset, negative=False):
         if negative:
             tile_offset -= tile_offset*2
@@ -236,8 +237,10 @@ def input_animation(tile, input_letter, offset=5): # blip each tile just slightl
 def valid_word_animation(tiles, color_values, user_guess, height):
     colors = []
 
+    print(tiles)
     if user_guess == "ezera":
-        colors = [(149, 149, 213), (170, 170, 80), (255, 153, 153), (96, 155, 103), (100, 129, 155)]
+        pass
+
     else:
         for index, value in enumerate(color_values):
             if value == "Green":
