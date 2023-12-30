@@ -196,8 +196,8 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
 
     if guess in word_list: # surprise animation for when the user enters my sisters name.
         if guess == "ezera":
-            animations.valid_word_animation(current_row_tiles, output, guess)
-        animations.valid_word_animation(current_row_tiles, output, user_guess)
+            animations.valid_word_animation(current_row_tiles, output, guess, WIN_HEIGHT)
+        animations.valid_word_animation(current_row_tiles, output, user_guess, WIN_HEIGHT)
         for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
             letters.render()
@@ -224,8 +224,8 @@ last_index_of_row = 5  # holds the index value of the last tile in the row. Incr
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
-print(WIN_WIDTH, WIN_HEIGHT)
 render_title_bar()
+
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
