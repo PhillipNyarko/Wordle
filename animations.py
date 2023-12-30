@@ -246,7 +246,7 @@ def valid_word_animation(tiles, color_values, user_guess, height):
                 colors.append(YELLOW)
             elif value == "Gray":
                 colors.append(TILE_GRAY)
-
+    start = time.time()
     for index, tile in enumerate(tiles):
         top_rect = pygame.Rect((tile.x, tile.y), (tile.width, 0))
         bottom_rect = pygame.Rect((tile.x, tile.y + tile.height), (tile.width, 0))
@@ -256,7 +256,7 @@ def valid_word_animation(tiles, color_values, user_guess, height):
 
         loops = int(height/12)  # 117 @ 875 window height
         rate = 1
-        delay = 1/(height*0.1)  # the smaller the height the longer the delay
+        delay = 2/(height*0.3)  # the smaller the height the longer the delay
 
         for i in range(loops//2):
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
@@ -285,3 +285,5 @@ def valid_word_animation(tiles, color_values, user_guess, height):
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
+    end = time.time()
+    print(end-start)
