@@ -52,7 +52,7 @@ class Board: # Main class that will have a subclass of rows and tiles as child o
         self.rows = 6
         self.cols = 5
         self.tile_size = WIN_HEIGHT/15 # tile size changes based on screen size
-        self.tile_spacing = 6 # set spacing between each tile and consider this number when calculating board width
+        self.tile_spacing = int(WIN_HEIGHT/233.333)  # set spacing between each tile and consider this number when calculating board width
         self.board_x_pos = WIN_WIDTH / 2
         self.board_y_pos = WIN_HEIGHT / 4
         self.board_width = (self.cols * self.tile_spacing + self.tile_size * self.cols) - self.tile_spacing
@@ -224,6 +224,7 @@ last_index_of_row = 5  # holds the index value of the last tile in the row. Incr
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
+print(WIN_WIDTH, WIN_HEIGHT)
 render_title_bar()
 while running:
     CLOCK.tick(60)
