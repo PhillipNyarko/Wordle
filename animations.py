@@ -8,7 +8,6 @@ pygame.init()
 # global variables
 WIN_WIDTH = pyautogui.size()[0]/1.2
 WIN_HEIGHT = pyautogui.size()[1]/1.2
-print(WIN_HEIGHT)
 CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)
 TILE_SIZE = WIN_HEIGHT/15
@@ -86,7 +85,7 @@ def bad_input_animation(tiles, user_guess):
         time.sleep(0.065)
 
     # oscillate the row back and forth at varying degrees of translation, then return to center
-    oscillations = 20
+    oscillations = 10
     skip_animation = False
     for i in range(oscillations//2):
         if user_skip_animation():
@@ -255,16 +254,16 @@ def valid_word_animation(tiles, color_values, user_guess, height):
         font_size = int(win_height / 30)
         font = pygame.font.Font("NeueHelvetica-Bold.otf", font_size)
 
-        print(height)
         loops = int(height/12)  # 117 @ 875 window height
         rate = 1
-        delay = 0.0035 / (tile.height / 101)
+        delay = 1/(height*0.1)  # the smaller the height the longer the delay
+
         for i in range(loops//2):
             pygame.draw.rect(SCREEN, BG_BLACK, top_rect, 0)
             pygame.draw.line(SCREEN, FULL_TILE_GRAY,
                              (top_rect.x, top_rect.y + top_rect.height),
                              (top_rect.x + top_rect.width-1, top_rect.y + top_rect.height))
-            top_rect.height +=  rate
+            top_rect.height += rate
             pygame.draw.rect(SCREEN, BG_BLACK, bottom_rect, 0)
             pygame.draw.line(SCREEN, FULL_TILE_GRAY,
                              (bottom_rect.x, bottom_rect.y-1),
