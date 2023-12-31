@@ -198,8 +198,6 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     del unchecked[:]
 
     if guess in word_list:  # surprise animation for when the user enters my sisters name.
-        if guess == "ezera":
-            animations.valid_word_animation(current_row_tiles, output, guess, WIN_HEIGHT)
         animations.valid_word_animation(current_row_tiles, output, user_guess, WIN_HEIGHT)
         for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
