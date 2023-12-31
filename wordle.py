@@ -226,7 +226,7 @@ wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 render_title_bar()
-
+print(wrd_of_the_day)
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():

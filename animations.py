@@ -151,7 +151,7 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors,
             SCREEN.blit(letter, letter_rect)
             if i % 2 == 0:
                 update_display()
-                time.sleep(0.03)
+                time.sleep(0.05)
 
         for i in range(init_height // scale):
             fill_tiles(tile)
@@ -173,7 +173,7 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors,
             SCREEN.blit(letter, letter_rect)
             if i % 2 == 0:
                 update_display()
-                time.sleep(0.04)
+                time.sleep(0.06)
 
     for i in range(WHITE[0], 17, -1):
         txt_color = abs(i - WHITE[0])
@@ -246,27 +246,23 @@ def valid_word_animation(tiles, color_values, user_guess, height, width):
     if ''.join(user_guess) == "ezera":
         for i in range(10000):
             # make dynamic to screen size
-            confetti = pygame.Rect(random.randint(0, width), random.randint(-1500, -50), random.randint(5, 10), random.randint(10, 15))
+            confetti = pygame.Rect(random.randint(0, width), random.randint(-2500, -200), random.randint(5, 10), random.randint(10, 25))
             confetti_list.append((confetti, random.choice(confetti_colors)))
 
-        animation_length = 50
+        animation_length = 100
         for i in range(animation_length):
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, confetti_list[j][1], confetti_list[j][0], 0)
 
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, BG_BLACK, confetti_list[j][0], 0)
-                confetti_list[j][0].y += random.randint(40, 150) # make dynamic to screen size
+                confetti_list[j][0].y += random.randint(20, 80)  # make dynamic to screen size
 
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, confetti_list[j][1], confetti_list[j][0], 0)
 
-            if i == int(animation_length / 4):
-                SCREEN.fill(BG_BLACK)
-                continue
-
             update_display()
-            time.sleep(0.06)
+            time.sleep(random.uniform(0.009, 0.05))
 
     for value in color_values:
         if value == "Green":
