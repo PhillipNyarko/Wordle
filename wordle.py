@@ -198,7 +198,7 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     del unchecked[:]
 
     if guess in word_list:  # surprise animation for when the user enters my sisters name.
-        animations.valid_word_animation(current_row_tiles, output, user_guess, WIN_HEIGHT)
+        animations.valid_word_animation(current_row_tiles, output, user_guess, WIN_HEIGHT, WIN_WIDTH)
         for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
             letters.render()
@@ -231,7 +231,7 @@ while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
 
-        if event.type == pygame.WINDOWSIZECHANGED:  # adjust variables if user decides to play in a different window size
+        if event.type == pygame.WINDOWSIZECHANGED:  # adjust vars if user decides to play in a different window size
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
             SCREEN = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.RESIZABLE)

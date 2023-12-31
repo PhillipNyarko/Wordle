@@ -234,7 +234,7 @@ def input_animation(tile, input_letter, offset):  # blip each tile just slightly
 
 
 # shrink and expand the tile on its y-axis, top and bottom, then reverse
-def valid_word_animation(tiles, color_values, user_guess, height):
+def valid_word_animation(tiles, color_values, user_guess, height, width):
     colors = []
 
     confetti_list = []
@@ -244,26 +244,29 @@ def valid_word_animation(tiles, color_values, user_guess, height):
     ]
 
     if ''.join(user_guess) == "ezera":
-        for i in range(100):
-            confetti = pygame.Rect(random.randint(0, WIN_WIDTH), 10, random.randint(2, 5), random.randint(4, 15))
-            confetti_list.append((confetti, random.choice(confetti_colors), random.randint(1,6))) # third value is rate of fall
+        for i in range(10000):
+            # make dynamic to screen size
+            confetti = pygame.Rect(random.randint(0, width), random.randint(-1500, -50), random.randint(5, 10), random.randint(10, 15))
+            confetti_list.append((confetti, random.choice(confetti_colors)))
 
-        for i in range(100):
+        animation_length = 50
+        for i in range(animation_length):
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, confetti_list[j][1], confetti_list[j][0], 0)
-                update_display()
-                time.sleep(0.0005)
 
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, BG_BLACK, confetti_list[j][0], 0)
-                update_display()
-                time.sleep(0.0005)
-                confetti_list[j][0].y += 30
+                confetti_list[j][0].y += random.randint(40, 150) # make dynamic to screen size
 
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, confetti_list[j][1], confetti_list[j][0], 0)
-                update_display()
-                time.sleep(0.0005)
+
+            if i == int(animation_length / 4):
+                SCREEN.fill(BG_BLACK)
+                continue
+
+            update_display()
+            time.sleep(0.06)
 
     for value in color_values:
         if value == "Green":
