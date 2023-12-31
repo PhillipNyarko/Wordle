@@ -160,7 +160,7 @@ def game_won(prev_tiles, curr_tiles, user_guess, tile_colors,
                 prev_tile_colors = tile_colors[len(tile_letters) - 10: len(tile_letters) - 5]
                 prev_tile_letters = tile_letters[len(tile_letters) - 10: len(tile_letters) - 5]
                 prev_row_color = YELLOW if prev_tile_colors[index] == "Yellow" else GREEN if prev_tile_colors[
-                                                                              index] == "Green" else TILE_GRAY
+                                                                            index] == "Green" else TILE_GRAY
                 prev_letter, prev_letter_rect = create_rect_and_letter(prev_tiles[index], prev_row_color,
                                                                        prev_tile_letters[index].upper(), WHITE, font, 0)
                 fill_tiles(prev_tiles[index])
@@ -234,8 +234,50 @@ def input_animation(tile, input_letter, offset):  # blip each tile just slightly
 
 
 # shrink and expand the tile on its y-axis, top and bottom, then reverse
-def valid_word_animation(tiles, color_values, user_guess, height, width):
+def valid_word_animation(tiles, color_values, user_guess, height, width, grid, tile_colors, letters):
     colors = []
+
+    def render_title_bar():
+        line_height = height / 19.4
+        pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (width, line_height))  # render line for bar
+
+        title_font_size = int(height / 25)
+        title_font = pygame.font.Font("KarnakPro-CondensedBlack.otf", title_font_size)
+        wordle_title = title_font.render("Wordle", True, WHITE)
+        wordle_rect = wordle_title.get_rect(center=(width / 2, int(height / 38.04)))  # move by center
+        SCREEN.blit(wordle_title, wordle_rect)  # draw wordle title
+
+    def render_grid():
+        tile_font_size = int(height / 30)
+        tile_font = pygame.font.Font("NeueHelvetica-Bold.otf", tile_font_size)
+
+        for x, y in enumerate(grid):
+            if tile_colors[x] == "Green":
+                pygame.draw.rect(SCREEN, GREEN, y, )  # draw the tiles of the grid
+            elif tile_colors[x] == "Yellow":
+                pygame.draw.rect(SCREEN, YELLOW, y)  # draw the tiles of the grid
+            elif tile_colors[x] == "Gray":
+                pygame.draw.rect(SCREEN, TILE_GRAY, y)  # draw the tiles of the grid
+            else:
+                pygame.draw.rect(SCREEN, TILE_GRAY, y, 2)  # draw the tiles of the grid
+
+        for x, y in enumerate(letters):
+            if tile_colors[x] == "Green":
+                tile_letter, tile_letter_rect = create_rect_and_letter(grid[x], GREEN, letters[x].upper(),
+                                                                       WHITE, tile_font, TILE_THICKNESS)
+                SCREEN.blit(tile_letter, tile_letter_rect)
+            elif tile_colors[x] == "Yellow":
+                tile_letter, tile_letter_rect = create_rect_and_letter(grid[x], YELLOW, letters[x].upper(),
+                                                                       WHITE, tile_font, TILE_THICKNESS)
+                SCREEN.blit(tile_letter, tile_letter_rect)
+            elif tile_colors[x] == "Gray":
+                tile_letter, tile_letter_rect = create_rect_and_letter(grid[x], TILE_GRAY, letters[x].upper(),
+                                                                       WHITE, tile_font, TILE_THICKNESS)
+                SCREEN.blit(tile_letter, tile_letter_rect)
+            else:
+                tile_letter, tile_letter_rect = create_rect_and_letter(grid[x], FULL_TILE_GRAY, letters[x].upper(),
+                                                                       WHITE, tile_font, TILE_THICKNESS)
+                SCREEN.blit(tile_letter, tile_letter_rect)
 
     confetti_list = []
     confetti_colors = [
@@ -246,10 +288,12 @@ def valid_word_animation(tiles, color_values, user_guess, height, width):
     if ''.join(user_guess) == "ezera":
         for i in range(10000):
             # make dynamic to screen size
-            confetti = pygame.Rect(random.randint(0, width), random.randint(-2500, -200), random.randint(5, 10), random.randint(10, 25))
+            confetti = pygame.Rect(random.randint(0, width), random.randint(-2500, -200),
+                                   random.randint(5, 10),
+                                   random.randint(10, 25))
             confetti_list.append((confetti, random.choice(confetti_colors)))
 
-        animation_length = 100
+        animation_length = 90
         for i in range(animation_length):
             for j in range(len(confetti_list)):
                 pygame.draw.rect(SCREEN, confetti_list[j][1], confetti_list[j][0], 0)
@@ -263,6 +307,9 @@ def valid_word_animation(tiles, color_values, user_guess, height, width):
 
             update_display()
             time.sleep(random.uniform(0.009, 0.05))
+            SCREEN.fill(BG_BLACK)
+            render_title_bar()
+            render_grid()
 
     for value in color_values:
         if value == "Green":

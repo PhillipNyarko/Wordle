@@ -37,7 +37,9 @@ def update_display():
 def render_title_bar():
 
     line_height = WIN_HEIGHT / 19.4
-    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (WIN_WIDTH, line_height))  # render line for bar
+
+    # render line for bar
+    pygame.draw.line(SCREEN, FULL_TILE_GRAY, (0, line_height), (WIN_WIDTH, line_height))
 
     font_size = int(WIN_HEIGHT / 25)
     font = pygame.font.Font("KarnakPro-CondensedBlack.otf", font_size)
@@ -198,7 +200,8 @@ def evaluate_row(user_guess, actual_word, current_row):  # current row returns t
     del unchecked[:]
 
     if guess in word_list:  # surprise animation for when the user enters my sisters name.
-        animations.valid_word_animation(current_row_tiles, output, user_guess, WIN_HEIGHT, WIN_WIDTH)
+        animations.valid_word_animation(current_row_tiles, output, user_guess, WIN_HEIGHT, WIN_WIDTH, tiles.tile_matrix,
+                                        tile_color_values, letters.letter_list)
         for index, value in enumerate(output):  # map color values to grid
             tile_color_values[index + current_row] = output[index]
             letters.render()
@@ -226,7 +229,6 @@ wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
 
 render_title_bar()
-print(wrd_of_the_day)
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
