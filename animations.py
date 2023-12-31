@@ -210,8 +210,7 @@ def game_lost(tiles, word): # render the actual word of the day, then let the re
 
 
 
-def input_animation(tile, input_letter): # blip each tile just slightly and change the color to a lighter gray
-    offset = 6
+def input_animation(tile, input_letter, offset): # blip each tile just slightly and change the color to a lighter gray
     def inflate_tile(tile_offset, negative=False):
         if negative:
             tile_offset -= tile_offset*2

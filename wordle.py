@@ -249,7 +249,7 @@ while running:
                 if len(letters.letter_list) < last_index_of_row:
                     letters.letter_list.append(pygame.key.name(event.key))
                     last_tile = tiles.tile_matrix[len(letters.letter_list) - 1]
-                    animations.input_animation(last_tile, letters.letter_list[-1])
+                    animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing + 2)
                     letters.render()
             elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:  # remove letter if user presses backspace
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
