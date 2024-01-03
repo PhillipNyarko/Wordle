@@ -1,10 +1,10 @@
 import sys
-import time
 import json
 import pygame
 import random
 import pyautogui
 import animations
+
 pygame.init()
 
 # global variables
@@ -224,15 +224,17 @@ board = Board()
 rows = Rows()
 tiles = Tiles()
 letters = Letters()
+game_is_won = False
+game_is_lost = False
 last_index_of_row = 5  # holds the index value of the last tile in the row. Increased by 5 after every enter press
 wrd_of_the_day = word_of_the_day()
 alphabet = "abcdefghijklmnopqrstuvwxyz"
+
 
 render_title_bar()
 while running:
     CLOCK.tick(60)
     for event in pygame.event.get():
-
         if event.type == pygame.WINDOWSIZECHANGED:  # adjust vars if user decides to play in a different window size
             WIN_WIDTH = pygame.display.get_surface().get_size()[0]
             WIN_HEIGHT = pygame.display.get_surface().get_size()[1]
@@ -243,6 +245,8 @@ while running:
             rows.__init__()
             tiles.__init__()
             letters.render()
+            if game_is_lost or game_is_won:
+                animations.press_to_reset(WIN_WIDTH, WIN_HEIGHT, skip=True)
 
         if event.type == pygame.KEYDOWN:  # render letter with animations when user presses key
             if pygame.key.name(event.key) in alphabet and len(letters.letter_list) < 30:
@@ -251,31 +255,40 @@ while running:
                     last_tile = tiles.tile_matrix[len(letters.letter_list) - 1]
                     animations.input_animation(last_tile, letters.letter_list[-1], tiles.tile_spacing + 2)
                     letters.render()
-            elif pygame.key.get_pressed()[pygame.K_BACKSPACE]:  # remove letter if user presses backspace
+            elif pygame.key.get_pressed()[pygame.K_BACKSPACE] and not game_is_won and not game_is_lost:
                 if len(letters.letter_list) > 0 and len(letters.letter_list) > last_index_of_row - tiles.cols:
                     letters.letter_list.pop()
                     letters.clear()
             # evaluate the row and color it correspondingly if user presses enter and the row is filled
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
+                print(wrd_of_the_day)
+                if game_is_lost:
+                    letters.letter_list.clear()
+                    tile_color_values = ["Unevaluated"] * 30
+                    last_index_of_row = 5
+                    wrd_of_the_day = word_of_the_day()
+                    reset()
+                    game_is_lost = False
+                    reset()
+                if game_is_won:
+                    # Reset the game state
+                    letters.letter_list.clear()
+                    tile_color_values = ["Unevaluated"] * 30
+                    last_index_of_row = 5
+                    wrd_of_the_day = word_of_the_day()
+                    reset()
+                    game_is_won = False
                 if len(letters.letter_list) == last_index_of_row:
                     eval_row = evaluate_row(letters.letter_list[-5:], wrd_of_the_day, last_index_of_row - 5)
                     if eval_row == "win":  # game won
-                        time.sleep(1)
-                        # Reset the game state
-                        letters.letter_list.clear()
-                        tile_color_values = ["Unevaluated"] * 30
-                        last_index_of_row = 5
-                        wrd_of_the_day = word_of_the_day()
-                        reset()
+                        game_is_won = True
+                        animations.press_to_reset(WIN_WIDTH, WIN_HEIGHT)
                     if eval_row == "valid" and len(letters.letter_list) != 30:  # valid guess
                         last_index_of_row += 5  # go to next row
-                    elif eval_row == "valid":  # valid guess but on last row == game over
+                    elif eval_row == "valid" and not game_is_won:  # valid guess but on last row == game over
                         animations.game_lost(tiles.tile_matrix[0:1], wrd_of_the_day)
-                        letters.letter_list.clear()
-                        tile_color_values = ["Unevaluated"] * 30
-                        last_index_of_row = 5
-                        wrd_of_the_day = word_of_the_day()
-                        reset()
+                        game_is_lost = True
+                        animations.press_to_reset(WIN_WIDTH, WIN_HEIGHT)
                     # if nothing returned it will stay on this row
         if event.type == pygame.QUIT:
             running = False

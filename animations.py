@@ -208,7 +208,7 @@ def game_lost(tiles, word):  # render the actual word of the day, then let the r
         SCREEN.blit(wrd_txt, wrd_txt_rect)
         update_display()
         if WHITE[0] - 1 >= i >= WHITE[0] - 3:
-            time.sleep(1)
+            time.sleep(1)  # wait for a second before fading out
 
 
 def input_animation(tile, input_letter, offset):  # blip each tile just slightly and change the color to a lighter gray
@@ -358,3 +358,29 @@ def valid_word_animation(tiles, color_values, user_guess, height, width, grid, t
             if i % 5 == 0:
                 update_display()
                 time.sleep(delay)
+
+
+def press_to_reset(width, height, skip=False):
+    text = " Enter to play again"
+    text_font_size = int(height / 50)
+    text_font = pygame.font.Font("NeueHelvetica-Bold.otf", text_font_size)
+    reset_message = text_font.render(text, True, (130, 130, 132))
+    reset_message_rect = reset_message.get_rect(center=(width / 2, int(height / 1.5)))  # move by
+
+
+    if skip:
+        return SCREEN.blit(reset_message, reset_message_rect)  # draw wordle title
+
+    for i in range(18, 116):
+        reset_message = text_font.render(text, True, (i if i < 130 else 130, i if i < 130 else 130, i))
+        reset_message_rect = reset_message.get_rect(center=(width / 2, int(height / 1.5)))  # move by center
+        pygame.draw.rect(SCREEN, BG_BLACK, reset_message_rect)
+        SCREEN.blit(reset_message, reset_message_rect)  # draw wordle title
+        if i % 2 == 00:
+            update_display()
+            time.sleep(0.0000001)
+        pygame.draw.rect(SCREEN, BG_BLACK, reset_message_rect)
+
+    SCREEN.blit(reset_message, reset_message_rect)  # draw wordle title
+    update_display()
+
