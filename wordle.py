@@ -261,7 +261,6 @@ while running:
                     letters.clear()
             # evaluate the row and color it correspondingly if user presses enter and the row is filled
             elif pygame.key.get_pressed()[pygame.K_RETURN] and len(letters.letter_list) % 5 == 0:
-                print(wrd_of_the_day)
                 if game_is_lost:
                     letters.letter_list.clear()
                     tile_color_values = ["Unevaluated"] * 30
