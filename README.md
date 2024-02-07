@@ -29,6 +29,7 @@ This project is a clone of the popular word-guessing game, _Wordle_. The game wa
 A random 5-letter word is selected. Your job is to guess the word in 6 guesses or less.
   
 Each letter will be assigned a color value: Gray, Yellow, or Green.
+
   Gray means the letter is not in that word.
 
   Yellow means the letter is in that word, but not in that spot.
